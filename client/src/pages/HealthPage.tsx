@@ -6,6 +6,17 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { RefreshCw, Clock, ExternalLink, Globe, Heart } from 'lucide-react';
 import { NewsItem } from '@/lib/data/liveData';
 
+// ─── Açıklama Temizleyici ─────────────────────────────────────────────────
+function getSummary(title: string, desc: string): string | null {
+  if (!desc || desc.length < 25) return null;
+  const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9ğüşıöçα-ω]/gi, '').slice(0, 60);
+  const t = norm(title);
+  const d = norm(desc);
+  if (t.length > 20 && d.startsWith(t.slice(0, 30))) return null;
+  if (d.length > 20 && t.startsWith(d.slice(0, 30))) return null;
+  return desc;
+}
+
 // ─── Resim ───────────────────────────────────────────────────────────────────
 
 const HEALTH_KEYWORDS = [
@@ -73,11 +84,11 @@ function HealthCard({ item, delay = 0 }: { item: NewsItem; delay?: number }) {
         />
       )}
 
-      {/* Gradient */}
+      {/* Altta ince okunabilirlik gradyanı — resmin büyük kısmı açık kalır */}
       <div
         className="absolute inset-0"
         style={{
-          background: 'linear-gradient(to top, rgba(5,13,26,0.95) 50%, rgba(5,13,26,0.0) 100%)',
+          background: 'linear-gradient(to top, rgba(5,13,26,0.94) 0%, rgba(5,13,26,0.80) 28%, rgba(5,13,26,0.20) 58%, rgba(5,13,26,0.00) 78%)',
         }}
       />
 
@@ -109,17 +120,18 @@ function HealthCard({ item, delay = 0 }: { item: NewsItem; delay?: number }) {
           {item.title}
         </h2>
 
-        {/* Özet */}
-        {item.description?.length > 20 && (
+        {/* Özet — başlığı tekrarlamıyor */}
+        {getSummary(item.title, item.description) && (
           <p className="text-sm mb-3"
             style={{
               color: 'rgba(255,255,255,0.6)',
               display: '-webkit-box',
-              WebkitLineClamp: 4,
+              WebkitLineClamp: 3,
               WebkitBoxOrient: 'vertical',
               overflow: 'hidden',
+              lineHeight: 1.5,
             }}>
-            {item.description}
+            {getSummary(item.title, item.description)}
           </p>
         )}
 
