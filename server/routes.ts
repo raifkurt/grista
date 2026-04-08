@@ -169,14 +169,30 @@ const FEEDS: Record<string, string[]> = {
     'https://news.google.com/rss/search?q=health+wellness+nutrition+longevity&hl=en&gl=US&ceid=US:en',
   ],
 
-  // ── SAĞLIK İYİ HABERLER ──
+  // ── SAĞLIK İYİ HABERLER — 22 kaynak → 500+ benzersiz haber ──
   healthgood: [
     'https://news.google.com/rss/search?q=health+breakthrough+discovery+good+news&hl=en&gl=US&ceid=US:en',
-    'https://news.google.com/rss/search?q=medical+research+new+treatment+cure&hl=en&gl=US&ceid=US:en',
-    'https://news.google.com/rss/search?q=longevity+wellness+nutrition+science+2026&hl=en&gl=US&ceid=US:en',
-    'https://news.google.com/rss/search?q=mental+health+wellbeing+happiness+tips&hl=en&gl=US&ceid=US:en',
-    'https://news.google.com/rss/search?q=sağlık+keşif+tedavi+iyi+haber&hl=tr&gl=TR&ceid=TR:tr',
-    'https://news.google.com/rss/search?q=fitness+exercise+healthy+lifestyle&hl=en&gl=US&ceid=US:en',
+    'https://news.google.com/rss/search?q=medical+research+new+treatment+cure+2026&hl=en&gl=US&ceid=US:en',
+    'https://news.google.com/rss/search?q=science+medicine+discovery+breakthrough+2026&hl=en&gl=US&ceid=US:en',
+    'https://news.google.com/rss/search?q=new+drug+FDA+approved+treatment+success&hl=en&gl=US&ceid=US:en',
+    'https://news.google.com/rss/search?q=longevity+aging+lifespan+science+2026&hl=en&gl=US&ceid=US:en',
+    'https://news.google.com/rss/search?q=anti+aging+centenarian+longevity+research&hl=en&gl=US&ceid=US:en',
+    'https://news.google.com/rss/search?q=nutrition+diet+healthy+eating+research&hl=en&gl=US&ceid=US:en',
+    'https://news.google.com/rss/search?q=superfood+vitamins+supplements+health+benefit&hl=en&gl=US&ceid=US:en',
+    'https://news.google.com/rss/search?q=mediterranean+diet+plant+based+health+study&hl=en&gl=US&ceid=US:en',
+    'https://news.google.com/rss/search?q=fitness+exercise+workout+health+benefit&hl=en&gl=US&ceid=US:en',
+    'https://news.google.com/rss/search?q=strength+training+muscle+health+study+2026&hl=en&gl=US&ceid=US:en',
+    'https://news.google.com/rss/search?q=running+cardio+heart+health+research&hl=en&gl=US&ceid=US:en',
+    'https://news.google.com/rss/search?q=mental+health+wellbeing+happiness+positive&hl=en&gl=US&ceid=US:en',
+    'https://news.google.com/rss/search?q=mindfulness+meditation+stress+sleep+health&hl=en&gl=US&ceid=US:en',
+    'https://news.google.com/rss/search?q=sleep+health+rest+recovery+science+2026&hl=en&gl=US&ceid=US:en',
+    'https://news.google.com/rss/search?q=cancer+treatment+cure+survival+new+therapy&hl=en&gl=US&ceid=US:en',
+    'https://news.google.com/rss/search?q=diabetes+heart+disease+prevention+research&hl=en&gl=US&ceid=US:en',
+    'https://news.google.com/rss/search?q=wellness+holistic+health+natural+remedy&hl=en&gl=US&ceid=US:en',
+    'https://news.google.com/rss/search?q=gut+health+microbiome+probiotics+research&hl=en&gl=US&ceid=US:en',
+    'https://news.google.com/rss/search?q=sa%C4%9Fl%C4%B1k+ke%C5%9Fif+tedavi+iyi+haber&hl=tr&gl=TR&ceid=TR:tr',
+    'https://news.google.com/rss/search?q=sa%C4%9Fl%C4%B1kl%C4%B1+ya%C5%9Fam+beslenme+spor+wellness&hl=tr&gl=TR&ceid=TR:tr',
+    'https://news.google.com/rss/search?q=uzun+ya%C5%9F+ya%C5%9Flanma+ara%C5%9Ft%C4%B1rma+bilim&hl=tr&gl=TR&ceid=TR:tr',
   ],
 };
 

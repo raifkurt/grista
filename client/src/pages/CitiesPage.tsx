@@ -3,25 +3,8 @@
  * Sadece bu iki şehirde olup bitenler
  */
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { RefreshCw, Clock, ExternalLink, MapPin, Globe } from 'lucide-react';
+import { RefreshCw, MapPin, Globe } from 'lucide-react';
 import { fetchCitiesNews, NewsItem } from '@/lib/data/liveData';
-
-// ─── Açıklama Temizleyici ──────────────────────────────────────────────────
-
-/**
- * Google News RSS'te description genellikle başlığı tekrar eder.
- * Eğer description başlıkla çok benzer/aynıysa gösterme.
- */
-function getSummary(title: string, desc: string): string | null {
-  if (!desc || desc.length < 25) return null;
-  const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9ğüşıöçα-ω]/gi, '').slice(0, 60);
-  const t = norm(title);
-  const d = norm(desc);
-  // description başlığın ilk kısmıyla başlıyorsa → tekrar
-  if (t.length > 20 && d.startsWith(t.slice(0, 30))) return null;
-  if (d.length > 20 && t.startsWith(d.slice(0, 30))) return null;
-  return desc;
-}
 
 // ─── Resim ───────────────────────────────────────────────────────────────────
 
@@ -68,7 +51,7 @@ function NewsCard({ item, city, delay = 0 }: {
       rel="noopener noreferrer"
       className="block rounded-2xl overflow-hidden relative group"
       style={{
-        minHeight: 260,
+        height: 280,
         opacity: visible ? 1 : 0,
         transform: visible ? 'translateY(0)' : 'translateY(14px)',
         transition: `opacity 0.4s ease ${delay}ms, transform 0.4s ease ${delay}ms`,
@@ -76,73 +59,47 @@ function NewsCard({ item, city, delay = 0 }: {
         border: `1px solid ${accent}20`,
       }}
     >
-      {/* Resim */}
-      {imgOk && (
+      {/* Resim — tam kart boyutu, filtre yok */}
+      {imgOk ? (
         <img
           src={imgSrc}
           alt=""
           onError={() => setImgOk(false)}
           className="absolute inset-0 w-full h-full object-cover"
-          style={{ opacity: 1.0 }}
+        />
+      ) : (
+        <div
+          className="absolute inset-0"
+          style={{ background: `linear-gradient(135deg, ${accent}22, hsl(222 47% 10%))` }}
         />
       )}
 
-      {/* Altta ince okunabilirlik gradyanı — resmin büyük kısmı açık kalır */}
+      {/* Gradient yalnızca alt banda */}
       <div
         className="absolute inset-0"
         style={{
-          background: 'linear-gradient(to top, rgba(5,13,26,0.94) 0%, rgba(5,13,26,0.80) 28%, rgba(5,13,26,0.20) 58%, rgba(5,13,26,0.00) 78%)',
+          background: 'linear-gradient(to top, rgba(5,13,26,0.97) 0%, rgba(5,13,26,0.88) 22%, rgba(5,13,26,0.08) 52%, rgba(5,13,26,0.00) 68%)',
         }}
       />
 
-      {/* Accent çizgisi */}
+      {/* Sol accent şerit */}
       <div className="absolute left-0 top-0 bottom-0 w-0.5" style={{ background: accent }} />
 
-      {/* İçerik */}
-      <div className="relative z-10 p-4 flex flex-col justify-end" style={{ minHeight: 260 }}>
-
-        {/* Üst: zaman + çeviri */}
-        <div className="flex items-center gap-2 mb-3">
-          {item.isNew && (
-            <span className="text-xs font-mono px-2 py-0.5 rounded-full animate-pulse"
-              style={{ background: 'rgba(245,158,11,0.2)', color: '#f59e0b' }}>
-              ● YENİ
-            </span>
-          )}
-          {(item as any).translated && (
-            <span className="text-xs px-2 py-0.5 rounded-full font-mono"
-              style={{ background: 'rgba(167,139,250,0.2)', color: '#a78bfa' }}>
-              🌐 ÇEVİRİLDİ
-            </span>
-          )}
-          <div className="ml-auto flex items-center gap-1 text-xs"
-            style={{ color: 'rgba(255,255,255,0.45)' }}>
-            <Clock className="w-3 h-3" />
-            {timeAgo(item.pubDate)}
-          </div>
-        </div>
-
-        {/* Başlık */}
+      {/* İçerik — alta yapışık, sadece başlık + kaynak */}
+      <div className="absolute bottom-0 left-0 right-0 z-10 px-4 pb-3 pt-2">
         <h3
-          className="font-bold text-white leading-snug mb-2"
-          style={{ fontSize: 'clamp(14px, 2.5vw, 18px)', lineHeight: 1.35 }}
+          className="font-bold text-white leading-snug mb-1.5"
+          style={{ fontSize: 'clamp(13px, 2.2vw, 17px)', lineHeight: 1.3 }}
         >
           {item.title}
         </h3>
-
-
-
-        {/* Kaynak + oku */}
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1.5 text-xs"
-            style={{ color: 'rgba(255,255,255,0.35)' }}>
-            <Globe className="w-3 h-3" />
-            <span className="truncate max-w-[160px]">{item.source}</span>
+          <div className="flex items-center gap-1 text-xs" style={{ color: 'rgba(255,255,255,0.38)' }}>
+            <Globe className="w-3 h-3 flex-shrink-0" />
+            <span className="truncate max-w-[150px]">{item.source}</span>
           </div>
-          <span className="flex items-center gap-1 text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity"
-            style={{ color: accent }}>
-            <ExternalLink className="w-3 h-3" />
-            Oku
+          <span className="text-xs font-mono" style={{ color: 'rgba(255,255,255,0.30)' }}>
+            {timeAgo(item.pubDate)}
           </span>
         </div>
       </div>
@@ -169,7 +126,7 @@ function CityColumn({
   }, []);
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-3">
 
       {/* Şehir başlığı */}
       <div className="sticky top-0 z-10 flex items-center justify-between py-3 px-1"
@@ -199,7 +156,7 @@ function CityColumn({
         <div className="space-y-3">
           {[...Array(5)].map((_, i) => (
             <div key={i} className="rounded-2xl animate-pulse"
-              style={{ height: 240, background: 'hsl(222 47% 8%)', opacity: 1 - i * 0.15 }} />
+              style={{ height: 280, background: 'hsl(222 47% 8%)', opacity: 1 - i * 0.15 }} />
           ))}
         </div>
       ) : (
@@ -209,7 +166,7 @@ function CityColumn({
               key={item.id}
               item={item}
               city={city}
-              delay={Math.min(i * 50, 800)}
+              delay={Math.min(i * 40, 600)}
             />
           ))}
         </div>
@@ -230,7 +187,7 @@ export default function CitiesPage() {
   const [mobileCity, setMobileCity] = useState<'istanbul' | 'athens'>('istanbul');
   const countRef = useRef(180);
 
-  const load = useCallback(async (force = false) => {
+  const load = useCallback(async () => {
     setRefreshing(true);
     try {
       const data = await fetchCitiesNews();
@@ -245,13 +202,13 @@ export default function CitiesPage() {
     countRef.current = 180;
   }, []);
 
-  useEffect(() => { load(true); }, [load]);
+  useEffect(() => { load(); }, [load]);
 
   useEffect(() => {
     const id = setInterval(() => {
       countRef.current -= 1;
       setCountdown(countRef.current);
-      if (countRef.current <= 0) load(true);
+      if (countRef.current <= 0) load();
     }, 1000);
     return () => clearInterval(id);
   }, [load]);
@@ -279,7 +236,7 @@ export default function CitiesPage() {
           )}
         </div>
         <button
-          onClick={() => load(true)}
+          onClick={() => load()}
           disabled={refreshing}
           className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border border-border text-muted-foreground hover:text-foreground transition-all"
         >
