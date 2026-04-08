@@ -10,6 +10,7 @@ const NAV = [
   { href: '/',         icon: LayoutDashboard, label: 'Komuta Merkezi' },
   { href: '/live',     icon: Radio,           label: 'Canlı Akış', badge: 'CANLI' },
   { href: '/cities',   icon: MapPin,          label: 'İstanbul & Atina', badge: 'YENİ' },
+  { href: '/health',    icon: Heart,           label: 'Sağlık & İyi Haberler' },
   { href: '/market',   icon: TrendingUp,      label: 'Piyasa İstihbaratı' },
   { href: '/property', icon: Building2,        label: 'Emlak Değerleme' },
   { href: '/financial',icon: DollarSign,       label: 'Finansal Risk' },

@@ -168,6 +168,16 @@ const FEEDS: Record<string, string[]> = {
     'https://news.google.com/rss/search?q=sağlık+hastane+ilaç+tedavi&hl=tr&gl=TR&ceid=TR:tr',
     'https://news.google.com/rss/search?q=health+wellness+nutrition+longevity&hl=en&gl=US&ceid=US:en',
   ],
+
+  // ── SAĞLIK İYİ HABERLER ──
+  healthgood: [
+    'https://news.google.com/rss/search?q=health+breakthrough+discovery+good+news&hl=en&gl=US&ceid=US:en',
+    'https://news.google.com/rss/search?q=medical+research+new+treatment+cure&hl=en&gl=US&ceid=US:en',
+    'https://news.google.com/rss/search?q=longevity+wellness+nutrition+science+2026&hl=en&gl=US&ceid=US:en',
+    'https://news.google.com/rss/search?q=mental+health+wellbeing+happiness+tips&hl=en&gl=US&ceid=US:en',
+    'https://news.google.com/rss/search?q=sağlık+keşif+tedavi+iyi+haber&hl=tr&gl=TR&ceid=TR:tr',
+    'https://news.google.com/rss/search?q=fitness+exercise+healthy+lifestyle&hl=en&gl=US&ceid=US:en',
+  ],
 };
 
 // ─── Önbellek ─────────────────────────────────────────────────────────────────

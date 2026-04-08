@@ -66,7 +66,7 @@ function NewsCard({ item, city, delay = 0 }: {
           alt=""
           onError={() => setImgOk(false)}
           className="absolute inset-0 w-full h-full object-cover"
-          style={{ opacity: 0.5 }}
+          style={{ opacity: 0.75 }}
         />
       )}
 
@@ -74,7 +74,7 @@ function NewsCard({ item, city, delay = 0 }: {
       <div
         className="absolute inset-0"
         style={{
-          background: 'linear-gradient(to top, rgba(5,13,26,0.97) 40%, rgba(5,13,26,0.4) 100%)',
+          background: 'linear-gradient(to top, rgba(5,13,26,0.85) 35%, rgba(5,13,26,0.2) 100%)',
         }}
       />
 

@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 const PAGE_TITLES: Record<string, { title: string; desc: string }> = {
   '/': { title: 'Komuta Merkezi', desc: 'Gerçek zamanlı zeka paneli' },
   '/live':   { title: 'Canlı Akış',    desc: 'Finans · Emlak · Sağlık — Gerçek zamanlı haberler' },
+  '/health':  { title: 'Sağlık & İyi Haberler', desc: 'Dünyanın her yerinden pozitif haberler · Wellness' },
   '/cities': { title: 'İstanbul & Atina', desc: 'Gayrimenkul haberleri · Türkçe + Yunanca kaynak · Otomatik çeviri' },
   '/market': { title: 'Piyasa İstihbaratı', desc: 'ARIMA + Kalman tahminleri · İstanbul & Atina' },
   '/property': { title: 'Emlak Değerleme Motoru', desc: 'Hedonik fiyatlama modeli · OLS regresyon' },

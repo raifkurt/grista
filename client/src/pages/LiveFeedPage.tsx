@@ -126,7 +126,7 @@ function NewsCard({ item }: { item: NewsItem }) {
           alt=""
           onError={() => setImgOk(false)}
           className="absolute inset-0 w-full h-full object-cover"
-          style={{ opacity: 0.45 }}
+          style={{ opacity: 0.70 }}
         />
       )}
 

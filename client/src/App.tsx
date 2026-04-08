@@ -16,6 +16,7 @@ import MarketingPage from './pages/MarketingPage';
 import AgentsPage from './pages/AgentsPage';
 import LiveFeedPage from './pages/LiveFeedPage';
 import CitiesPage from './pages/CitiesPage';
+import HealthPage from './pages/HealthPage';
 
 export default function App() {
   return (
@@ -37,6 +38,7 @@ export default function App() {
                 <Route path="/agents" component={AgentsPage} />
                 <Route path="/live" component={LiveFeedPage} />
                 <Route path="/cities" component={CitiesPage} />
+                <Route path="/health" component={HealthPage} />
               </Switch>
             </main>
           </div>
