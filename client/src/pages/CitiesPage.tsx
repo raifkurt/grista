@@ -66,7 +66,7 @@ function NewsCard({ item, city, delay = 0 }: {
           alt=""
           onError={() => setImgOk(false)}
           className="absolute inset-0 w-full h-full object-cover"
-          style={{ opacity: 0.75 }}
+          style={{ opacity: 1.0 }}
         />
       )}
 
@@ -74,7 +74,7 @@ function NewsCard({ item, city, delay = 0 }: {
       <div
         className="absolute inset-0"
         style={{
-          background: 'linear-gradient(to top, rgba(5,13,26,0.85) 35%, rgba(5,13,26,0.2) 100%)',
+          background: 'linear-gradient(to top, rgba(5,13,26,0.95) 50%, rgba(5,13,26,0.0) 100%)',
         }}
       />
 
@@ -114,12 +114,12 @@ function NewsCard({ item, city, delay = 0 }: {
         </h3>
 
         {/* Özet */}
-        {item.description?.length > 20 && (
+        {item.description && item.description.length > 30 && (
           <p className="text-sm mb-3"
             style={{
               color: 'rgba(255,255,255,0.6)',
               display: '-webkit-box',
-              WebkitLineClamp: 2,
+              WebkitLineClamp: 4,
               WebkitBoxOrient: 'vertical',
               overflow: 'hidden',
               lineHeight: 1.5,

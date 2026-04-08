@@ -126,14 +126,14 @@ function NewsCard({ item }: { item: NewsItem }) {
           alt=""
           onError={() => setImgOk(false)}
           className="absolute inset-0 w-full h-full object-cover"
-          style={{ opacity: 0.70 }}
+          style={{ opacity: 1.0 }}
         />
       )}
 
       {/* Gradyan overlay */}
       <div
         className="absolute inset-0"
-        style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.92) 55%, rgba(0,0,0,0.25) 100%)' }}
+        style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.93) 50%, rgba(0,0,0,0.0) 100%)' }}
       />
 
       {/* İçerik */}
@@ -174,7 +174,7 @@ function NewsCard({ item }: { item: NewsItem }) {
           </h2>
 
           {item.description && (
-            <p className="text-sm leading-relaxed mb-3" style={{ color: 'rgba(255,255,255,0.65)', WebkitLineClamp: 3, display: '-webkit-box', WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+            <p className="text-sm leading-relaxed mb-3" style={{ color: 'rgba(255,255,255,0.65)', WebkitLineClamp: 4, display: '-webkit-box', WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
               {item.description}
             </p>
           )}

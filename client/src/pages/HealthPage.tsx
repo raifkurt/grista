@@ -69,7 +69,7 @@ function HealthCard({ item, delay = 0 }: { item: NewsItem; delay?: number }) {
           alt=""
           onError={() => setImgOk(false)}
           className="absolute inset-0 w-full h-full object-cover"
-          style={{ opacity: 0.75 }}
+          style={{ opacity: 1.0 }}
         />
       )}
 
@@ -77,7 +77,7 @@ function HealthCard({ item, delay = 0 }: { item: NewsItem; delay?: number }) {
       <div
         className="absolute inset-0"
         style={{
-          background: 'linear-gradient(to top, rgba(5,13,26,0.92) 40%, rgba(5,13,26,0.25) 100%)',
+          background: 'linear-gradient(to top, rgba(5,13,26,0.95) 50%, rgba(5,13,26,0.0) 100%)',
         }}
       />
 
@@ -115,7 +115,7 @@ function HealthCard({ item, delay = 0 }: { item: NewsItem; delay?: number }) {
             style={{
               color: 'rgba(255,255,255,0.6)',
               display: '-webkit-box',
-              WebkitLineClamp: 2,
+              WebkitLineClamp: 4,
               WebkitBoxOrient: 'vertical',
               overflow: 'hidden',
             }}>
