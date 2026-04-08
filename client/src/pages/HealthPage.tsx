@@ -120,20 +120,7 @@ function HealthCard({ item, delay = 0 }: { item: NewsItem; delay?: number }) {
           {item.title}
         </h2>
 
-        {/* Özet — başlığı tekrarlamıyor */}
-        {getSummary(item.title, item.description) && (
-          <p className="text-sm mb-3"
-            style={{
-              color: 'rgba(255,255,255,0.6)',
-              display: '-webkit-box',
-              WebkitLineClamp: 3,
-              WebkitBoxOrient: 'vertical',
-              overflow: 'hidden',
-              lineHeight: 1.5,
-            }}>
-            {getSummary(item.title, item.description)}
-          </p>
-        )}
+
 
         {/* Kaynak */}
         <div className="flex items-center justify-between">

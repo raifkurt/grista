@@ -130,20 +130,7 @@ function NewsCard({ item, city, delay = 0 }: {
           {item.title}
         </h3>
 
-        {/* Özet — başlığı tekrarlamıyor */}
-        {getSummary(item.title, item.description) && (
-          <p className="text-sm mb-3"
-            style={{
-              color: 'rgba(255,255,255,0.6)',
-              display: '-webkit-box',
-              WebkitLineClamp: 3,
-              WebkitBoxOrient: 'vertical',
-              overflow: 'hidden',
-              lineHeight: 1.5,
-            }}>
-            {getSummary(item.title, item.description)}
-          </p>
-        )}
+
 
         {/* Kaynak + oku */}
         <div className="flex items-center justify-between">
