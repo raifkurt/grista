@@ -11,6 +11,21 @@ import {
   NewsItem, NewsCategory, LiveForex, LiveCrypto,
 } from '@/lib/data/liveData';
 
+// ─── Haber resmi ────────────────────────────────────────────────────────────
+
+const CAT_KW: Record<string, string> = {
+  finans:  'finance,economy,stock+market',
+  emlak:   'architecture,building,real+estate',
+  saglik:  'health,wellness,doctor',
+};
+
+function articleImg(item: NewsItem): string {
+  if (item.image) return item.image;
+  const hash = item.id.split('').reduce((a, c) => a + c.charCodeAt(0), 0) % 1000;
+  const kw = CAT_KW[item.category] || 'city,architecture';
+  return `https://loremflickr.com/800/450/${kw}?lock=${hash}`;
+}
+
 // ─── Sabitler ─────────────────────────────────────────────────────────────
 
 const CAT: Record<NewsCategory, {
@@ -85,7 +100,8 @@ function PriceChip({ sym, price, chg, live }: { sym: string; price: number; chg:
 
 function NewsCard({ item }: { item: NewsItem }) {
   const cat = CAT[item.category];
-  const [imgOk, setImgOk] = useState(!!item.image);
+  const imgSrc = articleImg(item);
+  const [imgOk, setImgOk] = useState(true);
 
   return (
     <a
@@ -104,15 +120,15 @@ function NewsCard({ item }: { item: NewsItem }) {
       onMouseLeave={e => (e.currentTarget.style.transform = 'translateY(0)')}
     >
       {/* Arka plan resmi */}
-      {item.image && imgOk ? (
+      {imgOk && (
         <img
-          src={item.image}
+          src={imgSrc}
           alt=""
           onError={() => setImgOk(false)}
           className="absolute inset-0 w-full h-full object-cover"
-          style={{ opacity: 0.35 }}
+          style={{ opacity: 0.45 }}
         />
-      ) : null}
+      )}
 
       {/* Gradyan overlay */}
       <div

@@ -6,6 +6,23 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { Building2, RefreshCw, Clock, Globe, ExternalLink, TrendingUp, MapPin, Zap } from 'lucide-react';
 import { fetchCitiesNews, NewsItem } from '@/lib/data/liveData';
 
+// ─── Haber resmi ────────────────────────────────────────────────────────────────
+
+const CAT_KEYWORDS: Record<string, string> = {
+  istanbul: 'istanbul,turkey,bosphorus',
+  athens: 'athens,greece,acropolis',
+  finans: 'finance,economy,business',
+  emlak: 'architecture,building,real+estate',
+  saglik: 'health,wellness,medical',
+};
+
+function articleImage(item: NewsItem, catKeyword = 'istanbul'): string {
+  if (item.image) return item.image;
+  const hash = item.id.split('').reduce((a, c) => a + c.charCodeAt(0), 0) % 1000;
+  const kw = CAT_KEYWORDS[catKeyword] || CAT_KEYWORDS.istanbul;
+  return `https://loremflickr.com/800/450/${kw}?lock=${hash}`;
+}
+
 // ─── Zaman yardımcısı ─────────────────────────────────────────────────────────
 
 function timeAgo(iso: string) {
@@ -26,9 +43,10 @@ function LiveDot({ color = '#10b981' }: { color?: string }) {
 
 // ─── Haber kartı (büyük, akıcı) ───────────────────────────────────────────────
 
-function NewsCard({ item, accent, delay = 0 }: { item: NewsItem; accent: string; delay?: number }) {
+function NewsCard({ item, accent, delay = 0, catKey = 'istanbul' }: { item: NewsItem; accent: string; delay?: number; catKey?: string }) {
   const [visible, setVisible] = useState(false);
-  const [imgOk, setImgOk] = useState(!!item.image);
+  const imgSrc = articleImage(item, catKey);
+  const [imgOk, setImgOk] = useState(true);
 
   useEffect(() => {
     const id = setTimeout(() => setVisible(true), delay);
@@ -54,10 +72,10 @@ function NewsCard({ item, accent, delay = 0 }: { item: NewsItem; accent: string;
       onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = `${accent}22`; (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; }}
     >
       {/* Arka plan resmi */}
-      {item.image && imgOk && (
-        <img src={item.image} alt="" onError={() => setImgOk(false)}
+      {imgOk && (
+        <img src={imgSrc} alt="" onError={() => setImgOk(false)}
           className="absolute inset-0 w-full h-full object-cover"
-          style={{ opacity: 0.18 }} />
+          style={{ opacity: 0.45 }} />
       )}
 
       {/* Sol accent çizgisi */}
@@ -162,7 +180,7 @@ function CityColumn({
       ) : (
         <div className="space-y-3">
           {items.map((item, i) => (
-            <NewsCard key={item.id} item={item} accent={accent} delay={Math.min(i * 40, 600)} />
+            <NewsCard key={item.id} item={item} accent={accent} catKey={name === 'İstanbul' ? 'istanbul' : 'athens'} delay={Math.min(i * 40, 600)} />
           ))}
         </div>
       )}
