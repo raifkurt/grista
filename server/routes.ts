@@ -116,27 +116,36 @@ async function translate(text: string, from = 'el', to = 'tr'): Promise<string> 
 
 const FEEDS: Record<string, string[]> = {
 
-  // ── İSTANBUL: Gayrimenkul ağırlıklı 8 kaynak ──
+  // ── İSTANBUL: Şehrin nabzı ── Sadece İstanbul'da olanlar
   istanbul: [
-    'https://news.google.com/rss/search?q=İstanbul+gayrimenkul+emlak+konut&hl=tr&gl=TR&ceid=TR:tr',
-    'https://news.google.com/rss/search?q=İstanbul+kira+kiralık+satılık+daire&hl=tr&gl=TR&ceid=TR:tr',
-    'https://news.google.com/rss/search?q=İstanbul+inşaat+proje+konut+fiyat&hl=tr&gl=TR&ceid=TR:tr',
-    'https://news.google.com/rss/search?q=Beşiktaş+Kadıköy+Şişli+Bakırköy+emlak&hl=tr&gl=TR&ceid=TR:tr',
-    'https://news.google.com/rss/search?q=Eyüpsultan+Çekmeköy+Başakşehir+konut&hl=tr&gl=TR&ceid=TR:tr',
-    'https://news.google.com/rss/search?q=İstanbul+konut+yatırım+kira+getirisi&hl=tr&gl=TR&ceid=TR:tr',
-    'https://news.google.com/rss/search?q=İstanbul+kentsel+dönüşüm+deprem+yapı&hl=tr&gl=TR&ceid=TR:tr',
-    'https://news.google.com/rss/search?q=sahibinden+hepsiemlak+emlakjet+İstanbul&hl=tr&gl=TR&ceid=TR:tr',
+    // Genel İstanbul haberleri
+    'https://news.google.com/rss/search?q=İstanbul+haber+şehir&hl=tr&gl=TR&ceid=TR:tr',
+    // Gayrimenkul + kira
+    'https://news.google.com/rss/search?q=İstanbul+konut+kira+emlak+fiyat&hl=tr&gl=TR&ceid=TR:tr',
+    // İlçeler bazında
+    'https://news.google.com/rss/search?q=Beşiktaş+Kadıköy+Şişli+Sarıyer+haber&hl=tr&gl=TR&ceid=TR:tr',
+    // İnşaat + kentsel dönüşüm
+    'https://news.google.com/rss/search?q=İstanbul+inşaat+kentsel+dönüşüm+proje&hl=tr&gl=TR&ceid=TR:tr',
+    // Yatırım + piyasa
+    'https://news.google.com/rss/search?q=İstanbul+gayrimenkul+yatırım+değer&hl=tr&gl=TR&ceid=TR:tr',
+    // Ulaşım + altyapı
+    'https://news.google.com/rss/search?q=İstanbul+metro+ulaşım+altyapı+İBB&hl=tr&gl=TR&ceid=TR:tr',
   ],
 
-  // ── ATİNA: Gayrimenkul ağırlıklı 7 kaynak ──
+  // ── ATİNA: Şehrin nabzı ── Sadece Atina'da olanlar
   athens: [
-    'https://news.google.com/rss/search?q=Athens+real+estate+property+market&hl=en&gl=GR&ceid=GR:en',
-    'https://news.google.com/rss/search?q=Greece+property+investment+Golden+Visa+2026&hl=en&gl=GR&ceid=GR:en',
-    'https://news.google.com/rss/search?q=Athens+apartment+rent+buy+Greece&hl=en&gl=GR&ceid=GR:en',
-    'https://news.google.com/rss/search?q=Αθήνα+ακίνητα+αγοραπωλησίες+κτηματαγορά&hl=el&gl=GR&ceid=GR:el',
-    'https://news.google.com/rss/search?q=Ελλάδα+ακίνητα+ενοίκιο+αγορά&hl=el&gl=GR&ceid=GR:el',
-    'https://news.google.com/rss/search?q=Greece+housing+market+prices+2026&hl=en&gl=GR&ceid=GR:en',
-    'https://news.google.com/rss/search?q=Glyfada+Kolonaki+Athens+property&hl=en&gl=GR&ceid=GR:en',
+    // Genel Atina haberleri (İngilizce)
+    'https://news.google.com/rss/search?q=Athens+Greece+city+news+2026&hl=en&gl=GR&ceid=GR:en',
+    // Gayrimenkul (İngilizce)
+    'https://news.google.com/rss/search?q=Athens+real+estate+property+rent+buy&hl=en&gl=GR&ceid=GR:en',
+    // Golden Visa + yatırım
+    'https://news.google.com/rss/search?q=Greece+Golden+Visa+property+investment&hl=en&gl=GR&ceid=GR:en',
+    // Yunanca haberler
+    'https://news.google.com/rss/search?q=Αθήνα+ακίνητα+αγορά+κτηματαγορά&hl=el&gl=GR&ceid=GR:el',
+    // Mahalle bazında (Kolonaki, Glyfada)
+    'https://news.google.com/rss/search?q=Kolonaki+Glyfada+Vouliagmeni+property&hl=en&gl=GR&ceid=GR:en',
+    // Atina şehir haberleri
+    'https://news.google.com/rss/search?q=Athens+municipality+city+development&hl=en&gl=GR&ceid=GR:en',
   ],
 
   // ── FİNANS: TR + GR ekonomi ──
