@@ -190,7 +190,7 @@ function MetaReklamRehberi() {
 /* 5. Google Ads Optimizasyon */
 const ESLESME_TIPLERI = [
   {tip:"Genel Eşleme",  ikon:"[...]",renk:"#EF4444",kapsam:"En genis",maliyet:"Dusuk CPC",kullanim:"Kefs, kitleyi genislet"},
-  {tip:"Ifade Eslesme", ikon:""..."",renk:"#F7931A",kapsam:"Orta",    maliyet:"Orta CPC",  kullanim:"Yeni kampanyalar"},
+  {tip:"Ifade Eslesme", ikon:'"..."',renk:"#F7931A",kapsam:"Orta",    maliyet:"Orta CPC",  kullanim:"Yeni kampanyalar"},
   {tip:"Tam Eslesme",   ikon:"[...]",renk:"#10b981",kapsam:"Dar",     maliyet:"Yuksek CPC",kullanim:"Donusum kampanyasi"},
 ];
 const KALITE_PUAN = [
@@ -368,7 +368,7 @@ function MusteriLTVAnaliz() {
           </div>
         </div>
       ))}
-      <div className="text-xs text-emerald-400 mt-2">Hedef: LTV:CAC > 3:1 minimum, ideal 5:1+</div>
+      <div className="text-xs text-emerald-400 mt-2">Hedef: LTV:CAC orani min 3:1, ideal 5:1+</div>
     </div>
   );
 }
@@ -378,7 +378,7 @@ const AB_ELEMENTLER = [
   {el:"Başlık (H1)",   etki:5, sure:"1-2 hafta", ipucu:"En etkili degisken — ilk deneyin"},
   {el:"CTA Butonu",   etki:4, sure:"1-2 hafta", ipucu:"Renk, metin, yer — tek degisen test"},
   {el:"Gorsel/Video", etki:4, sure:"2-3 hafta", ipucu:"Insan yuzu vs urun — kontekste gore"},
-  {el:"Fiyat Gorunum",etki:3, sure:"2-4 hafta", ipucu:"Cerceveleme: "Aylik ₺99" vs "Yillik ₺1188""},
+  {el:'Fiyat Gorunum',etki:3, sure:'2-4 hafta', ipucu:'Fiyat cerceveleme: aylik vs yillik paket karsilastirma'},
   {el:"Form Alanlar", etki:3, sure:"1-2 hafta", ipucu:"Az alan = yuksek tamamlama orani"},
   {el:"Sayfa Yapisi", etki:2, sure:"3-4 hafta", ipucu:"Buyuk degisim, cok ziyaretci gerek"},
 ];
@@ -463,7 +463,7 @@ function AttributionModelleri() {
 /* 11. Sosyal Medya Algoritma Rehberi */
 const SM_PLATFORMLAR = [
   {p:"Instagram",renk:"#E1306C",sıralar:['Kaydetme ve paylaşım > beğeni','Reels organik erişim x4','Story anket/soru: katılım artırır','İlk 30 dakika performansı kritik','Hashtag: 5-10 ilgili, niş tercih et']},
-  {p:"TikTok",  renk:"#010101",sıralar:['Tamamlanma oranı en önemli metrik','Ses trendi kullanımı görünürlük artırır','Dikey video, alt 1/3'te metin','İlk 3 saniye hook zorunlu','Niche topluluğu hedefle (FYP)']},
+  {p:"TikTok",  renk:"#010101",siralar:["Tamamlanma oranı en onemli metrik","Ses trendi gorunurluk artırır","Dikey video, alt ucte metin","Ilk 3 saniye hook zorunlu","Niche toplulugu hedefle FYP"]},
   {p:"LinkedIn",renk:"#0077B5",sıralar:['Metin odaklı gönderi daha fazla erişim','Bağlantı olmadan harici link','Yorum sayısı paylaşımdan değerli','PDF carousel: x3 etkileşim','Kişisel profil > şirket sayfası']},
   {p:"YouTube", renk:"#EF4444",sıralar:['İzleme süresi > tıklama oranı','Thumbnail CTR: %4-10 hedef','İlk 30sn izleyici bağlama','Oynatma listesi saat geçirme süresini artırır','Anahtar kelime başlık + açıklama ilk 2 satır']},
 ];
