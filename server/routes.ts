@@ -302,6 +302,7 @@ export async function registerRoutes(_httpServer: any, app: Express): Promise<an
     const feeds = FEEDS[cat];
     if (!feeds) return res.status(400).json({ error: 'Geçersiz kategori' });
     try {
+      if (req.query.force === '1') delete CACHE[`news_${cat}`]; // cache bypass
       const data = await cached(`news_${cat}`, 90_000, async () => {
         const results = await Promise.allSettled(feeds.map(u => fetchRSS(u, cat)));
         const all = results.filter((r): r is PromiseFulfilledResult<any[]> => r.status === 'fulfilled').flatMap(r => r.value);
@@ -312,8 +313,9 @@ export async function registerRoutes(_httpServer: any, app: Express): Promise<an
   });
 
   // İstanbul + Atina şehir sayfası — maksimum kaynak
-  app.get('/api/cities', async (_req, res) => {
+  app.get('/api/cities', async (req, res) => {
     try {
+      if (req.query.force === '1') delete CACHE['cities']; // cache bypass
       const data = await cached('cities', 3 * 60_000, async () => {
 
         // İstanbul: 8 feed paralel

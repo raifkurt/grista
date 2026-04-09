@@ -148,10 +148,10 @@ export default function FinancialPage() {
   }
 
   /* Finans haber yükleme */
-  const loadFinNews = useCallback(async () => {
+  const loadFinNews = useCallback(async (force = false) => {
     setNewsBusy(true);
     try {
-      const items = await fetchNewsByCategory('finans');
+      const items = await fetchNewsByCategory('finans', force);
       if (items.length) {
       const sorted = [...items].sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime());
       setFinNews(sorted);
@@ -167,7 +167,7 @@ export default function FinancialPage() {
 
   /* Pull-to-refresh */
   useEffect(() => {
-    const handler = () => loadFinNews();
+    const handler = (e: Event) => loadFinNews((e as CustomEvent).detail?.force ?? false);
     window.addEventListener('ptr', handler);
     return () => window.removeEventListener('ptr', handler);
   }, [loadFinNews]);
@@ -342,7 +342,7 @@ export default function FinancialPage() {
                 {finNews.length} haber · {newscd}sn
               </span>
             )}
-            <button onClick={loadFinNews} disabled={newsBusy} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, padding: '6px 12px', borderRadius: 8, border: '1px solid #1a2535', background: 'transparent', color: '#4a6080', cursor: 'pointer' }}>
+            <button onClick={() => loadFinNews(true)} disabled={newsBusy} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, padding: '6px 12px', borderRadius: 8, border: '1px solid #1a2535', background: 'transparent', color: '#4a6080', cursor: 'pointer' }}>
               <RefreshCw size={13} style={newsBusy ? { animation: 'spin 1s linear infinite' } : {}} />
               Yenile
             </button>
@@ -359,7 +359,7 @@ export default function FinancialPage() {
         ) : finNews.length === 0 ? (
           <div style={{ padding: 40, textAlign: 'center', borderRadius: 16, background: 'hsl(222 47% 8%)' }}>
             <p style={{ color: '#4a6080' }}>Haberler yükleniyor…</p>
-            <button onClick={loadFinNews} style={{ marginTop: 8, color: '#0BC5EA', fontSize: 13, background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline' }}>Tekrar dene</button>
+            <button onClick={() => loadFinNews(true)} style={{ marginTop: 8, color: '#0BC5EA', fontSize: 13, background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline' }}>Tekrar dene</button>
           </div>
         ) : (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 12 }}>

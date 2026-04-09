@@ -154,10 +154,10 @@ export default function CitiesPage() {
   const [tab, setTab]           = useState<'istanbul' | 'athens'>('istanbul');
   const cdRef = useRef(30);
 
-  const load = useCallback(async () => {
+  const load = useCallback(async (force = false) => {
     setBusy(true);
     try {
-      const d = await fetchCitiesNews();
+      const d = await fetchCitiesNews(force);
       if (d.istanbul?.length || d.athens?.length) {
         const srt = (arr: NewsItem[]) => [...arr].sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime());
         setIstanbul(srt(d.istanbul ?? []));
@@ -174,7 +174,7 @@ export default function CitiesPage() {
 
   /* Pull-to-refresh */
   useEffect(() => {
-    const handler = () => load();
+    const handler = (e: Event) => load((e as CustomEvent).detail?.force ?? false);
     window.addEventListener('ptr', handler);
     return () => window.removeEventListener('ptr', handler);
   }, [load]);
@@ -203,7 +203,7 @@ export default function CitiesPage() {
             </div>
           )}
         </div>
-        <button onClick={load} disabled={busy} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, padding: '6px 12px', borderRadius: 8, border: '1px solid #1a2535', background: 'transparent', color: '#4a6080', cursor: 'pointer' }}>
+        <button onClick={() => load(true)} disabled={busy} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, padding: '6px 12px', borderRadius: 8, border: '1px solid #1a2535', background: 'transparent', color: '#4a6080', cursor: 'pointer' }}>
           <RefreshCw size={13} style={busy ? { animation: 'spin 1s linear infinite' } : {}} />
           Yenile
         </button>

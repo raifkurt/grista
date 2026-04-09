@@ -112,10 +112,10 @@ export default function HealthPage() {
   const [cd, setCd]       = useState(30);
   const cdRef = useRef(30);
 
-  const load = useCallback(async () => {
+  const load = useCallback(async (force = false) => {
     setBusy(true);
     try {
-      const res = await fetch(`/api/news/healthgood?_=${Date.now()}`, { cache: 'no-store' });
+      const res = await fetch(`/api/news/healthgood?${force ? 'force=1&' : ''}_=${Date.now()}`, { cache: 'no-store' });
       if (res.ok) {
         const d = await res.json();
         if (Array.isArray(d) && d.length) {
@@ -134,7 +134,7 @@ export default function HealthPage() {
 
   /* Pull-to-refresh */
   useEffect(() => {
-    const handler = () => load();
+    const handler = (e: Event) => load((e as CustomEvent).detail?.force ?? false);
     window.addEventListener('ptr', handler);
     return () => window.removeEventListener('ptr', handler);
   }, [load]);
@@ -164,7 +164,7 @@ export default function HealthPage() {
             </div>
           )}
         </div>
-        <button onClick={load} disabled={busy} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, padding: '6px 12px', borderRadius: 8, border: '1px solid #1a2535', background: 'transparent', color: '#4a6080', cursor: 'pointer' }}>
+        <button onClick={() => load(true)} disabled={busy} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, padding: '6px 12px', borderRadius: 8, border: '1px solid #1a2535', background: 'transparent', color: '#4a6080', cursor: 'pointer' }}>
           <RefreshCw size={13} style={busy ? { animation: 'spin 1s linear infinite' } : {}} />
           Yenile
         </button>
@@ -181,7 +181,7 @@ export default function HealthPage() {
         <div style={{ padding: 60, textAlign: 'center', borderRadius: 16, background: 'hsl(222 47% 8%)' }}>
           <Heart size={36} color="#10b981" style={{ opacity: .2, marginBottom: 12 }} />
           <p style={{ color: '#4a6080' }}>Haberler yükleniyor…</p>
-          <button onClick={load} style={{ marginTop: 10, color: '#10b981', fontSize: 13, background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline' }}>Tekrar dene</button>
+          <button onClick={() => load(true)} style={{ marginTop: 10, color: '#10b981', fontSize: 13, background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline' }}>Tekrar dene</button>
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>

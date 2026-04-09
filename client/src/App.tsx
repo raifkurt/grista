@@ -49,7 +49,7 @@ export default function App() {
       if (startY < 0) return;
       const diff = lastY - startY;
       if (diff > 65) {
-        window.dispatchEvent(new Event('ptr'));
+        window.dispatchEvent(new CustomEvent('ptr', { detail: { force: true } }));
         setPtrActive(true);
         setTimeout(() => setPtrActive(false), 1400);
       }

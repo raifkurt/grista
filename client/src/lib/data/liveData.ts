@@ -132,8 +132,8 @@ export async function fetchNewsByCategory(cat: NewsCategory, force = false): Pro
 
 // ─── İstanbul + Atina ─────────────────────────────────────────────────────────
 
-export async function fetchCitiesNews(): Promise<{ istanbul: NewsItem[]; athens: NewsItem[] }> {
-  return apiFetch<any>('/api/cities', { istanbul: [], athens: [] });
+export async function fetchCitiesNews(force = false): Promise<{ istanbul: NewsItem[]; athens: NewsItem[] }> {
+  return apiFetch<any>(force ? '/api/cities?force=1' : '/api/cities', { istanbul: [], athens: [] });
 }
 
 // ─── Ticker ───────────────────────────────────────────────────────────────────
