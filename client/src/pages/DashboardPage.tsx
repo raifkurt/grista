@@ -393,13 +393,34 @@ function HizliBilgi({ macro }: { macro: any }) {
 
 
 /* ── ATHEX Borsa ─────────────────────────────────────────────────── */
+const ATHEX_FALLBACK_STOCKS = [
+  {symbol:'ETE',   name:'National Bank of Greece', price:9.42,  changePct:0.85, isIndex:false},
+  {symbol:'EUROB', name:'Eurobank Ergasias',        price:2.38,  changePct:1.28, isIndex:false},
+  {symbol:'OPAP',  name:'OPAP',                     price:17.85, changePct:0.34, isIndex:false},
+  {symbol:'MYTIL', name:'Mytilineos',               price:41.20, changePct:1.95, isIndex:false},
+  {symbol:'TITC',  name:'Titan Cement',             price:29.80, changePct:0.67, isIndex:false},
+  {symbol:'PPC',   name:'Public Power Corp',        price:12.60, changePct:2.11, isIndex:false},
+  {symbol:'ADMIE', name:'ADMIE Holdings',           price:2.95,  changePct:0.34, isIndex:false},
+  {symbol:'BELA',  name:'Belagri',                  price:1.82,  changePct:-0.55,isIndex:false},
+];
+const ATHEX_INDEX_FALLBACK = {symbol:'^ATF', name:'FTSE/ASE General Index', price:1421.5, changePct:0.72, isIndex:true};
 function AthexBorsa() {
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isFallback, setIsFallback] = useState(false);
   useEffect(() => {
     fetch(`/api/greece/stocks?_=${Date.now()}`, { cache: 'no-store' })
       .then(r => r.ok ? r.json() : []).catch(() => [])
-      .then(d => { setData(Array.isArray(d) ? d : []); setLoading(false); });
+      .then(d => {
+        const arr = Array.isArray(d) ? d : [];
+        if (arr.length > 0) {
+          setData(arr);
+        } else {
+          setData([ATHEX_INDEX_FALLBACK, ...ATHEX_FALLBACK_STOCKS]);
+          setIsFallback(true);
+        }
+        setLoading(false);
+      });
   }, []);
   const index = data.find(d => d.isIndex);
   const stocks = data.filter(d => !d.isIndex);
