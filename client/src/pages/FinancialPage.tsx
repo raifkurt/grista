@@ -14,7 +14,7 @@ function ago(iso: string) {
   return `${Math.floor(s / 86400)}g`;
 }
 
-const const FIN_KW = [
+const FIN_KW = [
   'finance,stock,market',     'money,currency,banking',   'business,economy,office',
   'crypto,bitcoin,blockchain','investment,chart,growth',  'bank,finance,building',
   'trading,exchange,numbers', 'savings,wealth,gold',      'economy,global,trade',
