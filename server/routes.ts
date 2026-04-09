@@ -458,7 +458,15 @@ export async function registerRoutes(_httpServer: any, app: Express): Promise<an
         const btc = majors.find((c: any) => c.id === 'bitcoin');
         const eth = majors.find((c: any) => c.id === 'ethereum');
         const gainers = gainersRaw
-          .filter((c: any) => !['bitcoin', 'ethereum'].includes(c.id) && c.price_change_percentage_24h > 0)
+          .filter((c: any) => {
+            const STABLE = ['tether','usd-coin','binance-usd','dai','true-usd','ethena-usde',
+              'frax','usdd','first-digital-usd','paypal-usd','mountain-protocol-usdm','reserve-rights-token',
+              'liquity-usd','neutrino','fei-usd','gemini-dollar','nusd','celo-dollar'];
+            return !['bitcoin','ethereum'].includes(c.id)
+              && !STABLE.includes(c.id)
+              && Math.abs((c.current_price ?? 1) - 1) > 0.1   // stablecoin fiyat filtresi
+              && (c.price_change_percentage_24h ?? 0) > 1;     // en az %1 artış
+          })
           .slice(0, 10)
           .map(fmt);
         return { btc: btc ? fmt(btc) : null, eth: eth ? fmt(eth) : null, gainers, updatedAt: new Date().toISOString() };

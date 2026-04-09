@@ -327,7 +327,7 @@ export default function FinancialPage() {
         </div>
 
         {/* BTC + ETH */}
-        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:12, marginBottom:12 }}>
+        <div style={{ display:'grid', gridTemplateColumns:'1fr', gap:12, marginBottom:12 }}>
           <BigCoinCard coin={crypto?.btc} />
           <BigCoinCard coin={crypto?.eth} />
         </div>
@@ -350,7 +350,7 @@ export default function FinancialPage() {
       </div>
 
       {/* ══ 2. 4 MODÜL ════════════════════════════════════════════════════ */}
-      <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(300px, 1fr))', gap:14 }}>
+      <div style={{ display:'grid', gridTemplateColumns:'1fr', gap:12 }}>
 
         {/* BIST En Çok Yükselen */}
         <div className="metric-card">
