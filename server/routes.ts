@@ -210,6 +210,14 @@ function cached(key: string, ttl: number, fn: () => Promise<any>) {
 
 export async function registerRoutes(_httpServer: any, app: Express): Promise<any> {
 
+  // Tüm /api/* yanıtlarına tarayıcı cache'ini kapat
+  app.use('/api', (_req, res, next) => {
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.set('Pragma', 'no-cache');
+    res.set('Expires', '0');
+    next();
+  });
+
   // Döviz (Frankfurter ECB)
   app.get('/api/forex', async (_req, res) => {
     try {

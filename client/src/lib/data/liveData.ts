@@ -65,7 +65,7 @@ const CRYPTO_FALLBACK: LiveCrypto = {
 
 async function apiFetch<T>(path: string, fallback: T): Promise<T> {
   try {
-    const res = await fetch(path);
+    const res = await fetch(path, { cache: 'no-store' });
     if (!res.ok) return fallback;
     return await res.json() as T;
   } catch {
@@ -122,7 +122,8 @@ export async function fetchAllNews(force = false): Promise<NewsItem[]> {
 
 export async function fetchNewsByCategory(cat: NewsCategory, force = false): Promise<NewsItem[]> {
   const entry = _news[cat];
-  if (!force && entry && Date.now() - entry.ts < 3 * 60_000) return entry.data;
+  // 25sn client cache — 30sn polling cycle’nin altında, taşıma engellemez
+  if (!force && entry && Date.now() - entry.ts < 25_000) return entry.data;
   const data = await apiFetch<NewsItem[]>(`/api/news/${cat}`, []);
   if (data.length > 0) _news[cat] = { data, ts: Date.now() };
   return data.length > 0 ? data : (entry?.data ?? []);
