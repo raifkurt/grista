@@ -653,6 +653,247 @@ function TrGrKarsilastirma() {
 }
 
 
+
+/* ── Enflasyon Tarihi 2024 ───────────────────────────────────────── */
+const INF_2024 = [
+  {ay:'Oca',tr:64.9,gr:2.9},{ay:'Şub',tr:67.1,gr:2.5},{ay:'Mar',tr:68.5,gr:2.8},
+  {ay:'Nis',tr:69.8,gr:3.1},{ay:'May',tr:75.5,gr:3.0},{ay:'Haz',tr:71.6,gr:2.8},
+  {ay:'Tem',tr:61.8,gr:2.5},{ay:'Ağu',tr:51.9,gr:2.3},{ay:'Eyl',tr:49.4,gr:2.1},
+  {ay:'Eki',tr:48.6,gr:2.2},{ay:'Kas',tr:47.1,gr:2.0},{ay:'Ara',tr:44.4,gr:1.9},
+];
+function EnflasyonKarsilastirma() {
+  const maxTR = Math.max(...INF_2024.map(d=>d.tr));
+  const H = 80;
+  const W = 100;
+  const trPath = INF_2024.map((d,i)=>`${i===0?'M':'L'}${(i/(INF_2024.length-1))*W},${H-((d.tr/maxTR)*H)}`).join(' ');
+  const grPath = INF_2024.map((d,i)=>`${i===0?'M':'L'}${(i/(INF_2024.length-1))*W},${H-((d.gr/maxTR)*H)}`).join(' ');
+  const latest = INF_2024[INF_2024.length-1];
+  return (
+    <div className="metric-card">
+      <div className="flex items-center gap-2 mb-2">
+        <Activity className="w-4 h-4 text-orange-400" />
+        <span className="text-sm font-semibold">Enflasyon Karşılaştırması — 2024 Yıllık</span>
+      </div>
+      <div className="flex gap-4 mb-3">
+        <div className="flex-1 p-2 rounded-xl text-center" style={{background:'hsl(222 47% 5%)',border:'1px solid #ef444430'}}>
+          <div className="text-xs text-muted-foreground">🇹🇷 Türkiye (Aralık)</div>
+          <div className="text-xl font-bold font-mono text-red-400">%{latest.tr}</div>
+          <div className="text-xs text-muted-foreground">Zirve: %75.5 (Mayıs)</div>
+        </div>
+        <div className="flex-1 p-2 rounded-xl text-center" style={{background:'hsl(222 47% 5%)',border:'1px solid #3b82f630'}}>
+          <div className="text-xs text-muted-foreground">🇬🇷 Yunanistan (Aralık)</div>
+          <div className="text-xl font-bold font-mono text-blue-400">%{latest.gr}</div>
+          <div className="text-xs text-muted-foreground">Zirve: %3.1 (Nisan)</div>
+        </div>
+        <div className="flex-1 p-2 rounded-xl text-center" style={{background:'hsl(222 47% 5%)',border:'1px solid #10b98130'}}>
+          <div className="text-xs text-muted-foreground">Fark (kat)</div>
+          <div className="text-xl font-bold font-mono text-emerald-400">×{(latest.tr/latest.gr).toFixed(1)}</div>
+          <div className="text-xs text-muted-foreground">TR/GR oranı</div>
+        </div>
+      </div>
+      <svg viewBox={`0 0 ${W} ${H}`} style={{width:'100%',height:H,display:'block'}} preserveAspectRatio="none">
+        <path d={trPath} fill="none" stroke="#ef4444" strokeWidth="1.5"/>
+        <path d={grPath} fill="none" stroke="#3b82f6" strokeWidth="1.5"/>
+      </svg>
+      <div className="flex justify-between text-xs font-mono text-muted-foreground mt-1">
+        {INF_2024.filter((_,i)=>i%3===0).map(d=><span key={d.ay}>{d.ay}</span>)}
+      </div>
+      <div className="flex gap-3 mt-2 text-xs">
+        <span className="flex items-center gap-1"><span className="w-3 h-0.5 bg-red-400 inline-block"/> Türkiye</span>
+        <span className="flex items-center gap-1"><span className="w-3 h-0.5 bg-blue-400 inline-block"/> Yunanistan</span>
+      </div>
+    </div>
+  );
+}
+
+/* ── Kamu Maliyesi ───────────────────────────────────────────────── */
+const MALIYE = [
+  {gosterge:'Kamu Borcu / GSYİH',     tr:'%32',      gr:'%160',    trIyi:true,  grIyi:false, not:'GR 2010'da %210 idi — reform var'},
+  {gosterge:'Bütçe Dengesi',          tr:'-%3.8',    gr:'+%1.1',   trIyi:false, grIyi:true,  not:'GR 2024'te fazla verdi'},
+  {gosterge:'Cari Hesap Dengesi',     tr:'-%4.2',    gr:'-%6.5',   trIyi:false, grIyi:false, not:'İkisi de açık veriyor'},
+  {gosterge:'Döviz Rezervi',          tr:'$135B',    gr:'€14B',    trIyi:false, grIyi:null,  not:'ECB desteği GR için avantaj'},
+  {gosterge:'Kredi Notu (S&P)',        tr:'B+',       gr:'BBB-',    trIyi:false, grIyi:true,  not:'GR yatırım yapılabilir seviyede'},
+  {gosterge:'Vergi / GSYİH',          tr:'%18',      gr:'%42',     trIyi:true,  grIyi:false, not:'GR AB ortalamasında'},
+];
+function KamuMaliyesi() {
+  return (
+    <div className="metric-card">
+      <div className="flex items-center gap-2 mb-3">
+        <Landmark className="w-4 h-4 text-amber-400" />
+        <span className="text-sm font-semibold">🇹🇷 vs 🇬🇷 — Kamu Maliyesi</span>
+      </div>
+      {MALIYE.map((r,i)=>(
+        <div key={i} className="py-2" style={{borderBottom:'1px solid rgba(255,255,255,.05)'}}>
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex-1 min-w-0">
+              <div className="text-xs font-semibold truncate">{r.gosterge}</div>
+              <div className="text-xs text-muted-foreground" style={{fontSize:9}}>{r.not}</div>
+            </div>
+            <div className="flex gap-3 shrink-0">
+              <span className="text-xs font-bold font-mono px-2 py-0.5 rounded" style={{background:r.trIyi?'#10b98120':'#ef444420',color:r.trIyi?'#10b981':'#ef4444',minWidth:50,textAlign:'center'}}>🇹🇷 {r.tr}</span>
+              <span className="text-xs font-bold font-mono px-2 py-0.5 rounded" style={{background:r.grIyi===true?'#10b98120':r.grIyi===false?'#ef444420':'#f59e0b20',color:r.grIyi===true?'#10b981':r.grIyi===false?'#ef4444':'#f59e0b',minWidth:50,textAlign:'center'}}>🇬🇷 {r.gr}</span>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* ── Ücretler & Yaşam ────────────────────────────────────────────── */
+const UCRETLER = [
+  {kategori:'Asgari Ücret (Aylık)',   trVal:500,  grVal:950,  trStr:'₺22.104 (~$500)',grStr:'€950 (~$1.040)'},
+  {kategori:'Ortalama Ücret',         trVal:950,  grVal:1580, trStr:'~₺42.000 ($950)', grStr:'~€1.580 ($1.730)'},
+  {kategori:'1+1 Kira (Merkez)',      trVal:400,  grVal:800,  trStr:'~₺17.000 ($400)', grStr:'~€750 ($820)'},
+  {kategori:'Aylık Gıda Sepeti',      trVal:200,  grVal:350,  trStr:'~₺8.500 ($200)',  grStr:'~€320 ($350)'},
+  {kategori:'Kira/Ücret Oranı',       trVal:42,   grVal:51,   trStr:'%42',             grStr:'%51'},
+];
+function UcretYasam() {
+  const max = Math.max(...UCRETLER.map(u=>Math.max(u.trVal,u.grVal)));
+  return (
+    <div className="metric-card">
+      <div className="flex items-center gap-2 mb-3">
+        <DollarSign className="w-4 h-4 text-green-400" />
+        <span className="text-sm font-semibold">🇹🇷 vs 🇬🇷 — Ücretler & Yaşam Maliyeti (USD)</span>
+      </div>
+      <div className="space-y-3">
+        {UCRETLER.map((u,i)=>(
+          <div key={i}>
+            <div className="flex justify-between text-xs mb-1">
+              <span className="text-muted-foreground font-semibold">{u.kategori}</span>
+            </div>
+            <div className="flex items-center gap-2 mb-0.5">
+              <span className="text-xs w-3">🇹🇷</span>
+              <div className="flex-1 h-4 rounded-full overflow-hidden" style={{background:'hsl(222 47% 8%)'}}>
+                <div className="h-4 rounded-full flex items-center pl-1" style={{width:`${(u.trVal/max)*100}%`,background:'#ef4444'}}>
+                  <span className="text-white whitespace-nowrap" style={{fontSize:8}}>{u.trStr}</span>
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs w-3">🇬🇷</span>
+              <div className="flex-1 h-4 rounded-full overflow-hidden" style={{background:'hsl(222 47% 8%)'}}>
+                <div className="h-4 rounded-full flex items-center pl-1" style={{width:`${(u.grVal/max)*100}%`,background:'#1d63ed'}}>
+                  <span className="text-white whitespace-nowrap" style={{fontSize:8}}>{u.grStr}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="text-xs text-muted-foreground mt-2 p-2 rounded-lg" style={{background:'hsl(222 47% 5%)',fontSize:10}}>
+        💡 Satın alma gücü paritesinde (PPP) TR kişi başı GSYİH $45K, GR $36K — ikisi de birbirine yakın
+      </div>
+    </div>
+  );
+}
+
+/* ── Dış Ticaret ─────────────────────────────────────────────────── */
+const IHRACAT_TR = [{label:'Makine',pct:24},{label:'Tekstil',pct:18},{label:'Taşıt',pct:16},{label:'Gıda',pct:12},{label:'Metal',pct:10},{label:'Diğer',pct:20}];
+const IHRACAT_GR = [{label:'Petrol ürünleri',pct:34},{label:'Gıda',pct:18},{label:'İlaç',pct:12},{label:'Metal',pct:10},{label:'Tekstil',pct:8},{label:'Diğer',pct:18}];
+function DisTicaret() {
+  return (
+    <div className="metric-card">
+      <div className="flex items-center gap-2 mb-3">
+        <Globe className="w-4 h-4 text-purple-400" />
+        <span className="text-sm font-semibold">🇹🇷 vs 🇬🇷 — Dış Ticaret Yapısı (2024)</span>
+      </div>
+      <div className="grid grid-cols-2 gap-4 mb-3">
+        {[
+          {flag:'🇹🇷',name:'Türkiye',ihracat:'$261B',ithalat:'$362B',denge:'-$101B',color:'#ef4444'},
+          {flag:'🇬🇷',name:'Yunanistan',ihracat:'$51B',ithalat:'$84B',denge:'-$33B',color:'#1d63ed'},
+        ].map(c=>(
+          <div key={c.name} className="p-2 rounded-xl" style={{background:'hsl(222 47% 5%)',border:`1px solid ${c.color}25`}}>
+            <div className="text-xs font-bold mb-2" style={{color:c.color}}>{c.flag} {c.name}</div>
+            {[{l:'İhracat',v:c.ihracat,col:'#10b981'},{l:'İthalat',v:c.ithalat,col:'#ef4444'},{l:'Denge',v:c.denge,col:'#f59e0b'}].map(row=>(
+              <div key={row.l} className="flex justify-between text-xs py-0.5">
+                <span className="text-muted-foreground">{row.l}</span>
+                <span className="font-mono font-bold" style={{color:row.col}}>{row.v}</span>
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <div className="text-xs font-semibold text-muted-foreground mb-2">🇹🇷 İhracat Dağılımı</div>
+          {IHRACAT_TR.map(it=>(
+            <div key={it.label} className="flex items-center gap-1 mb-1">
+              <span className="text-muted-foreground" style={{width:85,fontSize:9}}>{it.label}</span>
+              <div className="flex-1 h-2 rounded-full" style={{background:'hsl(222 47% 8%)'}}>
+                <div className="h-2 rounded-full" style={{width:`${it.pct}%`,background:'#ef4444'}}/>
+              </div>
+              <span className="text-muted-foreground font-mono" style={{fontSize:9,width:24}}>%{it.pct}</span>
+            </div>
+          ))}
+        </div>
+        <div>
+          <div className="text-xs font-semibold text-muted-foreground mb-2">🇬🇷 İhracat Dağılımı</div>
+          {IHRACAT_GR.map(it=>(
+            <div key={it.label} className="flex items-center gap-1 mb-1">
+              <span className="text-muted-foreground" style={{width:85,fontSize:9}}>{it.label}</span>
+              <div className="flex-1 h-2 rounded-full" style={{background:'hsl(222 47% 8%)'}}>
+                <div className="h-2 rounded-full" style={{width:`${it.pct}%`,background:'#1d63ed'}}/>
+              </div>
+              <span className="text-muted-foreground font-mono" style={{fontSize:9,width:24}}>%{it.pct}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── Kapsamlı Ekonomik Karşılaştırma ─────────────────────────────── */
+const EKONOMIK_TABLE = [
+  {kat:'Genel',items:[
+    {gosterge:'GSYİH (nominal)',          tr:'$1.15T',   gr:'$239B',    not:'Türkiye 4.8x büyük'},
+    {gosterge:'Kişi Başı GSYİH',         tr:'$13.5K',   gr:'$22.6K',   not:'GR daha yüksek'},
+    {gosterge:'Kişi Başı GSYİH (PPP)',   tr:'$45K',     gr:'$36K',     not:'TR satın alma gücünde önde'},
+    {gosterge:'Nüfus',                   tr:'86M',       gr:'10.4M',    not:''},
+  ]},
+  {kat:'İşgücü',items:[
+    {gosterge:'İşsizlik',                tr:'%8.8',     gr:'%9.5',     not:'Yakın seviyeler'},
+    {gosterge:'Genç İşsizliği',          tr:'%17.2',    gr:'%22.8',    not:'GR gençlik sorunu'},
+    {gosterge:'İş Kurma Kolaylığı',      tr:'33/190',   gr:'61/190',   not:'Dünya Bankası sıralaması'},
+    {gosterge:'Yolsuzluk Algı Endeksi',  tr:'36/100',   gr:'48/100',   not:'100 = tam temiz'},
+  ]},
+  {kat:'Sektör Ağırlıkları',items:[
+    {gosterge:'Turizm / GSYİH',          tr:'%4.8',     gr:'%20.6',    not:'GR'de dominant sektör'},
+    {gosterge:'Sanayi / GSYİH',          tr:'%29',      gr:'%16',      not:'TR daha sanayi odaklı'},
+    {gosterge:'Tarım / GSYİH',           tr:'%6.5',     gr:'%3.8',     not:''},
+    {gosterge:'Hizmetler / GSYİH',       tr:'%54',      gr:'%77',      not:'GR hizmet ekonomisi'},
+  ]},
+];
+function KapsamliEkonomik() {
+  return (
+    <div className="metric-card">
+      <div className="flex items-center gap-2 mb-3">
+        <BarChart3 className="w-4 h-4 text-cyan-400" />
+        <span className="text-sm font-semibold">🇹🇷 vs 🇬🇷 — Kapsamlı Ekonomik Göstergeler</span>
+      </div>
+      <div className="space-y-3">
+        {EKONOMIK_TABLE.map(kat=>(
+          <div key={kat.kat}>
+            <div className="text-xs font-bold text-cyan-400 mb-1.5 border-b border-cyan-400/20 pb-1">{kat.kat}</div>
+            <div className="space-y-1">
+              {kat.items.map((row,i)=>(
+                <div key={i} className="flex items-center gap-2 py-0.5">
+                  <span className="text-xs text-muted-foreground flex-1 min-w-0 truncate">{row.gosterge}</span>
+                  <span className="text-xs font-mono font-bold text-red-400 shrink-0" style={{minWidth:60,textAlign:'right'}}>🇹🇷 {row.tr}</span>
+                  <span className="text-xs font-mono font-bold text-blue-400 shrink-0" style={{minWidth:60,textAlign:'right'}}>🇬🇷 {row.gr}</span>
+                  {row.not && <span className="text-muted-foreground shrink-0 hidden md:block" style={{fontSize:9,maxWidth:140,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{row.not}</span>}
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+
 /* ════════════════════════════════════════════════════════════════════
    ANA DASHBOARD SAYFASI
 ════════════════════════════════════════════════════════════════════ */
@@ -859,7 +1100,7 @@ export default function DashboardPage() {
           <span className="text-xs font-semibold">Ajan Mesaj Kanalı</span>
           <span className="text-xs text-muted-foreground ml-auto font-mono">Contract Net Protocol</span>
         </div>
-        <div className="space-y-1 max-h-28 overflow-auto">
+        <div className="space-y-1">
           {messageLog.map((msg,i) => (
             <div key={i} className="flex items-center gap-2 text-xs font-mono" style={{ opacity:1-i*.12, fontSize:'10px' }}>
               <span className="text-cyan-400">›</span>
@@ -884,6 +1125,11 @@ export default function DashboardPage() {
       <AltinaVize />
       <YunanistanTurizm />
       <TrGrKarsilastirma />
+      <EnflasyonKarsilastirma />
+      <KamuMaliyesi />
+      <UcretYasam />
+      <DisTicaret />
+      <KapsamliEkonomik />
 
     </div>
   );
