@@ -3,7 +3,7 @@ import { fetchNewsByCategory, NewsItem } from '@/lib/data/liveData';
 import { MonteCarloEngine } from '@/lib/algorithms/monteCarlo';
 import { KalmanFilter } from '@/lib/algorithms/kalman';
 import { generateCurrencyData } from '@/lib/data/marketData';
-import { DollarSign, Activity, RefreshCw, TrendingUp, Bitcoin } from 'lucide-react';
+import { DollarSign, Activity, RefreshCw, TrendingUp, Bitcoin, BarChart2, Building2, Globe, Landmark } from 'lucide-react';
 
 /* ── Yardımcı ─────────────────────────────────────────────────── */
 function ago(iso: string) {
@@ -187,6 +187,13 @@ export default function FinancialPage() {
 
   /* Kripto detay */
   const [cryptoData, setCryptoData] = useState<any>(null);
+
+  /* Yeni modüller */
+  const [usGainers,  setUsGainers]  = useState<any[]>([]);
+  const [bistGainers,setBistGainers]= useState<any[]>([]);
+  const [bankRates,  setBankRates]  = useState<any>(null);
+  const [funds,      setFunds]      = useState<any[]>([]);
+  const [modulesLoading, setModulesLoading] = useState(true);
   const [cryptoCd, setCryptoCd]     = useState(300);
   const cryptoCdRef = useRef(300);
 
@@ -263,6 +270,19 @@ export default function FinancialPage() {
     }, 1000);
     return () => clearInterval(t);
   }, [loadCrypto]);
+
+  // Modül verileri yükle
+  useEffect(() => {
+    Promise.all([
+      fetch(`/api/us/gainers?_=${Date.now()}`,   { cache: 'no-store' }).then(r => r.json()).catch(() => []),
+      fetch(`/api/bist/gainers?_=${Date.now()}`, { cache: 'no-store' }).then(r => r.json()).catch(() => []),
+      fetch(`/api/bankrates?_=${Date.now()}`,    { cache: 'no-store' }).then(r => r.json()).catch(() => null),
+      fetch(`/api/funds?_=${Date.now()}`,        { cache: 'no-store' }).then(r => r.json()).catch(() => []),
+    ]).then(([us, bist, bank, fund]) => {
+      setUsGainers(us); setBistGainers(bist); setBankRates(bank); setFunds(fund);
+      setModulesLoading(false);
+    });
+  }, []);
 
   useEffect(() => { loadFinNews(); }, [loadFinNews]);
 

@@ -467,5 +467,118 @@ export async function registerRoutes(_httpServer: any, app: Express): Promise<an
     } catch (err: any) { res.status(500).json({ error: err.message }); }
   });
 
+
+  // ── ABD Borsası — Günün En Çok Yükselen Hisseleri ─────────────────────────
+  app.get('/api/us/gainers', async (req, res) => {
+    try {
+      if (req.query.force === '1') delete CACHE['us_gainers'];
+      const data = await cached('us_gainers', 5 * 60_000, async () => {
+        const ctrl = new AbortController(); setTimeout(() => ctrl.abort(), 10_000);
+        const r = await fetch(
+          'https://query1.finance.yahoo.com/v1/finance/screener/predefined/saved?formatted=false&lang=en-US&region=US&scrIds=day_gainers&start=0&count=10',
+          { signal: ctrl.signal, headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36' } }
+        );
+        const d = await r.json();
+        return (d.finance?.result?.[0]?.quotes ?? []).map((q: any) => ({
+          symbol: q.symbol, name: q.shortName || q.longName || q.symbol,
+          price: q.regularMarketPrice, changePct: q.regularMarketChangePercent,
+          change: q.regularMarketChange, volume: q.regularMarketVolume, mktCap: q.marketCap,
+        }));
+      });
+      res.json(data);
+    } catch (err: any) { res.status(500).json({ error: err.message }); }
+  });
+
+  // ── BIST — Günün En Çok Yükselen Türk Hisseleri ───────────────────────────
+  app.get('/api/bist/gainers', async (req, res) => {
+    try {
+      if (req.query.force === '1') delete CACHE['bist_gainers'];
+      const data = await cached('bist_gainers', 5 * 60_000, async () => {
+        const ctrl = new AbortController(); setTimeout(() => ctrl.abort(), 10_000);
+        const body = JSON.stringify({
+          offset: 0, size: 10,
+          sortField: 'percentchange', sortType: 'DESC', quoteType: 'EQUITY',
+          topOperator: 'AND',
+          query: { operator: 'AND', operands: [{ operator: 'EQ', operands: ['exchange', 'TUP'] }] },
+          userId: '', userIdType: 'guid',
+        });
+        const r = await fetch('https://query2.finance.yahoo.com/v1/finance/screener?formatted=false&lang=en-US&region=US&start=0&count=10', {
+          method: 'POST', signal: ctrl.signal,
+          headers: { 'Content-Type': 'application/json', 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36' },
+          body,
+        });
+        const d = await r.json();
+        return (d.finance?.result?.[0]?.quotes ?? []).map((q: any) => ({
+          symbol: q.symbol?.replace('.IS', '') ?? q.symbol,
+          name: q.shortName || q.longName || q.symbol,
+          price: q.regularMarketPrice, changePct: q.regularMarketChangePercent,
+          change: q.regularMarketChange, volume: q.regularMarketVolume,
+          currency: q.currency ?? 'TRY',
+        }));
+      });
+      res.json(data);
+    } catch (err: any) { res.status(500).json({ error: err.message }); }
+  });
+
+  // ── Banka TL Mevduat Faizleri ──────────────────────────────────────────────
+  app.get('/api/bankrates', async (_req, res) => {
+    // TCMB politika faizi %37 · Gecelik borç verme %40
+    res.json({
+      updatedAt: '2026-04-09',
+      source: 'TCMB · Banka açıklamaları',
+      tcmbPolicy: 37.00,
+      rates: [
+        { bank: 'QNB Finansbank',      logo: 'QNB',  rate1m: 41.00, rate3m: 41.50, rate6m: 41.00 },
+        { bank: 'HSBC Türkiye',        logo: 'HSBC', rate1m: 40.50, rate3m: 41.00, rate6m: 40.75 },
+        { bank: 'Yapı Kredi',          logo: 'YKB',  rate1m: 40.00, rate3m: 40.50, rate6m: 40.25 },
+        { bank: 'Denizbank',           logo: 'DNZ',  rate1m: 40.00, rate3m: 40.25, rate6m: 40.00 },
+        { bank: 'Garanti BBVA',        logo: 'GRT',  rate1m: 39.50, rate3m: 40.00, rate6m: 39.75 },
+        { bank: 'Akbank',              logo: 'AKB',  rate1m: 39.25, rate3m: 39.75, rate6m: 39.50 },
+        { bank: 'Türkiye İş Bankası',  logo: 'ISB',  rate1m: 39.00, rate3m: 39.50, rate6m: 39.25 },
+        { bank: 'TEB',                 logo: 'TEB',  rate1m: 38.75, rate3m: 39.25, rate6m: 39.00 },
+        { bank: 'Vakıfbank',           logo: 'VKF',  rate1m: 38.50, rate3m: 38.75, rate6m: 38.50 },
+        { bank: 'Halkbank',            logo: 'HLK',  rate1m: 38.50, rate3m: 38.75, rate6m: 38.50 },
+        { bank: 'Ziraat Bankası',      logo: 'ZRT',  rate1m: 38.00, rate3m: 38.50, rate6m: 38.25 },
+      ],
+    });
+  });
+
+  // ── TEFAS — En Fazla Getiren Türk Yatırım Fonları ─────────────────────────
+  app.get('/api/funds', async (req, res) => {
+    try {
+      if (req.query.force === '1') delete CACHE['funds'];
+      const data = await cached('funds', 60 * 60_000, async () => {
+        // TEFAS API — son 30 günlük getiriye göre sıralı
+        const today = new Date();
+        const ago30 = new Date(today); ago30.setDate(today.getDate() - 30);
+        const fmt = (d: Date) => `${String(d.getDate()).padStart(2,'0')}.${String(d.getMonth()+1).padStart(2,'0')}.${d.getFullYear()}`;
+        const ctrl = new AbortController(); setTimeout(() => ctrl.abort(), 12_000);
+        const r = await fetch(
+          `https://www.tefas.gov.tr/api/DB/BindHistoryInfo?FontipKodu=YAT&sfonkod=&bastarih=${fmt(ago30)}&bittarih=${fmt(today)}&fonturkodu=&islemdurum=`,
+          { signal: ctrl.signal, headers: { 'User-Agent': 'Mozilla/5.0', 'Referer': 'https://www.tefas.gov.tr/' } }
+        );
+        if (!r.ok) throw new Error('TEFAS HTTP ' + r.status);
+        const d = await r.json();
+        const list = Array.isArray(d) ? d : (d.data ?? d.Data ?? []);
+        return list
+          .filter((f: any) => f.getiri30 > 0 || f.GETIRI30 > 0)
+          .sort((a: any, b: any) => (b.getiri30 ?? b.GETIRI30 ?? 0) - (a.getiri30 ?? a.GETIRI30 ?? 0))
+          .slice(0, 10)
+          .map((f: any) => ({
+            code: f.fonkodu ?? f.FONKODU ?? '—',
+            name: f.fonadi ?? f.FONADI ?? '—',
+            type: f.foncategorisi ?? f.FONTURU ?? '—',
+            return30d: f.getiri30 ?? f.GETIRI30 ?? 0,
+            return1y:  f.getiri365 ?? f.GETIRI365 ?? null,
+            price:     f.fiyat ?? f.FIYAT ?? null,
+          }));
+      });
+      res.json(data);
+    } catch {
+      // TEFAS erişilemezse boş dön
+      res.json([]);
+    }
+  });
+
   return _httpServer;
 }
