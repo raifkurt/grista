@@ -927,6 +927,18 @@ const IG_MAKALELER = [
    ipucu:'"Banka araştırmanızı biz yapıyoruz" hizmetini standart pakete ekleyin — alıcı zaten bu konuda kaybolmuş durumda.',
    detaylar:['Banka ortaklığı: referans anlaşması + özel faiz','Komisyon: mortgage kapanmasından ₺1-5K','Yabancı kredi: HSBC + Deutsche Bank seçenekleri','Simülasyon: 10-15-20 yıl kıyaslaması sunun'],
    begeni:3300,goruntuleme:9500,renk:'#06B6D4'},
+  {ikon:'🏦',kategori:'Yatırım Analizi',okuma:'5 dk',
+   baslik:'Yeni Bina vs İkinci El: Hangisi Daha Karlı Yatırım',
+   ozet:'Yeni bina avantajları: garantili malzeme, ısı yalıtımı, asansör, site güvenliği, ilk 10 yıl bakım yok. Dezavantaj: erken teslimat riski, çevre henüz olgunlaşmamış. İkinci el avantajı: etabli mahalle, gerçek kira geçmişi, hemen gelir. Hesap: yeni binada değer artışı potansiyeli daha yüksek — özellikle kentsel dönüşüm bölgelerinde.',
+   ipucu:'"Kentsel dönüşüm kararnamesi" olan bölgelerde ikinci el alın — yıkım tazminatı yatırımı koruyor.',
+   detaylar:['Yeni bina: %8-15 erken alım indirimi potansiyeli','İkinci el: anında kira geliri, sıfır bekleme','Kentsel dönüşüm: ikinci el değer 3-5 yılda 2x','Enerji sınıfı A binalar %12 daha yüksek kira'],
+   begeni:4300,goruntuleme:12600,renk:'#F7931A'},
+  {ikon:'🗓️',kategori:'Pazar Araştırması',okuma:'5 dk',
+   baslik:'Satın Almadan Önce 5 Saatlik Bölge Analizi: Profesyonel Yöntem',
+   ozet:'Adım 1: TCMB konut fiyat endeksi + TÜİK bölge istatistiği. Adım 2: Sahibinden arşiv fiyatları 6 ay geriye. Adım 3: Google Maps ile ulaşım + okul + sağlık haritası. Adım 4: Belediye imar planı sorgusu (e-devlet). Adım 5: Mahallede 30 dakika fiziksel yürüyüş. Bu 5 adım, hatalı yatırım riskini %72 azaltıyor.',
+   ipucu:'E-devlet imar plan sorgulamasında "KENTGES" haritasına bakın — yapılaşma yoğunluğu ve yeşil alan planı görünüyor.',
+   detaylar:['TCMB EVDS: ücretsiz, güncel konut fiyat endeksi','Sahibinden arşiv: 6 ay önceki ilan fiyatlarını karşılaştır','İmar planı: e-devlet ile 2 dk'da sorgulanıyor','Fiziksel ziyaret: ses + koku + trafik gerçeği gösterir'],
+   begeni:3800,goruntuleme:11100,renk:'#84CC16'},
 ];
 
 function InstagramKartlar() {
