@@ -638,189 +638,387 @@ function ReklamMetinleri() {
 
 /* ─── Instagram Stili Gayrimenkul Pazarlama Makale Kartları ─── */
 const IG_MAKALELER = [
-  {ikon:'📸',kategori:'Görsel Pazarlama',
+  {ikon:'📸',kategori:'Görsel Pazarlama',okuma:'4 dk',
    baslik:'Emlak Fotoğrafçılığı 101: İlk Bakışta Satan Kareler',
-   ozet:'Doğru ışık saati, lens seçimi ve köşe çekimi tekniğiyle ilanınız %73 daha fazla tıklanıyor. Altın saat neden her şeyi değiştirir?',
+   ozet:'Doğru ışık saati, lens seçimi ve köşe çekimi tekniğiyle ilanınız %73 daha fazla tıklanıyor. Altın saat — gün batımından 1 saat önce — her türlü ışık koşulunu dengeler. Geniş açı lens (16-24mm) odaları gerçekten büyük gösterir; ama fazla kullanmak distorsiyon yaratır. Yatay çekim, dikey çekimden %2x daha fazla tıklanır.',
+   ipucu:'İlk fotoğraf her zaman en parlak oda veya manzara olsun. Karanlık fotoğraf = kayıp lead.',
+   detaylar:['Altın saat: güneş batımı ±1 saat','Köşe çekim: oda %30 büyük görünür','RAW formatı sonradan düzeltmeyi kolaylaştırır','Boş oda satmaz — minimal staging şart'],
    begeni:12400,goruntuleme:47200,renk:'#F7931A'},
-  {ikon:'🎬',kategori:'Video İçerik',
-   baslik:'60 Saniyede Daire Turu: Algoritmayı Yenen Format',
-   ozet:"Hook (0-3 sn) → oda geçişi → manzara → fiyat + CTA. Bu sırayı bozmayın. Reels'te organik erişim %4.8 kira getirisinden daha karlı olabilir.",
+  {ikon:'🎬',kategori:'Video İçerik',okuma:'5 dk',
+   baslik:"60 Saniyede Daire Turu: Algoritmayı Yenen Format",
+   ozet:"Hook (0-3 sn) → oda geçişi → manzara → fiyat + CTA. Bu sırayı bozmayın. Reels'te organik erişim %4.8 kira getirisinden daha karlı olabilir. İlk 3 saniye izleyiciyi tutmazsa algoritma videoyu gömmez. Müzik seçimi izlenme süresini %34 uzatır — trending ses kullanın.",
+   ipucu:'"Bu fiyata son 3 daire" cümlesini 45. saniyeye koyun — algoritma sonuna kadar izlemeyi ödüllendirir.',
+   detaylar:['0-3 sn: dikkat çekici hook cümlesi','4-30 sn: oda oda geçiş, ışıklı çekim','31-50 sn: balkon/manzara/havuz shot','51-60 sn: fiyat + WhatsApp CTA'],
    begeni:9800,goruntuleme:38100,renk:'#E1306C'},
-  {ikon:'📱',kategori:'Sosyal Medya',
+  {ikon:'📱',kategori:'Sosyal Medya',okuma:'3 dk',
    baslik:'Instagram Stories ile 7 Günde Proje Lansmanı',
-   ozet:'Gün 1: teaser, Gün 3: konum, Gün 5: avantaj, Gün 7: CTA. Polling sticker kullanan hesaplar %2.3x daha fazla DM alıyor.',
+   ozet:'Gün 1: teaser (sadece logo + soru), Gün 3: konum ipucu, Gün 5: 3 avantaj sayısı, Gün 7: fiyat aralığı + CTA. Polling sticker kullanan hesaplar %2.3x daha fazla DM alıyor. Geri sayım sticker satın alma aciliyetini %41 artırıyor. Stories 24 saatte kayboluyor — Highlights klasörüne kaydedin.',
+   ipucu:'Her Stories\'e link sticker ekleyin. WhatsApp\'a değil, lead form\'a yönlendirin.',
+   detaylar:['Polling: "Hazır mısın?" sorusu etkileşimi patlıyor','Countdown: gün sayısı satın alma kararını hızlandırıyor','DM otomatik yanıt: anında fiyat listesi gönder','Highlights: "Proje" klasörü = kalıcı tanıtım'],
    begeni:8700,goruntuleme:31400,renk:'#8B5CF6'},
-  {ikon:'🎯',kategori:'Google Ads',
+  {ikon:'🎯',kategori:'Google Ads',okuma:'6 dk',
    baslik:"Google'da Konut Satmak: BOFU Anahtar Kelime Rehberi",
-   ozet:'"İstanbul satilik daire" araması ₺28 CPC\'de dönerken "besiktas 2+1 fiyat" ₺11\'de dönüşüm yapıyor. Long-tail kazandırıyor.',
+   ozet:'"İstanbul satilik daire" araması ₺28 CPC\'de dönerken "besiktas 2+1 fiyat" ₺11\'de dönüşüm yapıyor. Long-tail kelimeler daha az rekabet, daha yüksek niyet demek. Arama ağı kampanyası için günlük bütçe: ₺500-1500. Hedefleme: Türkiye + Körfez ülkeleri + diaspora. Kalite puanı 7+ olmadan CPC düşmez.',
+   ipucu:'"[Semt] + [oda sayısı] + [fiyat aralığı]" formatındaki anahtar kelimeler CPL\'i %40 düşürür.',
+   detaylar:['BOFU: "istanbul satilik daire fiyatlari"','MOFU: "istanbul konut yatirim rehberi"','TOFU: "istanbul kira mi kredi mi hesapla"','Negatif: "kiralık" "ikinci el" "takas" ekleyin'],
    begeni:7600,goruntuleme:28900,renk:'#F7931A'},
-  {ikon:'📧',kategori:'Email Marketing',
+  {ikon:'📧',kategori:'Email Marketing',okuma:'5 dk',
    baslik:'Yatırımcıya Email Yazma Sanatı: 3 Cümle Kuralı',
-   ozet:'Konu satırı rakamla başlasın. İkinci cümle problemini adlandırsın. Üçüncü cümle çözümü sunup CTA\'ya bağlasın. %18 CTR gerçek.',
+   ozet:'Konu satırı rakamla başlasın ("₺268K m² ile İstanbul"). İkinci cümle okuyucunun problemini adlandırsın ("Her ay kira ödeyerek varlık biriktiremiyor olabilirsiniz"). Üçüncü cümle çözümü sunup CTA\'ya bağlasın. Uzun email = çöp. %18 CTR ve %42 açılma oranı gerçek başarılan rakamlar. Kişiselleştirme zorunlu: isim + bölge ilgisi.',
+   ipucu:'Konu satırında emoji kullanmayın — B2B ve yüksek gelirli segment spam filtrelerine takılıyor.',
+   detaylar:['Açılma için: rakam + merak + isim kombinasyonu','Tıklama için: tek CTA — birden fazla link oranı düşürür','Gönderim saati: Salı 10:00 veya Perşembe 14:00','Unsubscribe kolay olsun — temiz liste daha değerli'],
    begeni:7100,goruntuleme:24600,renk:'#06B6D4'},
-  {ikon:'💬',kategori:'WhatsApp',
+  {ikon:'💬',kategori:'WhatsApp',okuma:'4 dk',
    baslik:'WhatsApp Business ile Lead Yönetimi: Etiket Sistemi',
-   ozet:'Sıcak / Ilık / Soğuk / Tur Bekliyor / Tapu Aşaması. 5 etiketle hiçbir lead kaybolmaz. Broadcast listesi ayda 1 kez, gruba değil.',
+   ozet:'Sıcak / Ilık / Soğuk / Tur Bekliyor / Tapu Aşaması — 5 etiketle hiçbir lead kaybolmaz. Broadcast listesi ayda 1 kez, gruba değil. WhatsApp Business katalog özelliğiyle dairelerinizi doğrudan mesaj içinde sergileyin. Otomatik yanıt: çalışma saati dışındaki mesajlara anında fiyat listesi gönder. Okundu bildirimi ile sıcak lead takibi.',
+   ipucu:'Broadcast mesajı sabah 09:00-10:00 arasında gönderilen listede %2.1x daha yüksek yanıt alıyor.',
+   detaylar:['5 etiket sistemi: lead hiç kaybolmuyor','Katalog: daire fotoğraf + fiyat + link','Otomatik yanıt: mesai dışı fiyat listesi','Hızlı yanıt şablonları: 10 saniyelik cevap'],
    begeni:6900,goruntuleme:22300,renk:'#25D366'},
-  {ikon:'🏠',kategori:'Portal Optimizasyonu',
+  {ikon:'🏠',kategori:'Portal Optimizasyonu',okuma:'5 dk',
    baslik:'Sahibinden İlanınızı Zirveye Taşıyan 6 Teknik',
-   ozet:'Başlıkta metro mesafesi + m² + net fiyat zorunlu. İlk 3 fotoğraf köşe çekim olmalı. Günde 1 güncelleme algoritma sıralamasını yükseltir.',
+   ozet:'Başlıkta metro mesafesi + m² + net fiyat zorunlu ("Beşiktaş Metro 2 dk · 110m² · ₺12.5M"). İlk 3 fotoğraf köşe çekim olmalı. Günde 1 güncelleme algoritma sıralamasını yükseltir. Deskripsiyon 400+ kelime olmalı — SEO etkisi var. Fiyat güncelleme taktiği: ₺10 indirim sistemi sıfırlıyor. Platinum paket organik üstten daha etkili.',
+   ipucu:'İlan başlığına "acil satılık" veya "fırsat" yazmayın — güven kaybına yol açıyor.',
+   detaylar:['Başlık: metro mesafesi + m² + fiyat formatı','Günde 1 küçük güncelleme: algoritma sıfırlanıyor','400+ kelime açıklama: Google SEO avantajı','15-20 fotoğraf: az fotoğraf = düşük tıklanma'],
    begeni:6400,goruntuleme:19700,renk:'#10b981'},
-  {ikon:'🗺️',kategori:'SEO & İçerik',
+  {ikon:'🗺️',kategori:'SEO & İçerik',okuma:'7 dk',
    baslik:'Mahalle Rehberi İçeriği: 6 Ayda Organik Lead Makinesi',
-   ozet:'"Beşiktaş\'ta yaşam rehberi" → aylık 4.200 organik arama. Okul + market + metro mesafesi + restoran haritası = kullanıcı sayfada 4 dk kalıyor.',
+   ozet:'"Beşiktaş\'ta yaşam rehberi" → aylık 4.200 organik arama. Okul + market + metro mesafesi + restoran haritası = kullanıcı sayfada 4 dk kalıyor. 4 dakika oturma süresi Google\'ı "bu sayfa değerli" diye düşündürüyor. Her mahalle için ayrı rehber: Beşiktaş, Kadıköy, Ataşehir, Başakşehir. Atina için: Kolonaki, Glyfada, Piraeus, Kifisia ayrı ayrı.',
+   ipucu:'"[Mahalle] + kiralık daire fiyatları 2026" anahtar kelimesi ile başlayın — aylık 1.800 arama.',
+   detaylar:['Okul listesi: en yakın 3 okul + mesafe','Market + AVM: yürüyüş mesafesi verin','Metro/otobüs: güzergah numarası ile','Kira fiyat aralığı: güncel tutun = backlink kaynağı'],
    begeni:5900,goruntuleme:17800,renk:'#84CC16'},
-  {ikon:'🚁',kategori:'Görsel Pazarlama',
+  {ikon:'🚁',kategori:'Görsel Pazarlama',okuma:'4 dk',
    baslik:'Drone Çekimi: Projenizi Farklılaştıran 90 Saniye',
-   ozet:"Deniz/park/metro üst geçişi + proje girişi + çevre havadan. Drone'lu ilanlar portalda %41 daha uzun süre inceleniyor.",
+   ozet:"Deniz/park/metro üst geçişi + proje girişi + çevre havadan. Drone'lu ilanlar portalda %41 daha uzun süre inceleniyor. Türkiye'de drone iznini 3 gün önceden SHGM'ye bildirin. Sabah 07:00 veya akşam 17:00 en iyi ışık açısı. 4K video sonrasında hem Reels hem portal için kesim yapılabilir. Çekim maliyeti ₺1.500-4.000 — ROI en hızlı geri dönenlerden.",
+   ipucu:"Drone çekiminde projeyi en uzaktan başlayıp yaklaşarak bitirin — sinematik etki %2x daha güçlü.",
+   detaylar:['SHGM izni: 3 iş günü önceden başvurun','Altın saat: sabah 07:00 veya akşam 17:00','4K + LOG formatı: sonradan renk düzenleme','90 sn final video + 10 adet still frame cut'],
    begeni:5600,goruntuleme:15300,renk:'#3B82F6'},
-  {ikon:'🌍',kategori:'Yabancı Yatırımcı',
+  {ikon:'🌍',kategori:'Yabancı Yatırımcı',okuma:'6 dk',
    baslik:'Körfezden Avrupaya: Yabancı Alıcıya Pazarlama Dili',
-   ozet:'Körfez: Türkçe değil Arapça, dolar bazlı fiyat, helal yatırım vurgusu. Avrupalı: şeffaf ROI, Schengen bağlantısı, hukuki süreç anlatısı.',
+   ozet:'Körfez (SA, UAE, KW, QA): Arapça içerik, dolar bazlı fiyat, helal yatırım vurgusu, aile büyüklüğü vurgusu. Avrupalı expat: şeffaf ROI tablosu, Schengen bağlantısı, hukuki süreç anlatısı, İngilizce. Rus/CIS: €/$ bazlı, yatırım güvenliği, lokasyon kalitesi. Türk diaspora (DE, NL, AT): Türkçe, duygusal bağ + yatırım karması.',
+   ipucu:'Körfez için pazartesi sabahı (TR saati 09:00 = Dubai 10:00) en yüksek yanıt oranı.',
+   detaylar:['Körfez: Arapça başlık + $ fiyat zorunlu','Avrupalı: hukuki süreç PDF + tapu rehberi','Rus/CIS: €/$ bazlı + Telegram üzerinden iletişim','Diaspora: TL değer kaybı + yatırım mantığı anlat'],
    begeni:5400,goruntuleme:14200,renk:'#1d63ed'},
-  {ikon:'💰',kategori:'Golden Visa',
-   baslik:'Yunanistan Golden Visa: İçerik Stratejisi Rehberi',
-   ozet:'€250K eşiği, Schengen oturumu, 60 günde sonuç — bunlar hook. Detayda: hangi bölgeler sayılıyor, tapu süreci, vergi avantajları.',
+  {ikon:'💰',kategori:'Golden Visa',okuma:'5 dk',
+   baslik:'Yunanistan Golden Visa: İçerik Stratejisi ve SEO Rehberi',
+   ozet:'€250K eşiği, Schengen oturumu, 60 günde sonuç — bunlar hook. Detayda: hangi bölgeler sayılıyor (Atina merkez €500K, çevre €250K), tapu süreci, vergi avantajları, çocuklar için eğitim hakları. "Greece golden visa 2026" kelimesi aylık 18.000 küresel arama. İngilizce + Arapça + Rusça üç dil zorunlu.',
+   ipucu:'"€250K ile Schengen oturumu" ifadesini tüm platformlarda hook olarak kullanın — küresel arama hacmi yüksek.',
+   detaylar:['€250K eşiği: Atina dışı bölgeler','Schengen: 26 ülke seyahat hakkı','Süreç: 60-90 gün, noterde 1 gün','Vergi: %15 flat rate yabancı gelir için'],
    begeni:5200,goruntuleme:13600,renk:'#1d63ed'},
-  {ikon:'📊',kategori:'Lead Generation',
+  {ikon:'📊',kategori:'Lead Generation',okuma:'4 dk',
    baslik:'Kira Getirisi Hesaplayıcısı: En Güçlü Lead Mıknatısı',
-   ozet:"Adres + bütçe giren kullanıcı sıcak lead'e dönüşüyor. Form terk oranı %12 — piyasanın en düşüğü. Email kapısına bağlayın.",
+   ozet:"Adres + bütçe giren kullanıcı sıcak lead'e dönüşüyor. Form terk oranı %12 — piyasanın en düşüğü. Hesaplayıcı: yıllık kira geliri / toplam maliyet = brüt getiri. Net getiri: -vergi -yönetim ücreti -boşluk. İstanbul Beşiktaş brüt %3.2, Kadıköy %3.8, Başakşehir %4.5. Atina Kolonaki %3.5, Glyfada %4.2.",
+   ipucu:"Hesaplayıcı sonucuna 'Bu getiriyi optimize etmek için ücretsiz danışmanlık al' CTA ekleyin — %34 CVR.",
+   detaylar:['3 adım form: bütçe + bölge + amaç','Anlık hesap: brüt ve net getiri göster','Email kapısı: sonuç için email gir','Takip: 24 saat içinde sıcak arama'],
    begeni:5000,goruntuleme:12400,renk:'#EC4899'},
-  {ikon:'🤝',kategori:'CRM & Referans',
-   baslik:"Mevcut Müşteriden Yeni Satış: Referans Programı Kurulumu",
-   ozet:"Her başarılı referans için ₺5-10K hediye çeki veya kira yönetimi indirimi. Referans kaynaklı leadlerin kapanma oranı %2.8x daha yüksek.",
+  {ikon:'🤝',kategori:'CRM & Referans',okuma:'5 dk',
+   baslik:'Mevcut Müşteriden Yeni Satış: Referans Programı Kurulumu',
+   ozet:"Her başarılı referans için ₺5-10K hediye çeki veya kira yönetimi indirimi. Referans kaynaklı leadlerin kapanma oranı %2.8x daha yüksek — zaten güvenilir. Referans veren müşteri kendini değerli hisseder, referans alan güvenle gelir. Yıllık toplantı/iftar organizasyonu: portföy sahiplerini bir araya getirin — ağız içi pazarlama patlar.",
+   ipucu:"Tapu tamamlandıktan 30 gün sonra 'Tanıdığınız var mı?' sorusunu WhatsApp ile sorun — en yüksek yanıt anı.",
+   detaylar:['₺5-10K hediye çeki veya kira indirimi','Referans takip sistemi: CRM\'e lead kaynağı yazın','Yıllık müşteri toplantısı: sadakat + ağ büyür','Referans leadleri: satış süresi %40 kısalıyor'],
    begeni:4800,goruntuleme:11700,renk:'#F7931A'},
-  {ikon:'🖥️',kategori:'CRM',
+  {ikon:'🖥️',kategori:'CRM',okuma:'6 dk',
    baslik:'CRM Olmadan Büyük Hacim Emlak Portföyü Yönetemezsiniz',
-   ozet:'HubSpot CRM ücretsiz plan + WhatsApp entegrasyonu + otomatik takip emaili = 0 kaçan lead. Pipeline görünürlüğü satış süresini %34 kısaltıyor.',
+   ozet:'HubSpot CRM ücretsiz plan + WhatsApp entegrasyonu + otomatik takip emaili = 0 kaçan lead. Pipeline görünürlüğü satış süresini %34 kısaltıyor. Aşamalar: Gelen Lead → Nitelendirme → Tur → Teklif → Tapu. Her aşamada otomasyon: 48 saat yanıt vermeyene otomatik hatırlatma. Salesforce ve Zoho emlak sektörü için özelleştirilebilir.',
+   ipucu:"Telefon görüşmesini otomatik kaydedin (izinli) — 3 ay sonra pattern analizi satış tekniğinizi yeniliyor.",
+   detaylar:['HubSpot Free: 1 milyon contact, sınırsız pipeline','WhatsApp entegrasyon: Twilio veya WATI','Otomasyon: 48 saat sessizlik = otomatik takip','Raporlama: aylık CPL, CVR, satış süresi takip'],
    begeni:4700,goruntuleme:11200,renk:'#06B6D4'},
-  {ikon:'🚀',kategori:'Proje Lansmanı',
+  {ikon:'🚀',kategori:'Proje Lansmanı',okuma:'7 dk',
    baslik:'Proje Lansmanı Öncesi 90 Gün: Beklenti Mühendisliği',
-   ozet:'Ay 3: waitlist + teaser Reels. Ay 2: virtual tur + fiyat ipucu. Ay 1: soft launch listesi. Lansman günü stok baskısı = kuyruğu siz yaratın.',
+   ozet:'Ay 3: waitlist + teaser Reels + "çok yakında" billboard. Ay 2: virtual tur + fiyat ipucu email + broker bilgilendirme. Ay 1: soft launch (waitlist önce) + limited preview + fiyat açıklaması. Lansman günü: stok baskısı + sayım tahtası + canlı stream. Beklenti mühendisliği ile lansman günü %60 stok satılabiliyor.',
+   ipucu:"Waitlist için 'erken kayıt' formu açın — 500+ isim = lansman başarısı garantilenmiş.",
+   detaylar:['Ay 3: teaser + waitlist formu + sosyal medya countdown','Ay 2: broker bilgilendirme + virtual tur + fiyat ipucu','Ay 1: soft launch waitlist\'e, fiyat açıklaması','Lansman: canlı stream + fiziksel etkinlik + sayım'],
    begeni:4600,goruntuleme:10800,renk:'#8B5CF6'},
-  {ikon:'💡',kategori:'Satış Tekniği',
+  {ikon:'💡',kategori:'Satış Tekniği',okuma:'5 dk',
    baslik:'Fiyat Müzakeresinde 5 Psikoloji Tekniği',
-   ozet:'Çapa: önce yüksek fiyat söyleyin. Paketleme: dekorasyon + beyaz eşya ekleyin. Aciliyet: "bu haftaki fiyat" sınırı. Kayıp dili en iyi çalışır.',
+   ozet:'Çapa: önce yüksek fiyat söyleyin — her rakam çapaya göre değerlendiriliyor. Paketleme: dekorasyon + beyaz eşya + park + depo ekleyin, fiyatı bölmeyin. Aciliyet: "bu haftaki fiyat" sınırı gerçek olmalı. Kayıp dili: "Bu fırsatı kaçırırsanız..." cümlesi kazanç dilinden %2.3x daha etkili. Sessizlik: teklif verdikten sonra susun.',
+   ipucu:"Teklif verdikten sonra 7 saniye sessiz kalın — baskı otomatik oluşur, siz konuşmayın.",
+   detaylar:['Çapa etkisi: ilk rakam zihinsel referans oluyor','Paketleme: fiyatı parçalamak değeri yükseltiyor','Aciliyet: gerçek stok baskısı = etik + etkili','Kayıp dili: "kazanmak" değil "kaybetmemek" anlatın'],
    begeni:4500,goruntuleme:10100,renk:'#EF4444'},
-  {ikon:'📐',kategori:'Sunum Tekniği',
+  {ikon:'📐',kategori:'Sunum Tekniği',okuma:'4 dk',
    baslik:'Kat Planını 3 Farklı Şekilde Sunma Sanatı',
-   ozet:"Alıcıya göre format: yaşayacak için mobilya yerleşimi, yatırımcı için kira bölümü potansiyeli, expat için uluslararası ölçü karşılaştırması.",
+   ozet:"Alıcıya göre format seç: yaşayacak için mobilya yerleşimi + güneş açısı + komşu gürültüsü. Yatırımcı için kira bölümü potansiyeli + metrekare verimliliği + boşluk riski. Expat için uluslararası ölçü karşılaştırması (ft²/m²) + net kullanılabilir alan + depo. 3D kat planı 2D'den %56 daha uzun inceleniyor.",
+   ipucu:"Kat planına güneş pusulanı ekleyin — hangi oda öğle güneşi alıyor sorusu her alıcının aklında.",
+   detaylar:['Yaşayacak: mobilya + güneş + gürültü haritası','Yatırımcı: kira potansiyeli + ROI hesabı','Expat: m² = ft² dönüşümü + net vs brüt fark','3D plan: Matterport veya SketchUp ücretsiz versiyon'],
    begeni:4300,goruntuleme:9600,renk:'#3B82F6'},
-  {ikon:'🇬🇷',kategori:'Atina Pazarı',
+  {ikon:'🇬🇷',kategori:'Atina Pazarı',okuma:'5 dk',
    baslik:"Atina'da Gayrimenkul Pazarlama: Spitogatos + Meta Formülü",
-   ozet:"Spitogatos EN/EL çift dil zorunlu. Meta'da Yunanistan'ı + Körfez ülkelerini birlikte hedefleyin. Kolonaki ve Glyfada en yüksek CTR'li bölgeler.",
+   ozet:"Spitogatos EN/EL çift dil zorunlu — tek dil ilan görünürlüğü %45 düşüyor. Meta'da Yunanistan + Körfez ülkeleri + İngiltere birlikte hedefleyin. Kolonaki ve Glyfada en yüksek CTR bölgeler. Piraeus: yatırım ROI anlatısı. Kifisia: aile ve okul vurgusu. €/m² bazlı fiyat. Airbnb getirisi vs uzun dönem kira karşılaştırması hook olarak güçlü.",
+   ipucu:"Spitogatos'ta 'Golden Visa Eligible' etiketini kullanın — yabancı alıcı aramasında ön sıra garantisi.",
+   detaylar:['Spitogatos: EN+EL zorunlu, €/m² fiyat format','Meta hedef: GR + AE + SA + UK kombinasyonu','Kolonaki: lüks + erişim + kültür vurgusu','Glyfada: deniz + marina + plaj yaşamı'],
    begeni:4100,goruntuleme:9100,renk:'#1d63ed'},
-  {ikon:'🌆',kategori:'İstanbul Pazarı',
+  {ikon:'🌆',kategori:'İstanbul Pazarı',okuma:'5 dk',
    baslik:'İstanbul İlçe Konumlandırması: Kime Hangi Semt Satılır',
-   ozet:"Beşiktaş: genç profesyonel + expat. Ataşehir: kurumsal yatırımcı. Başakşehir: Körfez diasporası. Kadıköy: kira + yaşam dengesi arayan.",
+   ozet:"Beşiktaş: genç profesyonel + expat — metro erişimi + sosyal yaşam vurgusu. Ataşehir: kurumsal yatırımcı — m² verimliliği + kira getirisi rakamları. Başakşehir: Körfez diasporası — büyük aile, Arapça içerik, AVM yakınlığı. Kadıköy: kira + yaşam dengesi arayan — Boğaz + ulaşım + kültür. Her semt için ayrı landing page şart.",
+   ipucu:"Her ilçe için ayrı Facebook hedef kitlesi oluşturun — 'Beşiktaş + 25-40 yaş + kira arayanlar' gibi.",
+   detaylar:['Beşiktaş: metro + café + expat topluluk vurgusu','Ataşehir: finansal merkez + yeni bina stoğu','Başakşehir: büyük m² + AVM + okul + camii','Kadıköy: sanat + bohem + Bağdat Caddesi erişimi'],
    begeni:4000,goruntuleme:8800,renk:'#10b981'},
-  {ikon:'⭐',kategori:'Sosyal Kanıt',
+  {ikon:'⭐',kategori:'Sosyal Kanıt',okuma:'4 dk',
    baslik:'Sosyal Kanıt ile Satış Hızı: Müşteri Hikayesi Formatı',
-   ozet:'"3 yıl kira ödedim, şimdi ev sahibiyim" — 45 saniyelik video. Gerçek kişi + gerçek rakam + gerçek mahalle. Dönüşüm %2.1x artıyor.',
+   ozet:'"3 yıl kira ödedim, şimdi ev sahibiyim" — 45 saniyelik video. Gerçek kişi + gerçek rakam + gerçek mahalle. Dönüşüm %2.1x artıyor. Yazılı referans değil video referans — güven %4x daha yüksek. Google Business profili yıldız sayısı 4.8+ olan ajanlar %28 daha fazla lead alıyor. Referans videoyu hem portal ilanına hem Reels\'e koyun.',
+   ipucu:"'Kaç ayda kapattınız?' sorusunu videoya ekletin — hız = güven mesajı.",
+   detaylar:['Video referans: yüz göster + rakam ver + semt belirt','Google Business: 4.8+ yıldız için müşteriye QR kod ver','Sayı verin: "3 ayda tapu teslim" cümlesi satıyor','Portal ilanı: en üste referans müşteri sözü koy'],
    begeni:3900,goruntuleme:8500,renk:'#EC4899'},
-  {ikon:'🎥',kategori:'Teknoloji',
+  {ikon:'🎥',kategori:'Teknoloji',okuma:'5 dk',
    baslik:"Matterport 3D Tur ile Uzaktan Satış: Körfez Yatırımcısı Kazanmak",
-   ozet:"Dubai'dan İstanbul'a uçmadan tur yapan alıcı %67 daha hızlı karar veriyor. QR kod + WhatsApp link + tapu öncesi video toplantı şablonu.",
+   ozet:"Dubai'dan İstanbul'a uçmadan tur yapan alıcı %67 daha hızlı karar veriyor. Matterport Pro3 kamera kiralaması ₺1.500/gün — tapu bedelinin binde biri. QR kod ile link + WhatsApp video toplantı = uzaktan kapanma. Atina projeleri için de zorunlu: Körfez alıcısı hiç gelmeden €250K+ ödüyor.",
+   ipucu:"3D tur linkini email'e değil, WhatsApp'a gönderin — açılma oranı %4x daha yüksek.",
+   detaylar:['Matterport: aylık $69 plan, sınırsız model','QR kod: ilan broşüründe 3D tura direkt link','Uzaktan kapanma: video noterde e-imza mümkün','Atina: Körfez müşterisi gelmeden satın alıyor'],
    begeni:3700,goruntuleme:8100,renk:'#F7931A'},
-  {ikon:'📅',kategori:'İçerik Planlaması',
+  {ikon:'📅',kategori:'İçerik Planlaması',okuma:'4 dk',
    baslik:'Emlak Hesabı için 30 Günlük İçerik Takvimi',
-   ozet:'Pazartesi: piyasa verisi. Çarşamba: daire turu. Cuma: müşteri hikayesi. Pazar: mahalle keşfi. Sabit ritim = güven + algoritma puanı.',
+   ozet:'Pazartesi: piyasa verisi (m² fiyat, enflasyon, faiz). Çarşamba: daire turu Reels veya Stories. Cuma: müşteri hikayesi veya referans. Pazar: mahalle keşfi videosu. Sabit ritim = güven + algoritma puanı. Buffer veya Later ile haftada 1 saat oturumunda tüm haftayı planlayın. Spontane paylaşım yerine takvim sistemi %67 daha tutarlı büyüme sağlıyor.',
+   ipucu:"Her ayın ilk pazartesisi 'aylık piyasa raporu' paylaşın — takipçiler beklemeye başlıyor.",
+   detaylar:['Pazartesi: piyasa raporu + rakam güncellemesi','Çarşamba: proje/daire turu video','Cuma: müşteri hikayesi veya başarı','Pazar: mahalle, yaşam tarzı, keşif içeriği'],
    begeni:3600,goruntuleme:7900,renk:'#84CC16'},
-  {ikon:'🔄',kategori:'Remarketing',
+  {ikon:'🔄',kategori:'Remarketing',okuma:'4 dk',
    baslik:'İlanı Gören ama Aramayan Leadleri Geri Kazanmak',
-   ozet:"Meta Pixel + 30 günlük ziyaretçi hedefleme. Mesaj: \"Baktığınız daire hâlâ müsait — bugün fiyat sorun.\" Remarketing CPL'i %43 düşürüyor.",
+   ozet:"Meta Pixel + 30 günlük ziyaretçi hedefleme. Mesaj: \"Baktığınız daire hâlâ müsait — bugün fiyat sorun.\" Remarketing CPL'i %43 düşürüyor. Sahibinden veya portal ziyaretçilerini Google Ads ile yakalamak için RLSA (Remarketing Lists for Search Ads) kullanın. 7 gün içinde geri dönen kullanıcı satın alma niyetinin zirvesinde.",
+   ipucu:"Remarketing kitlesi için 'sayfa 3 dakika üzeri okuyanlar' segmentini ayrı tutun — en sıcak kitle bu.",
+   detaylar:['Meta Pixel: 30 günlük ziyaretçi liste','RLSA: arama ağında eski ziyaretçiye +%50 teklif artışı','7. gün: en yüksek remarketing dönüşüm anı','Dinamik reklam: gördüğü daireyi tekrar göster'],
    begeni:3400,goruntuleme:7500,renk:'#3B82F6'},
-  {ikon:'🧪',kategori:'A/B Test',
+  {ikon:'🧪',kategori:'A/B Test',okuma:'4 dk',
    baslik:'Hangi İlan Başlığı Daha Çok Tıklanır? 5 Test Sonucu',
-   ozet:'"Beşiktaş 2+1" < "Metro 3 dk · Deniz Manzaralı 2+1 · ₺12M". Rakam + özellik + lokasyon üçlüsü her seferinde kazanıyor. Test süresi: 72 saat.',
+   ozet:'"Beşiktaş 2+1" < "Metro 3 dk · Deniz Manzaralı 2+1 · ₺12M". Rakam + özellik + lokasyon üçlüsü her seferinde kazanıyor. Test süresi minimum 72 saat, minimum 500 görüntüleme. Sahibinden başlık A/B testi: Cuma-Pazartesi arası test, Salı sonucu. Kazanan başlığı tüm platformlara uygulayın. CTR farkı %15+ ise değişiklik kayda değer.',
+   ipucu:"Her ay tek bir değişkeni test edin: önce başlık, sonra fotoğraf sırası, sonra fiyat formatı.",
+   detaylar:['72 saat + 500 görüntüleme minimum örneklem','Değişkenler: başlık, ilk fotoğraf, fiyat formatı','CTR %15+ fark = anlamlı sonuç','Kazananı tüm platformlara kopyalayın'],
    begeni:3300,goruntuleme:7200,renk:'#8B5CF6'},
-  {ikon:'🤳',kategori:'Personal Brand',
+  {ikon:'🤳',kategori:'Personal Brand',okuma:'5 dk',
    baslik:'Emlakçı Influencer Olabilir mi? 10K Takipçi Stratejisi',
-   ozet:'Kendi yüzünüzü gösterin, kendi semtinizde çekin, kendi müşterinizin hikayesini anlatın. Marka hesabı değil kişisel hesap — güven 3x daha yüksek.',
+   ozet:'Kendi yüzünüzü gösterin, kendi semtinizde çekin, kendi müşterinizin hikayesini anlatın. Marka hesabı değil kişisel hesap — güven 3x daha yüksek. Niche belirleyin: "İstanbul Avrupa yakası lüks konut uzmanı" veya "Atina Körfez yatırımcısı danışmanı". Haftalık 3 Reels, günlük 1 Stories ile 6 ayda 10K ulaşmak mümkün.',
+   ipucu:"Bio'ya 'DM → ücretsiz bölge analizi' yazın — takipçiyi müşteriye dönüştüren en basit CTA.",
+   detaylar:['Niche: semt + hedef kitle + uzmanlık alanı','Kişisel hesap: marka hesabından %3x daha güvenilir','3 Reels/hafta + 1 Stories/gün minimum ritim','6 ay = 10K takipçi = ayda 3-5 organik lead'],
    begeni:3200,goruntuleme:6900,renk:'#EC4899'},
-  {ikon:'📲',kategori:'WhatsApp',
+  {ikon:'📲',kategori:'WhatsApp',okuma:'3 dk',
    baslik:'WhatsApp Kataloğu ile Proje Tanıtımı: Adım Adım Kurulum',
-   ozet:'Ürün = daire, fiyat alanı = m² başı ₺ + link. Katalog paylaşımı soğuk mesajdan %5x daha yüksek yanıt alıyor. Günde 1 güncelleme şart.',
+   ozet:'Ürün = daire (kat planı fotoğrafı), fiyat alanı = m² başı ₺ + toplam fiyat, açıklama = 3 özellik + link. Katalog paylaşımı soğuk mesajdan %5x daha yüksek yanıt alıyor. Günde 1 ürün (daire) güncelleme = yeni bildirim. Katalog paylaşım butonu DM\'de tek tık ile çalışıyor. Mevcut müşteri ağı ücretsiz viral dağıtım kanalı.',
+   ipucu:"Katalog'daki her daire için 'Sadece 2 adet kaldı' ibaresi ekleyin — kıtlık hissi anında artar.",
+   detaylar:['Ürün başlığı: daire tipi + kat + manzara','Fiyat: ₺/m² + toplam (iki bilgi birlikte)','Açıklama: 3 özellik + WhatsApp randevu linki','Günlük güncelleme: yeni bildirim = dikkat çekme'],
    begeni:3100,goruntuleme:6600,renk:'#25D366'},
-  {ikon:'💼',kategori:'B2B & Kurumsal',
+  {ikon:'💼',kategori:'B2B & Kurumsal',okuma:'5 dk',
    baslik:'LinkedIn ile Kurumsal Gayrimenkul Pazarlama: Fon & Expat',
-   ozet:"Hedef: CFO, aile ofisi, HR yöneticisi (expat relocation). İçerik: piyasa raporu PDF + ROI analizi. InMail CPS kurumsal segmentte %60 düşürüyor.",
+   ozet:"Hedef: CFO, aile ofisi yöneticisi, HR direktörü (expat relocation bütçesi olan). İçerik: piyasa raporu PDF + ROI analizi + sektör verisi. InMail CPS kurumsal segmentte %60 düşürüyor. Makale yayınlama (LinkedIn Article): haftalık 1 uzun form içerik = düşünce lideri konumu. Company page + kişisel profil birlikte çalışmalı.",
+   ipucu:"LinkedIn'de 'İstanbul Real Estate Market Report 2026' başlıklı PDF paylaşın — 500+ indirme = 500 sıcak B2B lead.",
+   detaylar:['ICP: CFO + aile ofisi + HR direktörü','InMail: kişiselleştirilmiş proje özeti + ROI','Article: haftalık piyasa analizi = otorite','PDF rapor: indirme = lead capture fırsatı'],
    begeni:3000,goruntuleme:6200,renk:'#0077B5'},
-  {ikon:'📈',kategori:'Analitik',
-   baslik:'GA4 ile Emlak Sitesi Analizi: Hangi Sayfa Satıyor',
-   ozet:'Dönüşüm yolu: Blog → Proje Sayfası → İletişim %68. Doğrudan giriş sadece %12. İçerik pazarlaması kanalınızın %56\'sını oluşturuyor.',
+  {ikon:'📈',kategori:'Analitik',okuma:'5 dk',
+   baslik:'GA4 ile Emlak Sitesi Analizi: Hangi Sayfa Gerçekten Satıyor',
+   ozet:'Dönüşüm yolu: Blog → Proje Sayfası → İletişim %68. Doğrudan giriş sadece %12. İçerik pazarlaması kanalınızın %56\'sını oluşturuyor. GA4\'te "iletişim formu gönder" dönüşüm hedefi kurun. Oturma süresi 3 dk+ olan sayfalar lead kalitesini artırıyor. Heatmap (Hotjar ücretsiz): kullanıcı nereye tıklıyor görmek için.',
+   ipucu:"GA4'te kaynak/araç raporu açın — LinkedIn mi, Google mu, WhatsApp mı daha çok lead getiriyor 30 günde görün.",
+   detaylar:['Dönüşüm hedefi: form gönder + WhatsApp tık','Heatmap: Hotjar ücretsiz 35 oturum/gün','Oturma 3 dk+: kaliteli sayfaları bulun','Kaynak analizi: hangi kanal ROI pozitif'],
    begeni:2900,goruntuleme:5900,renk:'#F7931A'},
-  {ikon:'🧲',kategori:'Lead Generation',
+  {ikon:'🧲',kategori:'Lead Generation',okuma:'4 dk',
    baslik:'İndirilebilir Rapor ile Email Listesi Büyütme: Aylık +800 Lead',
-   ozet:'"İstanbul 2026 Konut Piyasası Raporu" PDF karşılığı email. Landing page CVR %34. Sıcak listeye aylık 2 email = ₺1.84M ROI.',
+   ozet:'"İstanbul 2026 Konut Piyasası Raporu" PDF karşılığı email — landing page CVR %34. Sıcak listeye aylık 2 email = ₺1.84M ROI. Rapor içeriği: m² fiyat trendi, ilçe karşılaştırması, yatırım önerileri, kira getirisi tablosu. İndiren kişi satın alma niyetini açıklamış oluyor — en sıcak lead tipi. Raporu her çeyrekte güncelleyin.',
+   ipucu:"Rapor landing page'ine 'Bu raporu 1.240 yatırımcı indirdi' sayacı ekleyin — sosyal kanıt CVR'yi %18 artırıyor.",
+   detaylar:['Başlık: güncel yıl + spesifik şehir + "rapor"','İçerik: m² trendi + ilçe tablosu + tahmin','Landing page: tek form, tek CTA, sosyal kanıt','Dağıtım: LinkedIn + Meta + email imzası'],
    begeni:2700,goruntuleme:5600,renk:'#84CC16'},
-  {ikon:'💎',kategori:'Lüks Segment',
+  {ikon:'💎',kategori:'Lüks Segment',okuma:'5 dk',
    baslik:'Lüks Konut Pazarlamasında Fark Yaratan 5 Detay',
-   ozet:'Fiyat gösterme, erişim duygusu yarat. Özel davet ile tur. Mimari hikaye anlat. Yatırım değil yaşam tarzı sat. Dil: seçkin, sessiz, güvenli.',
+   ozet:'Fiyat gösterme değil, erişim duygusu yarat. Özel davet ile tur — herkes gelemez. Mimari hikaye anlat: mimar kim, ilham neydi, malzeme nereden. Yatırım değil yaşam tarzı sat — "sabah kahvenizi Boğaz\'a karşı için". Dil: seçkin, sessiz, güvenli — büyük harf, ünlem işareti yok. Broker seçimi: sadece referanslı ve onaylı.',
+   ipucu:"Lüks ilanda fiyat yazmayın, 'Fiyat bilgisi için randevu alın' yazın — erişim algısı değeri %15 artırıyor.",
+   detaylar:['İlan dili: sade, seçkin, ünlemsiz','Tur: özel davet + NDA imzası = gizlilik garantisi','Fotoğraf: editöryel stil, beyaz zemin değil sahne','Broker: referanslı, seçici, az müşterili'],
    begeni:2500,goruntuleme:5100,renk:'#06B6D4'},
+  /* ─── 20 YENİ MAKALE ─── */
+  {ikon:'🤖',kategori:'Yapay Zeka',okuma:'5 dk',
+   baslik:'ChatGPT ile Emlak İlanı Yazma: Dakikada Satışa Hazır Metin',
+   ozet:'ChatGPT Prompt şablonu: "Beşiktaş\'ta 110m², 3. kat, deniz manzaralı, metro 3 dk dairesi için Türkçe + İngilizce ilan metni yaz." Output: portal açıklaması + email konu satırı + WhatsApp mesajı + Instagram caption. Hepsini 3 dakikada üretebilirsiniz. A/B test için 3 farklı ton deneyin: profesyonel, samimi, aciliyet temelli.',
+   ipucu:'Claude veya GPT-4o\'ya "lüks, sıcak, davet edici" ton talimatı verin — otomatik dil farkı oluşuyor.',
+   detaylar:['Prompt şablonu: semt + m² + özellik + hedef kitle','Çıktı: TR + EN + AR üç dil eş zamanlı','Ton denemesi: resmi, samimi, aciliyet — A/B test','İlan sonrası: meta açıklama + schema markup'],
+   begeni:8900,goruntuleme:29400,renk:'#8B5CF6'},
+  {ikon:'🎵',kategori:'TikTok',okuma:'4 dk',
+   baslik:'TikTok\'ta Gayrimenkul: 0\'dan 100K Takipçiye Giden Yol',
+   ozet:'TikTok algoritması YouTube\'dan 6x daha hızlı büyütüyor — yeni hesap için organik avantaj muazzam. Format: "Evinizi göstereyim mi?" Duet talebi veya "Bu fiyata şaşıracaksınız" hook. İstanbul lüks daire videosu TikTok\'ta 2M görüntüleme alabiliyor. Günde 1 video, 30 gün — hesap ivme kazanıyor. Hashtag: #istanbulapartment #gayrimenkul #evturu',
+   ipucu:'İlk 5 videoya reklam harcamayın — algoritma organik olarak test ediyor, öyle büyütüyor.',
+   detaylar:['Hook: "Bu fiyata şaşıracaksınız" ilk 2 saniye','Trend ses kullanın: görünürlük 4x artıyor','Hashtag: TR + EN karışık, 5-8 arası','Duet: müşteri "aldım mı almadım mı?" formatı'],
+   begeni:7800,goruntuleme:26300,renk:'#010101'},
+  {ikon:'🏡',kategori:'Open House',okuma:'4 dk',
+   baslik:'Open House Organizasyonu: 1 Günde 20+ Ziyaretçi Formülü',
+   ozet:'Cumartesi 14:00-17:00 penceresi en verimli. Davet: WhatsApp Broadcast + portal ilanı "açık ev günü" etiketi + Instagram Story sayım. Kahve + meyve suyu: ziyaretçi 45 dk daha kalıyor. Kapıda imzalı liste: lead otomatik toplanıyor. Fotoğraflı geri bildirim formu: hangi oda en çok beğenildi analizi. Sonuç: 72 saat içinde 3-5 teklif.',
+   ipucu:'Open House\'u portal ilanında "Bu hafta sonu — sınırlı yer" olarak duyurun, bekleme listesi oluşturun.',
+   detaylar:['Cumartesi 14:00-17:00: en yüksek katılım saati','Davet: Broadcast + Story + portal ilanı','Fiziksel form: isim + telefon + ilgilenilen oda','72 saat: takip call — en sıcak an'],
+   begeni:5100,goruntuleme:16800,renk:'#10b981'},
+  {ikon:'📜',kategori:'Hukuki Süreç',okuma:'6 dk',
+   baslik:'Tapu Sürecini Alıcıya Anlatmanın Pazarlama Değeri',
+   ozet:'Alıcının en büyük korkusu: "Aldatılır mıyım? Tapu güvende mi?" Bu soruyu yanıtlayan ajans güven + kapanma hızı kazanıyor. 5 adım: Satış Vaadi → Tapu Harcı → Noter → TKGM Randevu → Teslim. Her adım için tahmini süre + maliyet şeffaf paylaşılsın. YouTube\'da "tapu süreci" videosu aylık 12.000 arama alıyor.',
+   ipucu:'"Tapu\'da yanınızdayım" garantisi verin — avukat desteği maliyeti ₺2-5K, güven değeri ölçülemez.',
+   detaylar:['5 adım şeffaflık: süreç + maliyet + sorumlu','Tapu harcı: alıcı %2 + satıcı %2 toplam %4','TKGM randevu: e-randevu sistemi, 2-3 gün bekleme','Yabancı alıcı: ek belge + çeviri + apostil'],
+   begeni:4600,goruntuleme:14200,renk:'#F7931A'},
+  {ikon:'🎨',kategori:'Görsel Araçlar',okuma:'3 dk',
+   baslik:'Canva ile Emlak Grafikleri: Profesyonel Görsel Dakikada',
+   ozet:'Canva Pro aylık ₺180 — fotoğraf düzenleme + ilan tasarımı + Stories şablonu hepsi içinde. Emlak için hazır şablon kategorisi var. Renk paleti: marka renginizi kaydedin, her grafik tutarlı. "m² başı ₺268K" gibi veri grafikleri Canva ile 5 dk\'da hazır. Ekip paylaşımı: asistan veya partner aynı hesaptan düzenleyebilir.',
+   ipucu:'Canva\'da "real estate" template arayın — 500+ hazır şablon, sadece metin ve renk değiştirin.',
+   detaylar:['Brand Kit: marka rengi + font bir kez ayarla','Template: her platform için boyut var (Reels, Story, Feed)','Veri grafik: bar chart ile m² karşılaştırması','Ekip: 5 kişiye kadar ücretsiz paylaşım'],
+   begeni:4200,goruntuleme:13100,renk:'#EC4899'},
+  {ikon:'🏗️',kategori:'Off-Plan Satış',okuma:'5 dk',
+   baslik:'Plan Üzeri (Off-Plan) Satış: İnşaat Öncesi Pazarlama Rehberi',
+   ozet:'Off-plan avantajı: %15-25 altında fiyat + taksit esnekliği. Dezavantaj: güven sorunu + teslim riski. Pazarlama cevabı: marka güveni + geçmiş proje referansları + bankadan teminat mektubu. Render kalitesi kritik — AI render ₺500\'de profesyonel çıktı. İnşaat ilerleme videosu aylık paylaşım: alıcı "proje ilerliyor" hissiyle rahat.',
+   ipucu:'Off-plan için inşaat kamerasını YouTube\'da canlı yayın olarak bırakın — 7/24 şeffaflık = güven.',
+   detaylar:['Fiyat avantajı: %15-25 altı ile başlangıç','Teminat: banka teminat mektubu = güven','Render: AI ile ₺500\'de fotogerçekçi görsel','Aylık güncelleme: inşaat ilerleme videosu'],
+   begeni:4400,goruntuleme:13700,renk:'#3B82F6'},
+  {ikon:'📉',kategori:'Kriz Yönetimi',okuma:'5 dk',
+   baslik:'Piyasa Düşüşünde Satış Stratejisi: Yavaş Dönemde Kapanma',
+   ozet:'Düşen piyasada bekleyen alıcı artıyor — fırsatı kimse kaçırmak istemiyor. Strateji: "şimdi almak doğru mu?" sorusunu veriye dayalı cevapla. TL depreciation anlatısı: "Her ay beklersen ₺X kaybediyorsun." Fiyat indirimi yerine değer paketi: park yeri + depo + mobilya dahil. Yabancı alıcı için kur avantajı: "€ bazlı hesapla %18 indirim."',
+   ipucu:'Düşen piyasada "acil satılık" yazma — "stratejik fiyatlandırma" de, aynı mesaj farklı etki.',
+   detaylar:['Veriye dayalı cevap: enflasyon + kira + değer karşılaştırması','TL depreciation: her ay beklemenin maliyeti','Değer paketi: para indirimi yerine bonus ekle','Yabancı: € bazlı hesap ile indirim algısı yarat'],
+   begeni:3800,goruntuleme:11200,renk:'#EF4444'},
+  {ikon:'✈️',kategori:'Yabancı Alıcı',okuma:'5 dk',
+   baslik:'Yabancı Uyruklular için Tapu Rehberi: 8 Adımda Ev Sahibi',
+   ozet:'Yabancı uyruklu Türkiye\'de tapu alabilir — 183 ülke ile karşılıklılık anlaşması. Gerekli: pasaport + vergi numarası + DASK + tapu harcı. Tapu harcı: alım bedelinin %4\'ü. Askeri yasak bölge kontrolü: 2 iş günü. Ortalama süre: başvurudan tapuya 7-15 gün. Yabancı uyruklu arama Google\'da aylık 8.400 — bu içeriği yazan ajans öne çıkıyor.',
+   ipucu:'"Yabancı uyruklu ev alabilir mi?" videosu YouTube\'da yükleyin — her ay 8.400 arama, sıfır rakip video.',
+   detaylar:['183 ülke: TR ile karşılıklılık anlaşması mevcut','Vergi no: online başvuru, 1 iş günü','Tapu harcı: %4 (alıcı + satıcı eşit bölüşebilir)','DASK: zorunlu deprem sigortası, yıllık ₺500-2.000'],
+   begeni:5300,goruntuleme:15900,renk:'#10b981'},
+  {ikon:'🌊',kategori:'Atina Pazarı',okuma:'4 dk',
+   baslik:'Atina Airbnb vs Uzun Dönem Kira: Yatırımcıya Doğru Analiz',
+   ozet:'Airbnb brüt getiri Atina Kolonaki\'de %7-9 — uzun dönem %4-5. Ancak: Airbnb yönetim ücreti %15-25, boşluk riski, eşyalanma maliyeti. Net hesapla fark kapanıyor. Glyfada deniz manzaralı: Airbnb açıkça kazanıyor. Kifisia\'da Airbnb talep daha düşük — uzun dönem güvenli. Yasal durum: Atina\'da Airbnb kayıt zorunlu.',
+   ipucu:'"Airbnb mi uzun dönem mi?" hesaplayıcısını landing page\'e ekleyin — her yatırımcının merak ettiği soru.',
+   detaylar:['Airbnb brüt: %7-9, net: %5-7 (yönetim dahil)','Uzun dönem: %4-5 brüt, %3-4 net, düşük stres','Glyfada: Airbnb net kazanıyor','Kayıt: Yunanistan\'da MHTE lisansı zorunlu'],
+   begeni:4700,goruntuleme:14800,renk:'#1d63ed'},
+  {ikon:'🧮',kategori:'Finansal Araçlar',okuma:'4 dk',
+   baslik:'Mortgage Hesaplayıcısı ile Lead Toplama: Aylık 200+ Form',
+   ozet:'Alıcının ilk sorusu: "Bu daireyi aylık kaç ödemeyle alabilirim?" Hesaplayıcı: gelir × 0.4 = maks taksit, faiz oranı × anapara × süre. İstanbul\'da 20 yıl %3.5 aylık faizle 1M TL kredi = aylık ₺35.000 taksit. Form: yaş + gelir + peşinat → otomatik hesap → WhatsApp CTA. Finans danışmanı yönlendirme = ek hizmet geliri.',
+   ipucu:'Hesaplayıcı sonucuna "Bu krediyi hangi bankadan alırsınız?" seçenekleri ekleyin — banka affiliate geliri.',
+   detaylar:['Formül: kredi = peşinat sonrası değer × aylık faiz × süre','Görsel çıktı: pasta grafik ile peşinat/faiz/anapara','WhatsApp CTA: "Banka karşılaştırması için ulaşın"','Affiliate: banka yönlendirme komisyonu ₺500-2.000'],
+   begeni:4100,goruntuleme:12300,renk:'#84CC16'},
+  {ikon:'🎪',kategori:'Fuar & Etkinlik',okuma:'4 dk',
+   baslik:'Gayrimenkul Fuarında Öne Çıkma: MIPIM, Cityscape ve Türkiye Fuarları',
+   ozet:'MIPIM Cannes (Mart): global yatırımcı + fon erişimi. Cityscape Dubai (Ekim): Körfez yatırımcısı direkt. Real Estate Turkey (İstanbul, yıllık): yerel + diaspora. Fuar hazırlığı: 3D tur QR kodu + broşür TR/EN/AR + canlı WhatsApp randevu sistemi. Fuar bütçeti ₺50K-200K — ROI: 10+ kurumsal lead ile kapanıyor.',
+   ipucu:'Fuar standında QR kodlu "anında WhatsApp randevu" sistem kurun — kartvizit değil numara almak istiyorsunuz.',
+   detaylar:['MIPIM: Mart, Cannes — en prestijli global fuar','Cityscape Dubai: Ekim — Körfez odaklı','Hazırlık: 3 dil broşür + 3D tur QR + video loop','Stand: WhatsApp randevu sistemi + lead form tablet'],
+   begeni:3600,goruntuleme:10800,renk:'#F7931A'},
+  {ikon:'🥽',kategori:'Teknoloji',okuma:'4 dk',
+   baslik:'VR ile Ev Turu: Meta Quest\'ten Ev Satmak',
+   ozet:'Meta Quest 3 ile alıcı dairenin içinde yürüyor — 10.000 km uzaktan. VR tur maliyeti ₺3.000-8.000 (tek seferlik üretim). Körfez yatırımcısı için dönüşüm %2.3x artıyor. Çözüm ortakları: Paracosm, Matterport VR modu. Etkinlik: fuar standında VR gözlük demo = kalabalık çekim garantisi. Yalnızca premium projeler için ekonomik.',
+   ipucu:'VR tur üretimini Matterport\'un "VR Export" özelliğiyle 3D taramadan çıkarın — ayrı üretim maliyeti yok.',
+   detaylar:['Meta Quest 3: ₺8.000 donanım, 1 kez yatırım','VR tur: Matterport\'tan direkt export edilebilir','Körfez demo: fuar standında kalabalık çekiyor','ROI: bir kapanmayla üretim maliyeti karşılanıyor'],
+   begeni:3400,goruntuleme:9700,renk:'#8B5CF6'},
+  {ikon:'📋',kategori:'Raporlama',okuma:'5 dk',
+   baslik:'Çeyreklik Piyasa Raporu: Otorite Kazanmanın En Hızlı Yolu',
+   ozet:'Q1/Q2/Q3/Q4 raporları: m² fiyat değişimi + kira endeksi + işlem hacmi + yatırım trendi. Kaynaklar: TÜİK, TCMB, Bank of Greece, Eurostat. PDF format: 8-12 sayfa, infografik ağırlıklı. Dağıtım: LinkedIn + email listesi + medya gönderimi. Raporu indiren kişi = nitelikli lead. Gazetecilerin sizi kaynak olarak kullanması = ücretsiz PR.',
+   ipucu:'Raporu Kadıköy Gazetesi veya Hürriyet Emlak gibi yerel medyaya gönderin — 1 haber = 10.000 organik erişim.',
+   detaylar:['Çeyreklik: Ocak + Nisan + Temmuz + Ekim başı','Veri: TÜİK EVDS + TCMB + tapu istatistikleri','Format: PDF 8-12 sayfa, infografik ağırlıklı','Dağıtım: medya listesi + LinkedIn + email'],
+   begeni:3200,goruntuleme:9100,renk:'#3B82F6'},
+  {ikon:'🌐',kategori:'İki Pazar',okuma:'6 dk',
+   baslik:'İstanbul-Dubai Köprüsü: İki Şehri Birden Satan Ajans Olmak',
+   ozet:'Dubai\'da yaşayan Türk yatırımcısı: İstanbul\'a yatırım yapıp Atina\'dan Golden Visa istiyor. Bu profil için 3 dilde (TR + EN + AR) içerik + iki şehir bilgisi + vergi danışmanı network zorunlu. Dubai\'da 70.000+ Türk expat bu potansiyelin sadece bir dilimi. Instagram\'da Dubai ofisi + İstanbul ofisi birlikte göstermek = global güven.',
+   ipucu:'LinkedIn\'de "İstanbul + Dubai gayrimenkul" niş keyword ile profil optimize edin — direkt arama yapan kitle var.',
+   detaylar:['70.000+ Türk Dubai expat = aktif yatırım potansiyeli','3 dil: TR + EN + AR minimum','Tax advisor network: UAE + TR karşılaştırmalı vergi','Instagram: iki şehir ofisi = global algı'],
+   begeni:5700,goruntuleme:17200,renk:'#F7931A'},
+  {ikon:'🏊',kategori:'Atina Pazarı',okuma:'4 dk',
+   baslik:'Atina Expat Kiracısı Çekme Stratejisi: Glyfada ve Kolonaki',
+   ozet:'Atina\'da 120.000+ expat — Amerikalı, İngiliz, Körfezli. Glyfada: İngiliz ve Amerikalı expat için deniz + okul + marina. Kolonaki: kültür + restoran + merkezi konum. Hedef platform: Expat.com + InterNations + Facebook Expat Greece grupları. İngilizce ilan + sözleşme zorunlu. Kira garantisi: 12 ay peşin veya sigorta.',
+   ipucu:'"Furnished apartment Athens Glyfada expat" Google araması ayda 2.200 — bu kelimeyle İngilizce ilan yazın.',
+   detaylar:['120.000+ expat Atina\'da yaşıyor','Glyfada: plaj + ISA okulu + marina = expat tercihi','Kolonaki: kültür + yürüyüş mesafesi tüm hizmetler','Kira garantisi: expat iş vereninden referans mektubu'],
+   begeni:3500,goruntuleme:10100,renk:'#1d63ed'},
+  {ikon:'🔑',kategori:'Kira Yönetimi',okuma:'5 dk',
+   baslik:'Yatırımcı Müşteriyi Elde Tutmanın Altın Kuralı: Kira Yönetimi',
+   ozet:'Satışı kapattınız — ama asıl uzun vadeli gelir kira yönetimi hizmetinde. %8-12 komisyon + ayda 1 rapor + sorun yönetimi = müşteri size bağlı. Yatırımcı portföyü büyüdükçe sizinle büyüyor. LTV hesabı: tek satış ₺50K komisyon vs 10 yıl kira yönetimi ₺200K+. Otomasyon: Airbnb yönetim yazılımı + kiracı portal sistemi.',
+   ipucu:'"Satış + 2 yıl ücretsiz kira yönetimi" paketi sunun — müşteriyi rakibe kaptırmamak için yeterli.',
+   detaylar:['Komisyon: aylık kiranın %8-12\'si','Aylık rapor: gelir + gider + bakım + doluluk','LTV: satış komisyonu vs uzun dönem yönetim','Yazılım: Hostaway, Smoobu veya yerel çözüm'],
+   begeni:3900,goruntuleme:11400,renk:'#10b981'},
+  {ikon:'🌱',kategori:'Sürdürülebilirlik',okuma:'4 dk',
+   baslik:'Yeşil Bina Pazarlaması: LEED ve BREEAM Sertifikası Nasıl Satılır',
+   ozet:'LEED sertifikalı bina %8-12 daha yüksek kira getirisi, %5-10 değer artışı. Avrupa\'dan Körfez\'e her yatırımcı ESG uyumlu portföy istiyor. Pazarlama dili: "karbon nötr", "sağlıklı yaşam alanı", "geleceğe yatırım". Enerji tasarrufu rakamları somutlaştırın: "Yıllık ₺8.000 enerji tasarrufu". B2B hedef: kurumsal fon + aile ofisi + ESG fonları.',
+   ipucu:'LEED sertifika plakasını entry\'de gösteren fotoğrafı ilanın 2. fotoğrafı yapın — kurumsal alıcı anında anlıyor.',
+   detaylar:['LEED Gold: %8-12 kira primi + %5-10 değer artışı','Enerji rakamı: yıllık ₺X tasarruf somutlaştırın','ESG hedef: kurumsal fon + aile ofisi','Belge: sertifika fotokopisi ilana ekleyin'],
+   begeni:2800,goruntuleme:7900,renk:'#84CC16'},
+  {ikon:'💳',kategori:'Finansman',okuma:'5 dk',
+   baslik:'Alıcıya Finansman Çözümü Sunmak: Komisyonu İkiye Katlama Yöntemi',
+   ozet:'Finansman çözümü sunan ajans kapanma oranını %34 artırıyor. Banka ortaklığı: Garanti, İş, Yapı Kredi ile referans anlaşması → alıcıya özel faiz oranı. İpotek danışmanı yönlendirme komisyonu: ₺1.000-5.000 / kapanma. Yabancı alıcı için: HSBC Türkiye + Deutsche Bank Türkiye yabancı uyruklulara kredi veriyor. Kredi simülasyonu sunmak güveni pekiştiriyor.',
+   ipucu:'"Banka araştırmanızı biz yapıyoruz" hizmetini standart pakete ekleyin — alıcı zaten bu konuda kaybolmuş durumda.',
+   detaylar:['Banka ortaklığı: referans anlaşması + özel faiz','Komisyon: mortgage kapanmasından ₺1-5K','Yabancı kredi: HSBC + Deutsche Bank seçenekleri','Simülasyon: 10-15-20 yıl kıyaslaması sunun'],
+   begeni:3300,goruntuleme:9500,renk:'#06B6D4'},
 ];
 
 function InstagramKartlar() {
   const fmt = (n: number) => n >= 1000 ? (n/1000).toFixed(1)+'K' : String(n);
   return (
-    <div style={{marginTop:40}}>
-      <div style={{marginBottom:20}}>
-        <h2 style={{fontSize:18,fontWeight:700,color:'#fff',margin:0}}>
-          📚 Gayrimenkul Pazarlama — En Çok Okunan İçerikler
-        </h2>
-        <p style={{fontSize:12,color:'hsl(222 47% 55%)',margin:'4px 0 0'}}>
-          En fazla beğeni ve görüntüleme alanlar önce · {IG_MAKALELER.length} makale
+    <div style={{marginTop:48}}>
+      <div style={{marginBottom:24,borderBottom:'1px solid rgba(255,255,255,.07)',paddingBottom:16}}>
+        <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:6}}>
+          <span style={{fontSize:24}}>📚</span>
+          <h2 style={{fontSize:22,fontWeight:800,color:'#fff',margin:0,letterSpacing:'-0.3px'}}>
+            Gayrimenkul Pazarlama — En Çok Okunan İçerikler
+          </h2>
+        </div>
+        <p style={{fontSize:13,color:'hsl(222 47% 55%)',margin:0}}>
+          En fazla beğeni ve görüntüleme alanlar önce · {IG_MAKALELER.length} makale · İstanbul & Atina pazarına özel
         </p>
       </div>
-      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(280px,1fr))',gap:14}}>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(320px,1fr))',gap:18}}>
         {IG_MAKALELER.map((m,i)=>(
           <div key={i} style={{
-            background:'hsl(222 47% 6%)',
-            border:`1px solid ${m.renk}22`,
-            borderRadius:16,
-            padding:16,
+            background:'hsl(222 47% 5%)',
+            border:`1px solid ${m.renk}28`,
+            borderRadius:18,
+            padding:20,
             display:'flex',
             flexDirection:'column',
-            gap:10,
+            gap:14,
             position:'relative',
             overflow:'hidden',
           }}>
-            {/* Sıra + kategori */}
-            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+            {/* Top bar: kategori + sıra + okuma */}
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',flexWrap:'wrap',gap:6}}>
               <span style={{
-                fontSize:10,fontWeight:700,letterSpacing:1,
-                background:`${m.renk}22`,color:m.renk,
-                padding:'2px 8px',borderRadius:20,
+                fontSize:10,fontWeight:700,letterSpacing:.8,
+                background:`${m.renk}20`,color:m.renk,
+                padding:'3px 10px',borderRadius:20,
               }}>{m.kategori.toUpperCase()}</span>
-              <span style={{fontSize:10,color:'hsl(222 47% 40%)',fontWeight:600}}>#{i+1}</span>
+              <div style={{display:'flex',gap:8,alignItems:'center'}}>
+                <span style={{fontSize:10,color:'hsl(222 47% 45%)'}}>⏱ {m.okuma}</span>
+                <span style={{fontSize:10,color:'hsl(222 47% 35%)',fontWeight:600}}>#{i+1}</span>
+              </div>
             </div>
             {/* Emoji + başlık */}
             <div>
-              <div style={{fontSize:28,marginBottom:6,lineHeight:1}}>{m.ikon}</div>
-              <div style={{fontSize:13,fontWeight:700,color:'#fff',lineHeight:1.4}}>
+              <div style={{fontSize:32,marginBottom:8,lineHeight:1}}>{m.ikon}</div>
+              <div style={{fontSize:15,fontWeight:800,color:'#fff',lineHeight:1.45,letterSpacing:'-0.2px'}}>
                 {m.baslik}
               </div>
             </div>
             {/* Özet */}
-            <div style={{fontSize:12,color:'hsl(222 47% 65%)',lineHeight:1.6,flex:1}}>
+            <div style={{fontSize:13,color:'hsl(222 47% 68%)',lineHeight:1.7,flex:1}}>
               {m.ozet}
             </div>
-            {/* Footer: beğeni + görüntüleme */}
-            <div style={{
-              display:'flex',gap:12,paddingTop:8,
-              borderTop:`1px solid ${m.renk}18`,
-            }}>
-              <span style={{fontSize:11,color:'#EC4899',fontWeight:600}}>
-                ❤️ {fmt(m.begeni)}
-              </span>
-              <span style={{fontSize:11,color:'hsl(222 47% 55%)',fontWeight:600}}>
-                👁 {fmt(m.goruntuleme)}
-              </span>
+            {/* Detay maddeleri */}
+            <div style={{display:'flex',flexDirection:'column',gap:5}}>
+              {m.detaylar.map((d,j)=>(
+                <div key={j} style={{display:'flex',gap:8,alignItems:'flex-start'}}>
+                  <span style={{color:m.renk,fontSize:12,marginTop:1,flexShrink:0}}>▸</span>
+                  <span style={{fontSize:12,color:'hsl(222 47% 60%)',lineHeight:1.5}}>{d}</span>
+                </div>
+              ))}
             </div>
-            {/* Accent bar at bottom */}
+            {/* İpucu */}
             <div style={{
-              position:'absolute',bottom:0,left:0,right:0,height:2,
-              background:`linear-gradient(90deg,${m.renk}88,transparent)`,
+              background:`${m.renk}10`,
+              border:`1px solid ${m.renk}25`,
+              borderRadius:10,
+              padding:'10px 12px',
+            }}>
+              <span style={{fontSize:10,fontWeight:700,color:m.renk,letterSpacing:.5}}>💡 PRO İPUCU</span>
+              <div style={{fontSize:12,color:'hsl(222 47% 72%)',marginTop:4,lineHeight:1.55}}>
+                {m.ipucu}
+              </div>
+            </div>
+            {/* Footer */}
+            <div style={{
+              display:'flex',gap:16,paddingTop:10,
+              borderTop:`1px solid ${m.renk}15`,
+              alignItems:'center',
+            }}>
+              <span style={{fontSize:12,color:'#EC4899',fontWeight:700}}>❤️ {fmt(m.begeni)}</span>
+              <span style={{fontSize:12,color:'hsl(222 47% 50%)',fontWeight:600}}>👁 {fmt(m.goruntuleme)}</span>
+              <div style={{marginLeft:'auto',
+                fontSize:9,fontWeight:700,letterSpacing:.5,
+                background:`${m.renk}15`,color:m.renk,
+                padding:'2px 7px',borderRadius:8,
+              }}>OKUMAK İÇİN KAYDET</div>
+            </div>
+            {/* Bottom accent */}
+            <div style={{
+              position:'absolute',bottom:0,left:0,right:0,height:3,
+              background:`linear-gradient(90deg,${m.renk},${m.renk}44,transparent)`,
             }}/>
           </div>
         ))}
@@ -828,6 +1026,7 @@ function InstagramKartlar() {
     </div>
   );
 }
+
 
 function PazarlamaModulleri() {
   return (
