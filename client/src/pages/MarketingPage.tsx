@@ -937,7 +937,7 @@ const IG_MAKALELER = [
    baslik:'Satın Almadan Önce 5 Saatlik Bölge Analizi: Profesyonel Yöntem',
    ozet:'Adım 1: TCMB konut fiyat endeksi + TÜİK bölge istatistiği. Adım 2: Sahibinden arşiv fiyatları 6 ay geriye. Adım 3: Google Maps ile ulaşım + okul + sağlık haritası. Adım 4: Belediye imar planı sorgusu (e-devlet). Adım 5: Mahallede 30 dakika fiziksel yürüyüş. Bu 5 adım, hatalı yatırım riskini %72 azaltıyor.',
    ipucu:'E-devlet imar plan sorgulamasında "KENTGES" haritasına bakın — yapılaşma yoğunluğu ve yeşil alan planı görünüyor.',
-   detaylar:['TCMB EVDS: ücretsiz, güncel konut fiyat endeksi','Sahibinden arşiv: 6 ay önceki ilan fiyatlarını karşılaştır','İmar planı: e-devlet ile 2 dk'da sorgulanıyor','Fiziksel ziyaret: ses + koku + trafik gerçeği gösterir'],
+   detaylar:['TCMB EVDS: ücretsiz, güncel konut fiyat endeksi','Sahibinden arşiv: 6 ay önceki ilan fiyatlarını karşılaştır','İmar planı: e-devlet ile 2 dk\'da sorgulanıyor','Fiziksel ziyaret: ses + koku + trafik gerçeği gösterir'],
    begeni:3800,goruntuleme:11100,renk:'#84CC16'},
 ];
 
