@@ -459,13 +459,11 @@ export async function registerRoutes(_httpServer: any, app: Express): Promise<an
         const eth = majors.find((c: any) => c.id === 'ethereum');
         const gainers = gainersRaw
           .filter((c: any) => {
-            const STABLE = ['tether','usd-coin','binance-usd','dai','true-usd','ethena-usde',
-              'frax','usdd','first-digital-usd','paypal-usd','mountain-protocol-usdm','reserve-rights-token',
-              'liquity-usd','neutrino','fei-usd','gemini-dollar','nusd','celo-dollar'];
-            return !['bitcoin','ethereum'].includes(c.id)
-              && !STABLE.includes(c.id)
-              && Math.abs((c.current_price ?? 1) - 1) > 0.1   // stablecoin fiyat filtresi
-              && (c.price_change_percentage_24h ?? 0) > 1;     // en az %1 artış
+            const EXCLUDE = ['tether','usd-coin','binance-usd','dai','true-usd','ethena-usde',
+              'frax','usdd','first-digital-usd','paypal-usd','mountain-protocol-usdm',
+              'liquity-usd','fei-usd','gemini-dollar','nusd','celo-dollar',
+              'bitcoin','ethereum'];
+            return !EXCLUDE.includes(c.id) && Math.abs((c.current_price ?? 1) - 1) > 0.05;
           })
           .slice(0, 20)
           .map(fmt);
@@ -497,32 +495,37 @@ export async function registerRoutes(_httpServer: any, app: Express): Promise<an
     } catch (err: any) { res.status(500).json({ error: err.message }); }
   });
 
-  // ── BIST — Günün En Çok Yükselen Türk Hisseleri ───────────────────────────
+  // ── BIST — Yahoo Finance Quote API (bilinen hisseler) ────────────────────────
   app.get('/api/bist/gainers', async (req, res) => {
     try {
       if (req.query.force === '1') delete CACHE['bist_gainers'];
       const data = await cached('bist_gainers', 5 * 60_000, async () => {
-        const ctrl = new AbortController(); setTimeout(() => ctrl.abort(), 10_000);
-        const body = JSON.stringify({
-          offset: 0, size: 10,
-          sortField: 'percentchange', sortType: 'DESC', quoteType: 'EQUITY',
-          topOperator: 'AND',
-          query: { operator: 'AND', operands: [{ operator: 'EQ', operands: ['exchange', 'TUP'] }] },
-          userId: '', userIdType: 'guid',
-        });
-        const r = await fetch('https://query2.finance.yahoo.com/v1/finance/screener?formatted=false&lang=en-US&region=US&start=0&count=10', {
-          method: 'POST', signal: ctrl.signal,
-          headers: { 'Content-Type': 'application/json', 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36' },
-          body,
-        });
+        const SYMBOLS = [
+          'THYAO.IS','GARAN.IS','AKBNK.IS','ISCTR.IS','KCHOL.IS','SASA.IS','PETKM.IS',
+          'EREGL.IS','SAHOL.IS','TOASO.IS','FROTO.IS','KOZAL.IS','BIMAS.IS','TCELL.IS',
+          'TUPRS.IS','ARCLK.IS','PGSUS.IS','ULKER.IS','VESTL.IS','SISE.IS','DOHOL.IS',
+          'EKGYO.IS','KRDMD.IS','TTKOM.IS','ASELS.IS','MGROS.IS','TATGD.IS','AEFES.IS',
+          'SOKM.IS','ENKAI.IS',
+        ].join(',');
+        const ctrl = new AbortController(); setTimeout(() => ctrl.abort(), 12_000);
+        const r = await fetch(
+          `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${SYMBOLS}&fields=regularMarketPrice,regularMarketChangePercent,regularMarketChange,shortName,regularMarketVolume`,
+          { signal: ctrl.signal, headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36' } }
+        );
         const d = await r.json();
-        return (d.finance?.result?.[0]?.quotes ?? []).map((q: any) => ({
-          symbol: q.symbol?.replace('.IS', '') ?? q.symbol,
-          name: q.shortName || q.longName || q.symbol,
-          price: q.regularMarketPrice, changePct: q.regularMarketChangePercent,
-          change: q.regularMarketChange, volume: q.regularMarketVolume,
-          currency: q.currency ?? 'TRY',
-        }));
+        const quotes = d.quoteResponse?.result ?? [];
+        return quotes
+          .filter((q: any) => q.regularMarketPrice > 0)
+          .sort((a: any, b: any) => (b.regularMarketChangePercent ?? 0) - (a.regularMarketChangePercent ?? 0))
+          .slice(0, 10)
+          .map((q: any) => ({
+            symbol: q.symbol?.replace('.IS', '') ?? q.symbol,
+            name: q.shortName || q.longName || q.symbol,
+            price: q.regularMarketPrice,
+            changePct: q.regularMarketChangePercent,
+            change: q.regularMarketChange,
+            volume: q.regularMarketVolume,
+          }));
       });
       res.json(data);
     } catch (err: any) { res.status(500).json({ error: err.message }); }

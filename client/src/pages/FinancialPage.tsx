@@ -312,7 +312,7 @@ export default function FinancialPage() {
         <div className="metric-card">
           <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:8 }}>
             <TrendingUp size={13} color={G}/>
-            <span style={{ fontWeight:700, fontSize:13 }}>En Çok Yükselen 10 Altcoin</span>
+            <span style={{ fontWeight:700, fontSize:13 }}>En Çok Yükselen 20 Altcoin</span>
             <span style={{ fontSize:10, color:'#3d5570', marginLeft:'auto', fontFamily:'monospace' }}>24 saatlik</span>
           </div>
           {cryptoLd ? <Skel n={8}/> : (crypto?.gainers??[]).length===0 ? (
