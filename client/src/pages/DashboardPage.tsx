@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { orchestrator } from '@/lib/agents/orchestrator';
 import { AgentStatus } from '@/lib/agents/types';
 import { generatePriceTrendIndex, getMacroIndicators, generateSentimentData } from '@/lib/data/marketData';
@@ -353,6 +353,198 @@ export default function DashboardPage() {
             </div>
           ))}
         </div>
+      </div>
+
+      {/* ════ Global Piyasa Saatleri ════ */}
+      <PiyasaSaatleri />
+
+      {/* ════ 2025 Yatırım Getiri Karşılaştırması ════ */}
+      <GetiriKarsilastirma />
+
+      {/* ════ Hızlı Bilgi Paneli ════ */}
+      <HizliBilgi macro={liveMacro} />
+
+      {/* ════ Kavram Rehberi ════ */}
+      <KavramRehberi />
+
+    </div>
+  );
+}
+
+// ─── Piyasa Saatleri ───────────────────────────────────────────────────────────────
+const MARKETS = [
+  { name: 'BIST İstanbul',  flag: '🇹🇷', openH: 6.0,  closeH: 13.5, localOpen: '09:00', localClose: '16:30', tz: 'TST' },
+  { name: 'LSE Londra',     flag: '🇬🇧', openH: 8.0,  closeH: 16.5, localOpen: '09:00', localClose: '17:30', tz: 'BST' },
+  { name: 'Xetra Frankfurt',flag: '🇩🇪', openH: 7.0,  closeH: 15.5, localOpen: '09:00', localClose: '17:30', tz: 'CEST' },
+  { name: 'NYSE / NASDAQ',  flag: '🇺🇸', openH: 14.5, closeH: 21.0, localOpen: '09:30', localClose: '16:00', tz: 'EDT' },
+  { name: 'TSE Tokyo',      flag: '🇯🇵', openH: 0.0,  closeH: 6.0,  localOpen: '09:00', localClose: '15:00', tz: 'JST' },
+  { name: 'SSE Şangay',    flag: '🇨🇳', openH: 1.5,  closeH: 7.0,  localOpen: '09:30', localClose: '15:00', tz: 'CST' },
+  { name: 'Kripto (24/7)',  flag: '₿',   openH: -1,  closeH: -1,  localOpen: '00:00', localClose: '24:00', tz: 'UTC' },
+];
+function isOpen(m: typeof MARKETS[0]): boolean {
+  if (m.openH === -1) return true;
+  const now = new Date();
+  const d = now.getUTCDay();
+  if (d === 0 || d === 6) return false;
+  const h = now.getUTCHours() + now.getUTCMinutes() / 60;
+  return m.closeH > m.openH ? h >= m.openH && h < m.closeH : h >= m.openH || h < m.closeH;
+}
+function PiyasaSaatleri() {
+  const [tick, setTick] = useState(0);
+  useEffect(() => { const t = setInterval(() => setTick(n => n + 1), 30000); return () => clearInterval(t); }, []);
+  const open = MARKETS.map(m => isOpen(m));
+  const openCount = open.filter(Boolean).length;
+  return (
+    <div className="metric-card">
+      <div className="flex items-center gap-2 mb-3">
+        <Globe className="w-4 h-4 text-cyan-400" />
+        <span className="text-sm font-semibold">Global Piyasa Saatleri</span>
+        <span className="text-xs font-mono ml-auto" style={{ color: openCount > 0 ? '#10b981' : '#ef4444' }}>
+          {openCount} borsa açık
+        </span>
+      </div>
+      <div className="grid grid-cols-1 gap-2">
+        {MARKETS.map((m, i) => (
+          <div key={m.name} className="flex items-center justify-between p-2 rounded-lg" style={{ background: 'hsl(222 47% 5%)' }}>
+            <div className="flex items-center gap-3">
+              <span style={{ fontSize: 18 }}>{m.flag}</span>
+              <div>
+                <div className="text-xs font-semibold">{m.name}</div>
+                <div className="text-xs text-muted-foreground font-mono">{m.localOpen}–{m.localClose} {m.tz}</div>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <div style={{ width: 8, height: 8, borderRadius: '50%', background: open[i] ? '#10b981' : '#374151', boxShadow: open[i] ? '0 0 6px #10b981' : 'none' }} />
+              <span className="text-xs font-mono font-semibold" style={{ color: open[i] ? '#10b981' : '#4b5563', minWidth: 48 }}>
+                {open[i] ? 'AÇIK' : 'KAPALI'}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="text-xs text-muted-foreground mt-2" style={{ fontSize: 10 }}>
+        👁‍🗨️ Saatler yerel iş saatlerini gösterir. Kripto piyasası günün her saati açıktır.
+      </div>
+    </div>
+  );
+}
+
+// ─── Getiri Karşılaştırma ───────────────────────────────────────────────────────────────
+const RETURNS_2025 = [
+  { name: 'Altın (TRY)',         pct: 47.2, color: '#F59E0B', note: 'En güvenli liman', icon: '🪩' },
+  { name: 'Dolar (USD/TRY)',      pct: 38.8, color: '#10b981', note: 'Kur artışından kazanc', icon: '💵' },
+  { name: 'TL Mevduat',          pct: 38.5, color: '#3B82F6', note: 'Banka faiz getirisi', icon: '🏦' },
+  { name: 'BIST 100',            pct: 29.3, color: '#8B5CF6', note: 'Borsa endeks getirisi', icon: '📈' },
+  { name: 'Kıymetli Gayrimenkul', pct: 28.1, color: '#EF4444', note: 'İst. konut değer artışı', icon: '🏠' },
+  { name: 'Euro (EUR/TRY)',       pct: 23.5, color: '#6B7280', note: 'Avrupa kur artışı', icon: '🇪🇺' },
+  { name: 'Bitcoin (USD)',        pct: 112.4,color: '#F7931A', note: 'Kripto piyasası', icon: '₿' },
+];
+function GetiriKarsilastirma() {
+  const maxPct = Math.max(...RETURNS_2025.map(r => r.pct));
+  return (
+    <div className="metric-card">
+      <div className="flex items-center gap-2 mb-1">
+        <BarChart3 className="w-4 h-4 text-emerald-400" />
+        <span className="text-sm font-semibold">2025 Yılı Yatırım Getiri Karşılaştırması</span>
+      </div>
+      <div className="text-xs text-muted-foreground mb-4">
+        100 TL yatırım yapsaydın, yıl sonunda ne kadar olurdu?
+      </div>
+      <div className="space-y-3">
+        {RETURNS_2025.sort((a, b) => b.pct - a.pct).map(r => (
+          <div key={r.name}>
+            <div className="flex items-center justify-between mb-1">
+              <div className="flex items-center gap-2">
+                <span style={{ fontSize: 14 }}>{r.icon}</span>
+                <div>
+                  <span className="text-xs font-semibold">{r.name}</span>
+                  <span className="text-xs text-muted-foreground ml-2">{r.note}</span>
+                </div>
+              </div>
+              <span className="text-sm font-bold font-mono" style={{ color: r.color }}>+%{r.pct.toFixed(1)}</span>
+            </div>
+            <div className="h-2 rounded-full" style={{ background: 'hsl(222 47% 8%)' }}>
+              <div className="h-2 rounded-full transition-all" style={{ width: `${(r.pct / maxPct) * 100}%`, background: r.color, opacity: 0.85 }} />
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="text-xs text-muted-foreground mt-3 p-2 rounded-lg" style={{ background: 'hsl(222 47% 5%)', fontSize: 10 }}>
+        ⚠️ Geçmiş getiri, gelecekteki getiriyi garanti etmez. Bu veriler bilgi amaçlıdır.
+      </div>
+    </div>
+  );
+}
+
+// ─── Hızlı Bilgi Paneli ───────────────────────────────────────────────────────────────
+function HizliBilgi({ macro }: { macro: any }) {
+  const m = macro ?? { turkey: { policyRate: 37, inflation: 30.91, gdpGrowth: 3.3, unemployment: 8.8 }, greece: { policyRate: 2.00, gdpGrowth: 2.5, touristArrivals: 33.6 } };
+  const items = [
+    { icon: '🇹🇷', label: 'Türkiye Merkez Bankası Faizi', value: `%${m.turkey.policyRate?.toFixed(2)}`, desc: 'Bu oran, bankaların birbirinden borcuç aldığı taban faizdir. Yüksekse mevduat da yüksek olur.', color: '#ef4444' },
+    { icon: '📈', label: 'Türkiye Enflasyonu', value: `%${m.turkey.inflation?.toFixed(1)}`, desc: 'Yıllık fiyat artış oranı. Maaşın bu orandan fazla artmadıysa satın alma gücün düştü.', color: '#f59e0b' },
+    { icon: '🇪🇺', label: 'ECB (Avrupa) Faizi', value: `%${m.greece.policyRate?.toFixed(2)}`, desc: 'Avrupa Merkez Bankası faizi. Atina gayrimenkullerini ve Euro/TRY kurunu etkiler.', color: '#3b82f6' },
+    { icon: '🇹🇷', label: 'Türkiye Büyme (GSYH)', value: `+%${m.turkey.gdpGrowth?.toFixed(1)}`, desc: 'Ekonominin ne hızda büydüğü. Pozitifse ekonomi genisliyor, negatifse daralıyor.', color: '#10b981' },
+    { icon: '🇬🇷', label: 'Yunanistan Büyme', value: `+%${m.greece.gdpGrowth?.toFixed(1)}`, desc: 'Atina özelinde önemli: turizm ve gayrimenkul yatırımları büyumeyi destekliyor.', color: '#10b981' },
+    { icon: '🇹🇷', label: 'Türkiye İşsizlik', value: `%${m.turkey.unemployment?.toFixed(1)}`, desc: 'Çalışmak isteyen ama iş bulamayanların oranı. Düşerse ekonomi güçlenıyor demektir.', color: '#8b5cf6' },
+    { icon: '🇬🇷', label: 'Yunanistan Turizm', value: `${m.greece.touristArrivals?.toFixed(1)}M/yıl`, desc: 'Yıllık turist sayısı. Atina konut ve kira piyasasını doğrudan etkiler.', color: '#0bc5ea' },
+    { icon: '🏦', label: 'En Yüksek Mevduat', value: '%41.00', desc: 'QNB Finansbank 1 ay vadeli TL mevduatı. 100.000₺ yatırınca yılda ~41.000₺ faiz.', color: '#f77f00' },
+  ];
+  return (
+    <div>
+      <div className="flex items-center gap-2 mb-3">
+        <Target className="w-4 h-4 text-cyan-400" />
+        <span className="text-sm font-semibold">Hızlı Bilgi Paneli</span>
+        <span className="text-xs text-muted-foreground ml-auto">Dünya Bankası · ECB · TCMB verileri</span>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        {items.map(it => (
+          <div key={it.label} className="metric-card" style={{ borderLeft: `3px solid ${it.color}` }}>
+            <div className="flex items-center gap-2 mb-1">
+              <span style={{ fontSize: 16 }}>{it.icon}</span>
+              <span className="text-xs font-semibold text-muted-foreground">{it.label}</span>
+              <span className="text-sm font-bold font-mono ml-auto" style={{ color: it.color }}>{it.value}</span>
+            </div>
+            <div className="text-xs text-muted-foreground leading-relaxed">{it.desc}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── Kavram Rehberi ───────────────────────────────────────────────────────────────
+const KAVRAMLAR = [
+  { term: 'Enflasyon',       icon: '📈', color: '#ef4444', text: 'Fiyatların genel seviyesinin artmasıdır. %30 enflasyon: dün 100₺’ye aldığın şey bugün 130₺. Paranın alım gücü azalır.' },
+  { term: 'Faiz Oranı',     icon: '🏦', color: '#3b82f6', text: 'Bankaya para yatırdığında ya da borç aldığında uygulanan yüzdedir. TCMB %37 = bankalar bu oranla para bulabilir.' },
+  { term: 'Döviz Kuru',     icon: '💱', color: '#10b981', text: 'Bir paranın başka bir paraya göre değeridir. USD/TRY 44 = 1 dolar için 44 TL ödemek gerekiyor demektir.' },
+  { term: 'Borsa Endeksi',   icon: '📊', color: '#8b5cf6', text: 'Seçilmiş hisselerin ortalama değerini gösteren ölçüttür. BIST 100 = İstanbul borsasındaki en büyük 100 şirket.' },
+  { term: 'Volatilite',      icon: '〰️', color: '#6366f1', text: 'Fiyatların ne kadar dalgalandığının ölçüsüdür. Yüksek volatilite = daha yüksek risk ama daha yüksek kazanc fırsatı.' },
+  { term: 'Portföy',         icon: '💼', color: '#0bc5ea', text: 'Sahip olduğun tüm yatırımların toplamıdır. Hisse + altın + dolar + gayrimenkul bir arada portföy oluşturur.' },
+  { term: 'Risk / Getiri',   icon: '⚖️', color: '#f97316', text: 'Daha fazla getiri için daha fazla risk alınır. Mevduat güvenli ama az kazandırır; Bitcoin riskli ama çok kazandırabilir.' },
+  { term: 'Kira Getirisi',   icon: '🏠', color: '#ec4899', text: 'Gayrimenkulden yılda elde edilen kira gelirinin mülk değerine oranıdır. %4 = 1M₺ mülk ayda ~3.333₺ kira.' },
+  { term: 'Piyasa Değeri',   icon: '🏢', color: '#f59e0b', text: 'Bir şirketin borsadaki toplam değeridir. Hisse fiyatı × toplam hisse sayısı. Apple = 3 trilyon dolar piyasa değeri.' },
+  { term: 'VaR (Risk Ölçümü)',icon: '🛡️', color: '#a855f7', text: '%95 güvenle 1 günde kaybedilebilecek maksimum miktardır. VaR 180K₺ = 100 günde en fazla 5 gün bu kadar kaybı aşarsin.' },
+  { term: 'Sentiment',       icon: '🗣️', color: '#22d3ee', text: 'Yatırımcıların genel duygusu/beklentisidir. "Açgözlülük" = herkes alıyor, piyasa üstlenmiş olabilir. "Korku" = satış fırsatı olabilir.' },
+  { term: 'Arbitraj',        icon: '⚡', color: '#84cc16', text: 'Aynı şeyin farklı yerlerde farklı fiyatlandırılmasından kazanç sağlamaktır. Dünyanın en bilinen yatırım stratejilerinden biridir.' },
+];
+function KavramRehberi() {
+  return (
+    <div>
+      <div className="flex items-center gap-2 mb-3">
+        <Brain className="w-4 h-4 text-cyan-400" />
+        <span className="text-sm font-semibold">Kavram Rehberi</span>
+        <span className="text-xs text-muted-foreground ml-auto">Hiç bilmeyenler için açıklamalar</span>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        {KAVRAMLAR.map(k => (
+          <div key={k.term} className="p-3 rounded-xl" style={{ background: 'hsl(222 47% 5%)', border: `1px solid ${k.color}20` }}>
+            <div className="flex items-center gap-2 mb-1.5">
+              <span style={{ fontSize: 18 }}>{k.icon}</span>
+              <span className="text-xs font-bold" style={{ color: k.color }}>{k.term}</span>
+            </div>
+            <div className="text-xs text-muted-foreground leading-relaxed">{k.text}</div>
+          </div>
+        ))}
       </div>
     </div>
   );
