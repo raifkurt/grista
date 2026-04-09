@@ -3,11 +3,28 @@ import { RefreshCw, MapPin } from 'lucide-react';
 import { fetchCitiesNews, NewsItem } from '@/lib/data/liveData';
 
 /* ── Resim ────────────────────────────────────────────────────────── */
+const IST_KW = [
+  'istanbul,bosphorus,turkey', 'mosque,minaret,architecture', 'istanbul,skyline,city',
+  'bazaar,market,culture',     'bridge,sea,turkey',           'ottoman,palace,history',
+  'street,city,istanbul',      'travel,landmark,istanbul',    'construction,urban,modern',
+  'harbor,port,boats',         'neighborhood,istanbul,city',  'galata,tower,istanbul',
+  'turkey,culture,people',     'sunset,sea,istanbul',         'historical,district,istanbul',
+];
+const ATH_KW = [
+  'athens,parthenon,greece', 'greece,sea,blue',             'acropolis,ancient,ruins',
+  'greek,architecture,white', 'mediterranean,coast,greece',  'athens,city,street',
+  'greece,culture,tradition', 'olive,mediterranean,trees',   'greek,island,aegean',
+  'temple,ancient,columns',   'athens,sunset,landmark',      'greece,travel,tourism',
+  'white,blue,cyclades',      'greek,food,taverna',          'greece,economy,parliament',
+];
+
 function img(item: NewsItem, city: 'istanbul' | 'athens') {
   if (item.image) return item.image;
-  const h = item.id.split('').reduce((a, c) => a + c.charCodeAt(0), 0) % 1000;
-  const kw = city === 'istanbul' ? 'istanbul,bosphorus,turkey' : 'athens,acropolis,greece';
-  return `https://loremflickr.com/800/500/${kw}?lock=${h}`;
+  let h = 5381;
+  for (const c of item.id + item.title) h = ((h << 5) + h + c.charCodeAt(0)) & 0x7fffffff;
+  const a = Math.abs(h);
+  const kw = (city === 'istanbul' ? IST_KW : ATH_KW)[a % (city === 'istanbul' ? IST_KW.length : ATH_KW.length)];
+  return `https://loremflickr.com/800/500/${kw}?lock=${a % 9999}`;
 }
 
 function ago(iso: string) {

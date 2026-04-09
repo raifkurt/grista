@@ -14,15 +14,20 @@ function ago(iso: string) {
   return `${Math.floor(s / 86400)}g`;
 }
 
-const FIN_KW = [
-  'finance,stock,market', 'money,trading,chart', 'business,economy,bank',
-  'crypto,bitcoin,blockchain', 'investment,growth,profit', 'wall-street,nasdaq,exchange',
+const const FIN_KW = [
+  'finance,stock,market',     'money,currency,banking',   'business,economy,office',
+  'crypto,bitcoin,blockchain','investment,chart,growth',  'bank,finance,building',
+  'trading,exchange,numbers', 'savings,wealth,gold',      'economy,global,trade',
+  'startup,entrepreneur,tech','coins,gold,wealth',        'data,analytics,charts',
+  'economics,market,analysis','wall-street,nasdaq,stocks','real-estate,property,invest',
 ];
 
 function finImg(item: NewsItem) {
   if (item.image) return item.image;
-  const h = item.id.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
-  return `https://loremflickr.com/800/500/${FIN_KW[h % FIN_KW.length]}?lock=${h % 500}`;
+  let h = 5381;
+  for (const c of item.id + item.title) h = ((h << 5) + h + c.charCodeAt(0)) & 0x7fffffff;
+  const a = Math.abs(h);
+  return `https://loremflickr.com/800/500/${FIN_KW[a % FIN_KW.length]}?lock=${a % 9999}`;
 }
 
 /* ── Finans Haber Kartı ───────────────────────────────────────── */

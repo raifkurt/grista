@@ -4,15 +4,21 @@ import { NewsItem } from '@/lib/data/liveData';
 
 /* ── Resim ────────────────────────────────────────────────────────── */
 const KW = [
-  'health,wellness,nature', 'fitness,yoga,sport', 'food,nutrition,fruit',
-  'medical,science,lab', 'nature,forest,green', 'ocean,calm,blue',
-  'flowers,garden,spring', 'running,active,lifestyle', 'sunrise,sky,peaceful',
+  'medical,doctor,hospital',    'science,research,laboratory', 'fitness,running,exercise',
+  'nutrition,food,vegetables',  'mental,wellness,meditation',  'aging,longevity,senior',
+  'heart,cardiology,pulse',     'brain,neurology,cognitive',   'medicine,pharmacy,capsules',
+  'clinic,surgery,treatment',   'yoga,zen,mindfulness',        'cancer,research,oncology',
+  'sleep,rest,recovery',        'biotech,genome,DNA',          'family,children,healthy',
+  'sport,athletic,performance', 'water,nature,purity',         'vitamins,minerals,health',
+  'biology,microscope,cells',   'immunity,vaccine,science',
 ];
 
 function img(item: NewsItem) {
   if (item.image) return item.image;
-  const h = item.id.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
-  return `https://loremflickr.com/800/500/${KW[h % KW.length]}?lock=${h % 500}`;
+  let h = 5381;
+  for (const c of item.id + item.title) h = ((h << 5) + h + c.charCodeAt(0)) & 0x7fffffff;
+  const a = Math.abs(h);
+  return `https://loremflickr.com/800/500/${KW[a % KW.length]}?lock=${a % 9999}`;
 }
 
 function ago(iso: string) {
