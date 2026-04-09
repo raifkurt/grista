@@ -435,39 +435,38 @@ export async function registerRoutes(_httpServer: any, app: Express): Promise<an
   });
 
 
-  // ── Kripto Detay: BTC+ETH + Top 10 Altcoin Yükseleni ─────────────────────
+  // ── Kripto Detay: BTC+ETH + Top 20 Altcoin ───────────────────────────────
   app.get('/api/cryptodetail', async (req, res) => {
     try {
       if (req.query.force === '1') delete CACHE['cryptodetail'];
-      const data = await cached('cryptodetail', 5 * 60_000, async () => {
-        const ctrl = new AbortController();
-        setTimeout(() => ctrl.abort(), 12_000);
-        // BTC + ETH detayı
-        const [r1, r2] = await Promise.all([
-          fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin,ethereum&order=market_cap_desc&per_page=2&page=1&sparkline=false&price_change_percentage=24h', { signal: ctrl.signal }),
-          fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=price_change_percentage_24h_desc&per_page=50&page=1&sparkline=false', { signal: ctrl.signal }),
-        ]);
-        const [majors, gainersRaw] = await Promise.all([r1.json(), r2.json()]);
-        const fmt = (c: any) => ({
-          id: c.id, symbol: c.symbol.toUpperCase(), name: c.name,
-          price: c.current_price, change24h: c.price_change_percentage_24h,
-          marketCap: c.market_cap, image: c.image,
-          high24h: c.high_24h, low24h: c.low_24h,
-          volume: c.total_volume,
-        });
-        const btc = majors.find((c: any) => c.id === 'bitcoin');
-        const eth = majors.find((c: any) => c.id === 'ethereum');
-        const gainers = gainersRaw
-          .filter((c: any) => {
-            const EXCLUDE = ['tether','usd-coin','binance-usd','dai','true-usd','ethena-usde',
-              'frax','usdd','first-digital-usd','paypal-usd','mountain-protocol-usdm',
-              'liquity-usd','fei-usd','gemini-dollar','nusd','celo-dollar',
-              'bitcoin','ethereum'];
-            return !EXCLUDE.includes(c.id) && Math.abs((c.current_price ?? 1) - 1) > 0.05;
-          })
-          .slice(0, 20)
-          .map(fmt);
-        return { btc: btc ? fmt(btc) : null, eth: eth ? fmt(eth) : null, gainers, updatedAt: new Date().toISOString() };
+      const data = await cached('cryptodetail', 10 * 60_000, async () => {
+        const hdr = { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36' };
+        const EXCLUDE = new Set(['tether','usd-coin','binance-usd','dai','true-usd','ethena-usde',
+          'frax','usdd','first-digital-usd','paypal-usd','mountain-protocol-usdm',
+          'liquity-usd','fei-usd','gemini-dollar','nusd','celo-dollar','bitcoin','ethereum']);
+
+        // BTC + ETH — ayrı try/catch
+        let btc: any = null, eth: any = null;
+        try {
+          const ctrl1 = new AbortController(); setTimeout(() => ctrl1.abort(), 10_000);
+          const r1 = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin,ethereum&order=market_cap_desc&per_page=2&page=1&sparkline=false&price_change_percentage=24h', { signal: ctrl1.signal, headers: hdr });
+          const majors = await r1.json();
+          const fmt = (c: any) => ({ id:c.id, symbol:c.symbol.toUpperCase(), name:c.name, price:c.current_price, change24h:c.price_change_percentage_24h, marketCap:c.market_cap, image:c.image, high24h:c.high_24h, low24h:c.low_24h, volume:c.total_volume });
+          btc = majors.find((c:any)=>c.id==='bitcoin') ? fmt(majors.find((c:any)=>c.id==='bitcoin')) : null;
+          eth = majors.find((c:any)=>c.id==='ethereum') ? fmt(majors.find((c:any)=>c.id==='ethereum')) : null;
+        } catch { /* BTC/ETH çekilemedi */ }
+
+        // Altcoin gainers — ayrı try/catch
+        let gainers: any[] = [];
+        try {
+          const ctrl2 = new AbortController(); setTimeout(() => ctrl2.abort(), 10_000);
+          const r2 = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=price_change_percentage_24h_desc&per_page=100&page=1&sparkline=false', { signal: ctrl2.signal, headers: hdr });
+          const raw = await r2.json();
+          const fmt2 = (c: any) => ({ id:c.id, symbol:c.symbol.toUpperCase(), name:c.name, price:c.current_price, change24h:c.price_change_percentage_24h, marketCap:c.market_cap, image:c.image, volume:c.total_volume });
+          gainers = raw.filter((c:any)=>!EXCLUDE.has(c.id) && Math.abs((c.current_price??1)-1)>0.05).slice(0,20).map(fmt2);
+        } catch { /* altcoin çekilemedi */ }
+
+        return { btc, eth, gainers, updatedAt: new Date().toISOString() };
       });
       res.json(data);
     } catch (err: any) { res.status(500).json({ error: err.message }); }
