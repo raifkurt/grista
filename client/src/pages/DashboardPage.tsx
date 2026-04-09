@@ -31,8 +31,10 @@ const STATES = ['perceiving', 'deliberating', 'executing', 'communicating', 'idl
 export default function DashboardPage() {
   const [statuses, setStatuses] = useState<AgentStatus[]>([]);
   const [priceIndex, setPriceIndex] = useState<ReturnType<typeof generatePriceTrendIndex> | null>(null);
-  const [macro, setMacro] = useState(getMacroIndicators());
+  const [macro, setMacro] = useState<any>(null);
   const [sentiment, setSentiment] = useState<ReturnType<typeof generateSentimentData> | null>(null);
+  const [liveSentiment, setLiveSentiment] = useState<{ value: number; label: string } | null>(null);
+  const [liveMacro, setLiveMacro] = useState<any>(null);
   const [arimaForecast, setArimaForecast] = useState<number[]>([]);
   const [anomalies, setAnomalies] = useState<boolean[]>([]);
   const [agentStates, setAgentStates] = useState<Record<string, typeof STATES[number]>>({});
@@ -61,6 +63,12 @@ export default function DashboardPage() {
     const idx = generatePriceTrendIndex(36);
     setPriceIndex(idx);
     setSentiment(generateSentimentData(90));
+
+    // Canlı makro + sentiment
+    fetch(`/api/macro?_=${Date.now()}`, { cache: 'no-store' })
+      .then(r => r.json()).then(d => setLiveMacro(d)).catch(() => {});
+    fetch(`/api/sentiment?_=${Date.now()}`, { cache: 'no-store' })
+      .then(r => r.json()).then(d => setLiveSentiment(d)).catch(() => {});
 
     // Run ARIMA on istanbul prices
     const series = idx.istanbul;
@@ -194,13 +202,23 @@ export default function DashboardPage() {
 
   const currentSentiment = sentiment?.fearGreed.slice(-1)[0] ?? 68;
 
+  // Canlı veri veya statik fallback
+  const macro = liveMacro ?? {
+    turkey:  { policyRate: 37.00, inflation: 30.91, gdpGrowth: 3.3,  unemployment: 8.8 },
+    greece:  { policyRate: 2.00,  inflation: 2.3,   gdpGrowth: 2.5,  touristArrivals: 33.6 },
+  };
+  const sentimentValue = liveSentiment?.value ?? currentSentiment;
+  const sentimentLbl   = liveSentiment
+    ? liveSentiment.label
+    : (currentSentiment > 60 ? 'İhtiyatlı Bullish' : currentSentiment > 40 ? 'Nötr' : 'Ayı Piyasası');
+
   return (
     <div className="p-4 space-y-4 max-w-screen-2xl mx-auto">
       {/* KPI Strip */}
       <div className="grid grid-cols-4 gap-3">
         {[
           { label: 'İst. Konut Endeksi', value: `${priceIndex?.istanbul.slice(-1)[0]?.toFixed(1) ?? '—'}`, sub: 'ARIMA(2,1,2) tahmin: ' + (arimaForecast.slice(-1)[0]?.toFixed(1) ?? '—'), icon: Building2, color: '#00d4ff', change: '+28.3%' },
-          { label: 'Sentiment Skoru', value: `${currentSentiment}`, sub: currentSentiment > 60 ? 'İhtiyatlı Bullish' : currentSentiment > 40 ? 'Nötr' : 'Ayı Piyasası', icon: Brain, color: '#10b981', change: '+4.2%' },
+          { label: 'Kripto F&G Endeksi', value: `${sentimentValue}`, sub: `${sentimentLbl}${liveSentiment ? ' · Canlı' : ''}`, icon: Brain, color: '#10b981', change: sentimentValue > 60 ? '↑ Açgözlü' : sentimentValue > 40 ? '→ Nötr' : '↓ Korku' },
           { label: 'Portföy VaR (95%)', value: '₺180K', sub: 'Monte Carlo 5.000 sim · günlük', icon: Shield, color: '#8b5cf6', change: '-2.1%' },
           { label: 'Aktif Anomali', value: `${anomalies.filter(Boolean).length}`, sub: 'Isolation Forest tespiti', icon: AlertTriangle, color: '#f59e0b', change: `${anomalies.filter(Boolean).length > 3 ? 'Yüksek' : 'Normal'}` },
         ].map(k => (

@@ -359,5 +359,80 @@ export async function registerRoutes(_httpServer: any, app: Express): Promise<an
     } catch (err: any) { res.status(500).json({ error: err.message }); }
   });
 
+
+  // ── Makroekonomik Göstergeler — World Bank + ECB ──────────────────────────
+  app.get('/api/macro', async (req, res) => {
+    try {
+      if (req.query.force === '1') delete CACHE['macro'];
+      const data = await cached('macro', 12 * 60 * 60_000, async () => {
+        const wbGet = async (url: string, fb: number): Promise<number> => {
+          try {
+            const ctrl = new AbortController();
+            setTimeout(() => ctrl.abort(), 10_000);
+            const r = await fetch(url, { signal: ctrl.signal });
+            if (!r.ok) return fb;
+            const d = await r.json();
+            return typeof d[1]?.[0]?.value === 'number' ? d[1][0].value : fb;
+          } catch { return fb; }
+        };
+        const [trInfl, trGdp, trUnem, grInfl, grGdp] = await Promise.all([
+          wbGet('https://api.worldbank.org/v2/country/TR/indicator/FP.CPI.TOTL.ZG?format=json&mrv=1', 30.91),
+          wbGet('https://api.worldbank.org/v2/country/TR/indicator/NY.GDP.MKTP.KD.ZG?format=json&mrv=1', 3.3),
+          wbGet('https://api.worldbank.org/v2/country/TR/indicator/SL.UEM.TOTL.ZS?format=json&mrv=1', 8.8),
+          wbGet('https://api.worldbank.org/v2/country/GR/indicator/FP.CPI.TOTL.ZG?format=json&mrv=1', 2.3),
+          wbGet('https://api.worldbank.org/v2/country/GR/indicator/NY.GDP.MKTP.KD.ZG?format=json&mrv=1', 2.5),
+        ]);
+        // ECB deposit facility rate
+        let ecbRate = 2.00;
+        try {
+          const ctrl = new AbortController();
+          setTimeout(() => ctrl.abort(), 8_000);
+          const ecbR = await fetch(
+            'https://data-api.ecb.europa.eu/service/data/FM/B.U2.EUR.4F.KR.DFR.LEV?format=jsondata&lastNObservations=1',
+            { signal: ctrl.signal }
+          );
+          const ecbD = await ecbR.json();
+          const series = ecbD.dataSets?.[0]?.series;
+          if (series) {
+            const firstKey = Object.keys(series)[0];
+            const obs = series[firstKey]?.observations;
+            if (obs) {
+              const lastIdx = Object.keys(obs).sort((a, b) => +a - +b).pop();
+              if (lastIdx !== undefined) ecbRate = obs[lastIdx][0];
+            }
+          }
+        } catch {}
+        return {
+          turkey:  { policyRate: 37.00, inflation: trInfl,  gdpGrowth: trGdp,  unemployment: trUnem },
+          greece:  { policyRate: ecbRate, inflation: grInfl, gdpGrowth: grGdp,  touristArrivals: 33.6 },
+          source:  'World Bank · ECB API',
+          updatedAt: new Date().toISOString(),
+        };
+      });
+      res.json(data);
+    } catch (err: any) { res.status(500).json({ error: err.message }); }
+  });
+
+  // ── Kripto Korku/Açgözlülük Endeksi ───────────────────────────────────────
+  app.get('/api/sentiment', async (req, res) => {
+    try {
+      if (req.query.force === '1') delete CACHE['sentiment'];
+      const data = await cached('sentiment', 60 * 60_000, async () => {
+        const ctrl = new AbortController();
+        setTimeout(() => ctrl.abort(), 8_000);
+        const r = await fetch('https://api.alternative.me/fng/?limit=1&format=json', { signal: ctrl.signal });
+        const d = await r.json();
+        const cur = d.data?.[0];
+        return {
+          value: parseInt(cur?.value ?? '50'),
+          label: cur?.value_classification ?? 'Neutral',
+          updatedAt: new Date().toISOString(),
+          source: 'Alternative.me',
+        };
+      });
+      res.json(data);
+    } catch (err: any) { res.status(500).json({ error: err.message }); }
+  });
+
   return _httpServer;
 }
