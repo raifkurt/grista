@@ -491,11 +491,11 @@ const VISA_TIERS = [
   {min:250000, label:'Standart', color:'#6B7280', icon:'🏠',
    desc:"Yunanistan'da herhangi bir gayrimenkul. En yaygın seçenek.", days:60, years:5},
   {min:400000, label:'Premium Bölge', color:'#3B82F6', icon:'🏙️',
-   desc:'Atina merkezi, Selanik, Mykonos, Santorini. Daha hızlı süreç.', days:45, years:5},
+   desc:"Atina merkezi, Selanik, Mykonos, Santorini. Daha hızlı süreç.", days:45, years:5},
   {min:800000, label:'Elite', color:'#8B5CF6', icon:'🏝️',
-   desc:'2+ mülk veya özel konut projeleri. En geniş haklarla.', days:30, years:5},
+   desc:"2+ mülk veya özel konut projeleri. En geniş haklarla.", days:30, years:5},
   {min:500000, label:'Tarih & Miras', color:'#F59E0B', icon:'🏛️',
-   desc:'Tarihi bina restorasyonu. Karşılıksız ikamet ve kültür katkısı.', days:45, years:5},
+   desc:"Tarihi bina restorasyonu. Karşılıksız ikamet ve kültür katkısı.", days:45, years:5},
 ];
 function AltinaVize() {
   return (
@@ -566,7 +566,7 @@ function YunanistanTurizm() {
         {[
           {label:'En Yoğun Ay', value:'Ağustos', sub:'6.8M ziyaretçi', color:'#1d63ed'},
           {label:'Toplam Yıllık', value:`${toplam.toFixed(1)}M`, sub:'2025 tahmini', color:'#10b981'},
-          {label:'Turizm Geliri', value:`€${gelir.toFixed(1)}B`, sub:'GSYİH'nin %20'si', color:'#f59e0b'},
+          {label:'Turizm Geliri', value:`€${gelir.toFixed(1)}B`, sub:"GSYİH'nin %20'si", color:'#f59e0b'},
         ].map(k=>(
           <div key={k.label} className="p-2 rounded-xl text-center" style={{background:'hsl(222 47% 5%)'}}>
             <div className="text-sm font-bold font-mono" style={{color:k.color}}>{k.value}</div>
