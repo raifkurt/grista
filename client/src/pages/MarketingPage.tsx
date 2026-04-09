@@ -635,6 +635,200 @@ function ReklamMetinleri() {
 }
 
 /* ══ WRAPPER ════════════════════════════════════════════════════════ */
+
+/* ─── Instagram Stili Gayrimenkul Pazarlama Makale Kartları ─── */
+const IG_MAKALELER = [
+  {ikon:'📸',kategori:'Görsel Pazarlama',
+   baslik:'Emlak Fotoğrafçılığı 101: İlk Bakışta Satan Kareler',
+   ozet:'Doğru ışık saati, lens seçimi ve köşe çekimi tekniğiyle ilanınız %73 daha fazla tıklanıyor. Altın saat neden her şeyi değiştirir?',
+   begeni:12400,goruntuleme:47200,renk:'#F7931A'},
+  {ikon:'🎬',kategori:'Video İçerik',
+   baslik:'60 Saniyede Daire Turu: Algoritmayı Yenen Format',
+   ozet:"Hook (0-3 sn) → oda geçişi → manzara → fiyat + CTA. Bu sırayı bozmayın. Reels'te organik erişim %4.8 kira getirisinden daha karlı olabilir.",
+   begeni:9800,goruntuleme:38100,renk:'#E1306C'},
+  {ikon:'📱',kategori:'Sosyal Medya',
+   baslik:'Instagram Stories ile 7 Günde Proje Lansmanı',
+   ozet:'Gün 1: teaser, Gün 3: konum, Gün 5: avantaj, Gün 7: CTA. Polling sticker kullanan hesaplar %2.3x daha fazla DM alıyor.',
+   begeni:8700,goruntuleme:31400,renk:'#8B5CF6'},
+  {ikon:'🎯',kategori:'Google Ads',
+   baslik:"Google'da Konut Satmak: BOFU Anahtar Kelime Rehberi",
+   ozet:'"İstanbul satilik daire" araması ₺28 CPC\'de dönerken "besiktas 2+1 fiyat" ₺11\'de dönüşüm yapıyor. Long-tail kazandırıyor.',
+   begeni:7600,goruntuleme:28900,renk:'#F7931A'},
+  {ikon:'📧',kategori:'Email Marketing',
+   baslik:'Yatırımcıya Email Yazma Sanatı: 3 Cümle Kuralı',
+   ozet:'Konu satırı rakamla başlasın. İkinci cümle problemini adlandırsın. Üçüncü cümle çözümü sunup CTA\'ya bağlasın. %18 CTR gerçek.',
+   begeni:7100,goruntuleme:24600,renk:'#06B6D4'},
+  {ikon:'💬',kategori:'WhatsApp',
+   baslik:'WhatsApp Business ile Lead Yönetimi: Etiket Sistemi',
+   ozet:'Sıcak / Ilık / Soğuk / Tur Bekliyor / Tapu Aşaması. 5 etiketle hiçbir lead kaybolmaz. Broadcast listesi ayda 1 kez, gruba değil.',
+   begeni:6900,goruntuleme:22300,renk:'#25D366'},
+  {ikon:'🏠',kategori:'Portal Optimizasyonu',
+   baslik:'Sahibinden İlanınızı Zirveye Taşıyan 6 Teknik',
+   ozet:'Başlıkta metro mesafesi + m² + net fiyat zorunlu. İlk 3 fotoğraf köşe çekim olmalı. Günde 1 güncelleme algoritma sıralamasını yükseltir.',
+   begeni:6400,goruntuleme:19700,renk:'#10b981'},
+  {ikon:'🗺️',kategori:'SEO & İçerik',
+   baslik:'Mahalle Rehberi İçeriği: 6 Ayda Organik Lead Makinesi',
+   ozet:'"Beşiktaş\'ta yaşam rehberi" → aylık 4.200 organik arama. Okul + market + metro mesafesi + restoran haritası = kullanıcı sayfada 4 dk kalıyor.',
+   begeni:5900,goruntuleme:17800,renk:'#84CC16'},
+  {ikon:'🚁',kategori:'Görsel Pazarlama',
+   baslik:'Drone Çekimi: Projenizi Farklılaştıran 90 Saniye',
+   ozet:"Deniz/park/metro üst geçişi + proje girişi + çevre havadan. Drone'lu ilanlar portalda %41 daha uzun süre inceleniyor.",
+   begeni:5600,goruntuleme:15300,renk:'#3B82F6'},
+  {ikon:'🌍',kategori:'Yabancı Yatırımcı',
+   baslik:'Körfezden Avrupaya: Yabancı Alıcıya Pazarlama Dili',
+   ozet:'Körfez: Türkçe değil Arapça, dolar bazlı fiyat, helal yatırım vurgusu. Avrupalı: şeffaf ROI, Schengen bağlantısı, hukuki süreç anlatısı.',
+   begeni:5400,goruntuleme:14200,renk:'#1d63ed'},
+  {ikon:'💰',kategori:'Golden Visa',
+   baslik:'Yunanistan Golden Visa: İçerik Stratejisi Rehberi',
+   ozet:'€250K eşiği, Schengen oturumu, 60 günde sonuç — bunlar hook. Detayda: hangi bölgeler sayılıyor, tapu süreci, vergi avantajları.',
+   begeni:5200,goruntuleme:13600,renk:'#1d63ed'},
+  {ikon:'📊',kategori:'Lead Generation',
+   baslik:'Kira Getirisi Hesaplayıcısı: En Güçlü Lead Mıknatısı',
+   ozet:"Adres + bütçe giren kullanıcı sıcak lead'e dönüşüyor. Form terk oranı %12 — piyasanın en düşüğü. Email kapısına bağlayın.",
+   begeni:5000,goruntuleme:12400,renk:'#EC4899'},
+  {ikon:'🤝',kategori:'CRM & Referans',
+   baslik:"Mevcut Müşteriden Yeni Satış: Referans Programı Kurulumu",
+   ozet:"Her başarılı referans için ₺5-10K hediye çeki veya kira yönetimi indirimi. Referans kaynaklı leadlerin kapanma oranı %2.8x daha yüksek.",
+   begeni:4800,goruntuleme:11700,renk:'#F7931A'},
+  {ikon:'🖥️',kategori:'CRM',
+   baslik:'CRM Olmadan Büyük Hacim Emlak Portföyü Yönetemezsiniz',
+   ozet:'HubSpot CRM ücretsiz plan + WhatsApp entegrasyonu + otomatik takip emaili = 0 kaçan lead. Pipeline görünürlüğü satış süresini %34 kısaltıyor.',
+   begeni:4700,goruntuleme:11200,renk:'#06B6D4'},
+  {ikon:'🚀',kategori:'Proje Lansmanı',
+   baslik:'Proje Lansmanı Öncesi 90 Gün: Beklenti Mühendisliği',
+   ozet:'Ay 3: waitlist + teaser Reels. Ay 2: virtual tur + fiyat ipucu. Ay 1: soft launch listesi. Lansman günü stok baskısı = kuyruğu siz yaratın.',
+   begeni:4600,goruntuleme:10800,renk:'#8B5CF6'},
+  {ikon:'💡',kategori:'Satış Tekniği',
+   baslik:'Fiyat Müzakeresinde 5 Psikoloji Tekniği',
+   ozet:'Çapa: önce yüksek fiyat söyleyin. Paketleme: dekorasyon + beyaz eşya ekleyin. Aciliyet: "bu haftaki fiyat" sınırı. Kayıp dili en iyi çalışır.',
+   begeni:4500,goruntuleme:10100,renk:'#EF4444'},
+  {ikon:'📐',kategori:'Sunum Tekniği',
+   baslik:'Kat Planını 3 Farklı Şekilde Sunma Sanatı',
+   ozet:"Alıcıya göre format: yaşayacak için mobilya yerleşimi, yatırımcı için kira bölümü potansiyeli, expat için uluslararası ölçü karşılaştırması.",
+   begeni:4300,goruntuleme:9600,renk:'#3B82F6'},
+  {ikon:'🇬🇷',kategori:'Atina Pazarı',
+   baslik:"Atina'da Gayrimenkul Pazarlama: Spitogatos + Meta Formülü",
+   ozet:"Spitogatos EN/EL çift dil zorunlu. Meta'da Yunanistan'ı + Körfez ülkelerini birlikte hedefleyin. Kolonaki ve Glyfada en yüksek CTR'li bölgeler.",
+   begeni:4100,goruntuleme:9100,renk:'#1d63ed'},
+  {ikon:'🌆',kategori:'İstanbul Pazarı',
+   baslik:'İstanbul İlçe Konumlandırması: Kime Hangi Semt Satılır',
+   ozet:"Beşiktaş: genç profesyonel + expat. Ataşehir: kurumsal yatırımcı. Başakşehir: Körfez diasporası. Kadıköy: kira + yaşam dengesi arayan.",
+   begeni:4000,goruntuleme:8800,renk:'#10b981'},
+  {ikon:'⭐',kategori:'Sosyal Kanıt',
+   baslik:'Sosyal Kanıt ile Satış Hızı: Müşteri Hikayesi Formatı',
+   ozet:'"3 yıl kira ödedim, şimdi ev sahibiyim" — 45 saniyelik video. Gerçek kişi + gerçek rakam + gerçek mahalle. Dönüşüm %2.1x artıyor.',
+   begeni:3900,goruntuleme:8500,renk:'#EC4899'},
+  {ikon:'🎥',kategori:'Teknoloji',
+   baslik:"Matterport 3D Tur ile Uzaktan Satış: Körfez Yatırımcısı Kazanmak",
+   ozet:"Dubai'dan İstanbul'a uçmadan tur yapan alıcı %67 daha hızlı karar veriyor. QR kod + WhatsApp link + tapu öncesi video toplantı şablonu.",
+   begeni:3700,goruntuleme:8100,renk:'#F7931A'},
+  {ikon:'📅',kategori:'İçerik Planlaması',
+   baslik:'Emlak Hesabı için 30 Günlük İçerik Takvimi',
+   ozet:'Pazartesi: piyasa verisi. Çarşamba: daire turu. Cuma: müşteri hikayesi. Pazar: mahalle keşfi. Sabit ritim = güven + algoritma puanı.',
+   begeni:3600,goruntuleme:7900,renk:'#84CC16'},
+  {ikon:'🔄',kategori:'Remarketing',
+   baslik:'İlanı Gören ama Aramayan Leadleri Geri Kazanmak',
+   ozet:"Meta Pixel + 30 günlük ziyaretçi hedefleme. Mesaj: \"Baktığınız daire hâlâ müsait — bugün fiyat sorun.\" Remarketing CPL'i %43 düşürüyor.",
+   begeni:3400,goruntuleme:7500,renk:'#3B82F6'},
+  {ikon:'🧪',kategori:'A/B Test',
+   baslik:'Hangi İlan Başlığı Daha Çok Tıklanır? 5 Test Sonucu',
+   ozet:'"Beşiktaş 2+1" < "Metro 3 dk · Deniz Manzaralı 2+1 · ₺12M". Rakam + özellik + lokasyon üçlüsü her seferinde kazanıyor. Test süresi: 72 saat.',
+   begeni:3300,goruntuleme:7200,renk:'#8B5CF6'},
+  {ikon:'🤳',kategori:'Personal Brand',
+   baslik:'Emlakçı Influencer Olabilir mi? 10K Takipçi Stratejisi',
+   ozet:'Kendi yüzünüzü gösterin, kendi semtinizde çekin, kendi müşterinizin hikayesini anlatın. Marka hesabı değil kişisel hesap — güven 3x daha yüksek.',
+   begeni:3200,goruntuleme:6900,renk:'#EC4899'},
+  {ikon:'📲',kategori:'WhatsApp',
+   baslik:'WhatsApp Kataloğu ile Proje Tanıtımı: Adım Adım Kurulum',
+   ozet:'Ürün = daire, fiyat alanı = m² başı ₺ + link. Katalog paylaşımı soğuk mesajdan %5x daha yüksek yanıt alıyor. Günde 1 güncelleme şart.',
+   begeni:3100,goruntuleme:6600,renk:'#25D366'},
+  {ikon:'💼',kategori:'B2B & Kurumsal',
+   baslik:'LinkedIn ile Kurumsal Gayrimenkul Pazarlama: Fon & Expat',
+   ozet:"Hedef: CFO, aile ofisi, HR yöneticisi (expat relocation). İçerik: piyasa raporu PDF + ROI analizi. InMail CPS kurumsal segmentte %60 düşürüyor.",
+   begeni:3000,goruntuleme:6200,renk:'#0077B5'},
+  {ikon:'📈',kategori:'Analitik',
+   baslik:'GA4 ile Emlak Sitesi Analizi: Hangi Sayfa Satıyor',
+   ozet:'Dönüşüm yolu: Blog → Proje Sayfası → İletişim %68. Doğrudan giriş sadece %12. İçerik pazarlaması kanalınızın %56\'sını oluşturuyor.',
+   begeni:2900,goruntuleme:5900,renk:'#F7931A'},
+  {ikon:'🧲',kategori:'Lead Generation',
+   baslik:'İndirilebilir Rapor ile Email Listesi Büyütme: Aylık +800 Lead',
+   ozet:'"İstanbul 2026 Konut Piyasası Raporu" PDF karşılığı email. Landing page CVR %34. Sıcak listeye aylık 2 email = ₺1.84M ROI.',
+   begeni:2700,goruntuleme:5600,renk:'#84CC16'},
+  {ikon:'💎',kategori:'Lüks Segment',
+   baslik:'Lüks Konut Pazarlamasında Fark Yaratan 5 Detay',
+   ozet:'Fiyat gösterme, erişim duygusu yarat. Özel davet ile tur. Mimari hikaye anlat. Yatırım değil yaşam tarzı sat. Dil: seçkin, sessiz, güvenli.',
+   begeni:2500,goruntuleme:5100,renk:'#06B6D4'},
+];
+
+function InstagramKartlar() {
+  const fmt = (n: number) => n >= 1000 ? (n/1000).toFixed(1)+'K' : String(n);
+  return (
+    <div style={{marginTop:40}}>
+      <div style={{marginBottom:20}}>
+        <h2 style={{fontSize:18,fontWeight:700,color:'#fff',margin:0}}>
+          📚 Gayrimenkul Pazarlama — En Çok Okunan İçerikler
+        </h2>
+        <p style={{fontSize:12,color:'hsl(222 47% 55%)',margin:'4px 0 0'}}>
+          En fazla beğeni ve görüntüleme alanlar önce · {IG_MAKALELER.length} makale
+        </p>
+      </div>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(280px,1fr))',gap:14}}>
+        {IG_MAKALELER.map((m,i)=>(
+          <div key={i} style={{
+            background:'hsl(222 47% 6%)',
+            border:`1px solid ${m.renk}22`,
+            borderRadius:16,
+            padding:16,
+            display:'flex',
+            flexDirection:'column',
+            gap:10,
+            position:'relative',
+            overflow:'hidden',
+          }}>
+            {/* Sıra + kategori */}
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+              <span style={{
+                fontSize:10,fontWeight:700,letterSpacing:1,
+                background:`${m.renk}22`,color:m.renk,
+                padding:'2px 8px',borderRadius:20,
+              }}>{m.kategori.toUpperCase()}</span>
+              <span style={{fontSize:10,color:'hsl(222 47% 40%)',fontWeight:600}}>#{i+1}</span>
+            </div>
+            {/* Emoji + başlık */}
+            <div>
+              <div style={{fontSize:28,marginBottom:6,lineHeight:1}}>{m.ikon}</div>
+              <div style={{fontSize:13,fontWeight:700,color:'#fff',lineHeight:1.4}}>
+                {m.baslik}
+              </div>
+            </div>
+            {/* Özet */}
+            <div style={{fontSize:12,color:'hsl(222 47% 65%)',lineHeight:1.6,flex:1}}>
+              {m.ozet}
+            </div>
+            {/* Footer: beğeni + görüntüleme */}
+            <div style={{
+              display:'flex',gap:12,paddingTop:8,
+              borderTop:`1px solid ${m.renk}18`,
+            }}>
+              <span style={{fontSize:11,color:'#EC4899',fontWeight:600}}>
+                ❤️ {fmt(m.begeni)}
+              </span>
+              <span style={{fontSize:11,color:'hsl(222 47% 55%)',fontWeight:600}}>
+                👁 {fmt(m.goruntuleme)}
+              </span>
+            </div>
+            {/* Accent bar at bottom */}
+            <div style={{
+              position:'absolute',bottom:0,left:0,right:0,height:2,
+              background:`linear-gradient(90deg,${m.renk}88,transparent)`,
+            }}/>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function PazarlamaModulleri() {
   return (
     <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(340px, 1fr))', gap:16, marginTop:24}}>
@@ -876,6 +1070,7 @@ export default function MarketingPage() {
         </div>
       )}
       <PazarlamaModulleri />
+      <InstagramKartlar />
     </div>
   );
 }
