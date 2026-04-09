@@ -31,7 +31,6 @@ const STATES = ['perceiving', 'deliberating', 'executing', 'communicating', 'idl
 export default function DashboardPage() {
   const [statuses, setStatuses] = useState<AgentStatus[]>([]);
   const [priceIndex, setPriceIndex] = useState<ReturnType<typeof generatePriceTrendIndex> | null>(null);
-  const [macro, setMacro] = useState<any>(null);
   const [sentiment, setSentiment] = useState<ReturnType<typeof generateSentimentData> | null>(null);
   const [liveSentiment, setLiveSentiment] = useState<{ value: number; label: string } | null>(null);
   const [liveMacro, setLiveMacro] = useState<any>(null);
