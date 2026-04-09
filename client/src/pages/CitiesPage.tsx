@@ -201,14 +201,20 @@ export default function CitiesPage() {
         })}
       </div>
 
-      {/* Grid — mobilde tek sütun tam genişlik, masaüstünde yan yana */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-3 md:p-4">
-        <div className={tab === 'istanbul' ? 'block' : 'hidden md:block'}>
+      {/* MOBİL — tek sütun, tam genişlik */}
+      <div className="md:hidden p-3">
+        {tab === 'istanbul' && (
           <Col city="istanbul" flag="🇹🇷" label="İstanbul" accent="#0BC5EA" items={istanbul} loading={loading} />
-        </div>
-        <div className={tab === 'athens' ? 'block' : 'hidden md:block'}>
+        )}
+        {tab === 'athens' && (
           <Col city="athens" flag="🇬🇷" label="Atina" accent="#a78bfa" items={athens} loading={loading} />
-        </div>
+        )}
+      </div>
+
+      {/* MASAÜSTÜ — yan yana iki sütun */}
+      <div className="hidden md:grid md:grid-cols-2 md:gap-6 md:p-4">
+        <Col city="istanbul" flag="🇹🇷" label="İstanbul" accent="#0BC5EA" items={istanbul} loading={loading} />
+        <Col city="athens" flag="🇬🇷" label="Atina" accent="#a78bfa" items={athens} loading={loading} />
       </div>
     </div>
   );

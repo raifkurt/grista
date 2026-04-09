@@ -67,7 +67,7 @@ export default function FinancialPage() {
           <div className="text-sm font-semibold">Monte Carlo Simülasyon Parametreleri</div>
           <span className="text-xs text-muted-foreground ml-auto">3.000 yol · GBM</span>
         </div>
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
           {[
             { label: `Başlangıç Değeri: ₺${(params.S0 / 1e6).toFixed(1)}M`, key: 'S0', min: 500000, max: 20000000, step: 100000 },
             { label: `Yıllık Getiri: %${(params.mu * 100).toFixed(0)}`, key: 'mu', min: 0.05, max: 0.60, step: 0.01 },
@@ -94,7 +94,7 @@ export default function FinancialPage() {
       {result && (
         <div className="grid grid-cols-12 gap-4">
           {/* KPI strip */}
-          <div className="col-span-12 grid grid-cols-6 gap-3">
+          <div className="col-span-12 grid grid-cols-2 md:grid-cols-6 gap-3">
             {[
               { label: 'Medyan Sonuç', value: `₺${(result.median / 1e6).toFixed(2)}M`, color: '#10b981', sub: `Getiri: ${((result.median / params.S0 - 1) * 100).toFixed(0)}%` },
               { label: 'P5 (Kötü Senaryo)', value: `₺${(result.p5 / 1e6).toFixed(2)}M`, color: '#ef4444', sub: `Kayıp: ${((result.p5 / params.S0 - 1) * 100).toFixed(0)}%` },
@@ -113,7 +113,7 @@ export default function FinancialPage() {
 
           {/* Distribution histogram */}
           {histBuckets && (
-            <div className="col-span-6 metric-card">
+            <div className="col-span-12 md:col-span-6 metric-card">
               <div className="text-sm font-semibold mb-1">Terminal Değer Dağılımı</div>
               <div className="text-xs text-muted-foreground mb-3">Monte Carlo {params.years} yıl · {result.finalValues.length} simülasyon</div>
               <div className="flex items-end gap-0.5" style={{ height: 140 }}>
@@ -143,7 +143,7 @@ export default function FinancialPage() {
 
           {/* Real Estate projection */}
           {reResult && (
-            <div className="col-span-6 metric-card">
+            <div className="col-span-12 md:col-span-6 metric-card">
               <div className="text-sm font-semibold mb-1">Gayrimenkul Yatırım Projeksiyonu</div>
               <div className="text-xs text-muted-foreground mb-3">
                 Kira getirisi dahil · %{(params.mu * 100).toFixed(0)} değerlenme · IRR: %{(reResult.irr * 100).toFixed(1)}
