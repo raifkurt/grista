@@ -183,9 +183,9 @@ export default function CitiesPage() {
   const [loading, setLoading]   = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [lastUpd, setLastUpd]   = useState<Date | null>(null);
-  const [countdown, setCountdown] = useState(180);
+  const [countdown, setCountdown] = useState(30);
   const [mobileCity, setMobileCity] = useState<'istanbul' | 'athens'>('istanbul');
-  const countRef = useRef(180);
+  const countRef = useRef(30);
 
   const load = useCallback(async () => {
     setRefreshing(true);
@@ -199,7 +199,7 @@ export default function CitiesPage() {
     } catch { /* sessiz */ }
     setLoading(false);
     setRefreshing(false);
-    countRef.current = 180;
+    countRef.current = 30;
   }, []);
 
   useEffect(() => { load(); }, [load]);
@@ -231,7 +231,7 @@ export default function CitiesPage() {
           </div>
           {lastUpd && (
             <p className="text-xs font-mono mt-0.5" style={{ color: 'hsl(215 20% 45%)' }}>
-              {istanbul.length + athens.length} haber · {lastUpd.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })} · {Math.floor(countdown / 60)}:{String(countdown % 60).padStart(2, '0')}
+              {istanbul.length + athens.length} haber · {lastUpd.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })} · {countdown}sn
             </p>
           )}
         </div>

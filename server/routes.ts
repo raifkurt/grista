@@ -35,9 +35,10 @@ function parseRSS(xml: string, category: string): any[] {
 
     const rawTitle = get('title');
     // "Başlık - Kaynak" formatından kaynağı ayır
-    const titleParts = rawTitle.match(/^(.*?)\s+-\s+([^-]+)$/);
+    // Tire, en-dash (–), em-dash (—) hepsini ayır
+    const titleParts = rawTitle.match(/^(.+?)\s+[-\u2013\u2014]\s+([^\u2013\u2014-]{2,60})$/);
     const title  = titleParts ? titleParts[1].trim() : rawTitle;
-    const source = titleParts ? titleParts[2].trim() : (get('source') || new URL('http://x.com').hostname);
+    const source = titleParts ? titleParts[2].trim() : (get('source') || '');
     const link   = getRaw('link').trim() || (block.match(/https?:\/\/[^\s<"]+/) || [])[0] || '#';
     const pubDate = get('pubDate') || get('dc:date') || '';
     const desc   = get('description');
@@ -116,36 +117,36 @@ async function translate(text: string, from = 'el', to = 'tr'): Promise<string> 
 
 const FEEDS: Record<string, string[]> = {
 
-  // ── İSTANBUL: Şehrin nabzı ── Sadece İstanbul'da olanlar
+  // ── İSTANBUL: Şehrin nabzı ──
   istanbul: [
-    // Genel İstanbul haberleri
     'https://news.google.com/rss/search?q=İstanbul+haber+şehir&hl=tr&gl=TR&ceid=TR:tr',
-    // Gayrimenkul + kira
     'https://news.google.com/rss/search?q=İstanbul+konut+kira+emlak+fiyat&hl=tr&gl=TR&ceid=TR:tr',
-    // İlçeler bazında
     'https://news.google.com/rss/search?q=Beşiktaş+Kadıköy+Şişli+Sarıyer+haber&hl=tr&gl=TR&ceid=TR:tr',
-    // İnşaat + kentsel dönüşüm
     'https://news.google.com/rss/search?q=İstanbul+inşaat+kentsel+dönüşüm+proje&hl=tr&gl=TR&ceid=TR:tr',
-    // Yatırım + piyasa
     'https://news.google.com/rss/search?q=İstanbul+gayrimenkul+yatırım+değer&hl=tr&gl=TR&ceid=TR:tr',
-    // Ulaşım + altyapı
     'https://news.google.com/rss/search?q=İstanbul+metro+ulaşım+altyapı+İBB&hl=tr&gl=TR&ceid=TR:tr',
+    'https://news.google.com/rss/search?q=İstanbul+ekonomi+turizm+kültür&hl=tr&gl=TR&ceid=TR:tr',
+    'https://news.google.com/rss/search?q=Fatih+Üsküdar+Ataşehir+Bakırköy+haber&hl=tr&gl=TR&ceid=TR:tr',
+    'https://news.google.com/rss/search?q=İstanbul+deprem+altyapı+güvenlik&hl=tr&gl=TR&ceid=TR:tr',
+    'https://news.google.com/rss/search?q=İstanbul+nüfus+göç+yaşam+maliyet&hl=tr&gl=TR&ceid=TR:tr',
+    'https://news.google.com/rss/search?q=Istanbul+Turkey+news+city&hl=en&gl=TR&ceid=TR:en',
+    'https://news.google.com/rss/search?q=Istanbul+real+estate+property+2026&hl=en&gl=TR&ceid=TR:en',
   ],
 
-  // ── ATİNA: Şehrin nabzı ── Sadece Atina'da olanlar
+  // ── ATİNA: Şehrin nabzı ──
   athens: [
-    // Genel Atina haberleri (İngilizce)
     'https://news.google.com/rss/search?q=Athens+Greece+city+news+2026&hl=en&gl=GR&ceid=GR:en',
-    // Gayrimenkul (İngilizce)
     'https://news.google.com/rss/search?q=Athens+real+estate+property+rent+buy&hl=en&gl=GR&ceid=GR:en',
-    // Golden Visa + yatırım
     'https://news.google.com/rss/search?q=Greece+Golden+Visa+property+investment&hl=en&gl=GR&ceid=GR:en',
-    // Yunanca haberler
     'https://news.google.com/rss/search?q=Αθήνα+ακίνητα+αγορά+κτηματαγορά&hl=el&gl=GR&ceid=GR:el',
-    // Mahalle bazında (Kolonaki, Glyfada)
     'https://news.google.com/rss/search?q=Kolonaki+Glyfada+Vouliagmeni+property&hl=en&gl=GR&ceid=GR:en',
-    // Atina şehir haberleri
     'https://news.google.com/rss/search?q=Athens+municipality+city+development&hl=en&gl=GR&ceid=GR:en',
+    'https://news.google.com/rss/search?q=Greece+economy+tourism+investment+2026&hl=en&gl=GR&ceid=GR:en',
+    'https://news.google.com/rss/search?q=Athens+Piraeus+infrastructure+transport&hl=en&gl=GR&ceid=GR:en',
+    'https://news.google.com/rss/search?q=Greece+construction+new+project+development&hl=en&gl=GR&ceid=GR:en',
+    'https://news.google.com/rss/search?q=Ελλάδα+νέα+αθήνα+ακίνητα+οικονομία&hl=el&gl=GR&ceid=GR:el',
+    'https://news.google.com/rss/search?q=Athens+cost+of+living+rental+market&hl=en&gl=GR&ceid=GR:en',
+    'https://news.google.com/rss/search?q=Greece+expat+living+digital+nomad+2026&hl=en&gl=GR&ceid=GR:en',
   ],
 
   // ── FİNANS: TR + GR ekonomi ──
@@ -243,7 +244,7 @@ export async function registerRoutes(_httpServer: any, app: Express): Promise<an
     const feeds = FEEDS[cat];
     if (!feeds) return res.status(400).json({ error: 'Geçersiz kategori' });
     try {
-      const data = await cached(`news_${cat}`, 2 * 60_000, async () => {
+      const data = await cached(`news_${cat}`, 90_000, async () => {
         const results = await Promise.allSettled(feeds.map(u => fetchRSS(u, cat)));
         const all = results.filter((r): r is PromiseFulfilledResult<any[]> => r.status === 'fulfilled').flatMap(r => r.value);
         return dedup(all);
