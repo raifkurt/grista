@@ -445,7 +445,7 @@ export async function registerRoutes(_httpServer: any, app: Express): Promise<an
         // BTC + ETH detayı
         const [r1, r2] = await Promise.all([
           fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin,ethereum&order=market_cap_desc&per_page=2&page=1&sparkline=false&price_change_percentage=24h', { signal: ctrl.signal }),
-          fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=price_change_percentage_24h_desc&per_page=30&page=1&sparkline=false', { signal: ctrl.signal }),
+          fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=price_change_percentage_24h_desc&per_page=50&page=1&sparkline=false', { signal: ctrl.signal }),
         ]);
         const [majors, gainersRaw] = await Promise.all([r1.json(), r2.json()]);
         const fmt = (c: any) => ({
@@ -467,7 +467,7 @@ export async function registerRoutes(_httpServer: any, app: Express): Promise<an
               && Math.abs((c.current_price ?? 1) - 1) > 0.1   // stablecoin fiyat filtresi
               && (c.price_change_percentage_24h ?? 0) > 1;     // en az %1 artış
           })
-          .slice(0, 10)
+          .slice(0, 20)
           .map(fmt);
         return { btc: btc ? fmt(btc) : null, eth: eth ? fmt(eth) : null, gainers, updatedAt: new Date().toISOString() };
       });
@@ -571,7 +571,7 @@ export async function registerRoutes(_httpServer: any, app: Express): Promise<an
         return list
           .filter((f: any) => f.getiri30 > 0 || f.GETIRI30 > 0)
           .sort((a: any, b: any) => (b.getiri30 ?? b.GETIRI30 ?? 0) - (a.getiri30 ?? a.GETIRI30 ?? 0))
-          .slice(0, 10)
+          .slice(0, 20)
           .map((f: any) => ({
             code: f.fonkodu ?? f.FONKODU ?? '—',
             name: f.fonadi ?? f.FONADI ?? '—',
