@@ -35,10 +35,10 @@ function parseRSS(xml: string, category: string): any[] {
 
     const rawTitle = get('title');
     // "Başlık - Kaynak" formatından kaynağı ayır
-    // Tire, en-dash (–), em-dash (—) hepsini ayır
-    const titleParts = rawTitle.match(/^(.+?)\s+[-\u2013\u2014]\s+([^\u2013\u2014-]{2,60})$/);
-    const title  = titleParts ? titleParts[1].trim() : rawTitle;
-    const source = titleParts ? titleParts[2].trim() : (get('source') || '');
+    // Tire / en-dash / em-dash ile kaynak adını ayır
+    const sep = rawTitle.match(/^(.+?)\s+[-\u2013\u2014]\s+([^\u2013\u2014-]{2,80})$/);
+    const title  = sep ? sep[1].trim() : rawTitle.replace(/\s+[-\u2013\u2014]\s+\S+.*$/, '').trim() || rawTitle;
+    const source = sep ? sep[2].trim() : (get('source') || '');
     const link   = getRaw('link').trim() || (block.match(/https?:\/\/[^\s<"]+/) || [])[0] || '#';
     const pubDate = get('pubDate') || get('dc:date') || '';
     const desc   = get('description');
@@ -65,7 +65,7 @@ function parseRSS(xml: string, category: string): any[] {
         pubDate: pubDate ? new Date(pubDate).toISOString() : new Date().toISOString(),
         source,
         category,
-        description: desc,
+        description: '',  // kullanılmıyor, bant genişliği tasarrufu
         image,
         isNew: Date.now() - pubTs < 15 * 60_000,
       });

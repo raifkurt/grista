@@ -1,105 +1,90 @@
-/**
- * GRISTA — İstanbul & Atina Şehir Nabzı
- * Sadece bu iki şehirde olup bitenler
- */
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { RefreshCw, MapPin, Globe } from 'lucide-react';
+import { RefreshCw, MapPin } from 'lucide-react';
 import { fetchCitiesNews, NewsItem } from '@/lib/data/liveData';
 
-// ─── Resim ───────────────────────────────────────────────────────────────────
-
-function articleImage(item: NewsItem, city: 'istanbul' | 'athens'): string {
+/* ── Resim ────────────────────────────────────────────────────────── */
+function img(item: NewsItem, city: 'istanbul' | 'athens') {
   if (item.image) return item.image;
-  const hash = item.id.split('').reduce((a, c) => a + c.charCodeAt(0), 0) % 1000;
-  const kw = city === 'istanbul'
-    ? 'istanbul,turkey,bosphorus,city'
-    : 'athens,greece,acropolis,city';
-  return `https://loremflickr.com/800/500/${kw}?lock=${hash}`;
+  const h = item.id.split('').reduce((a, c) => a + c.charCodeAt(0), 0) % 1000;
+  const kw = city === 'istanbul' ? 'istanbul,bosphorus,turkey' : 'athens,acropolis,greece';
+  return `https://loremflickr.com/800/500/${kw}?lock=${h}`;
 }
 
-// ─── Zaman ───────────────────────────────────────────────────────────────────
-
-function timeAgo(iso: string) {
+function ago(iso: string) {
   const s = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
-  if (s < 60) return `${s}sn`;
-  if (s < 3600) return `${Math.floor(s / 60)}dk`;
+  if (s < 60)    return `${s}sn`;
+  if (s < 3600)  return `${Math.floor(s / 60)}dk`;
   if (s < 86400) return `${Math.floor(s / 3600)}sa`;
-  return `${Math.floor(s / 86400)} gün`;
+  return `${Math.floor(s / 86400)}g`;
 }
 
-// ─── Haber Kartı ─────────────────────────────────────────────────────────────
-
-function NewsCard({ item, city, delay = 0 }: {
-  item: NewsItem;
-  city: 'istanbul' | 'athens';
-  delay?: number;
-}) {
+/* ── Kart ─────────────────────────────────────────────────────────── */
+function Card({ item, city, i }: { item: NewsItem; city: 'istanbul' | 'athens'; i: number }) {
   const accent = city === 'istanbul' ? '#0BC5EA' : '#a78bfa';
-  const imgSrc = articleImage(item, city);
-  const [visible, setVisible] = useState(false);
-  const [imgOk, setImgOk] = useState(true);
+  const [show, setShow] = useState(false);
+  const [imgErr, setImgErr] = useState(false);
 
   useEffect(() => {
-    const id = setTimeout(() => setVisible(true), delay);
-    return () => clearTimeout(id);
-  }, [delay]);
+    const t = setTimeout(() => setShow(true), Math.min(i * 40, 500));
+    return () => clearTimeout(t);
+  }, [i]);
 
   return (
     <a
       href={item.link}
       target="_blank"
       rel="noopener noreferrer"
-      className="block rounded-2xl overflow-hidden relative group"
       style={{
-        height: 280,
-        opacity: visible ? 1 : 0,
-        transform: visible ? 'translateY(0)' : 'translateY(14px)',
-        transition: `opacity 0.4s ease ${delay}ms, transform 0.4s ease ${delay}ms`,
+        display: 'block',
+        position: 'relative',
+        height: 260,
+        borderRadius: 16,
+        overflow: 'hidden',
+        border: `1px solid ${accent}22`,
         textDecoration: 'none',
-        border: `1px solid ${accent}20`,
+        opacity: show ? 1 : 0,
+        transform: show ? 'none' : 'translateY(12px)',
+        transition: `opacity .35s ease ${Math.min(i * 40, 500)}ms, transform .35s ease ${Math.min(i * 40, 500)}ms`,
       }}
     >
-      {/* Resim — tam kart boyutu, filtre yok */}
-      {imgOk ? (
+      {/* Resim */}
+      {!imgErr ? (
         <img
-          src={imgSrc}
+          src={img(item, city)}
           alt=""
-          onError={() => setImgOk(false)}
-          className="absolute inset-0 w-full h-full object-cover"
+          onError={() => setImgErr(true)}
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
         />
       ) : (
-        <div
-          className="absolute inset-0"
-          style={{ background: `linear-gradient(135deg, ${accent}22, hsl(222 47% 10%))` }}
-        />
+        <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(135deg, ${accent}18, #05090f)` }} />
       )}
 
-      {/* Gradient yalnızca alt banda */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background: 'linear-gradient(to top, rgba(5,13,26,0.97) 0%, rgba(5,13,26,0.88) 22%, rgba(5,13,26,0.08) 52%, rgba(5,13,26,0.00) 68%)',
-        }}
-      />
+      {/* Sadece altta okunabilirlik gradyanı */}
+      <div style={{
+        position: 'absolute', inset: 0,
+        background: 'linear-gradient(to top, rgba(3,8,20,.97) 0%, rgba(3,8,20,.82) 30%, rgba(3,8,20,.05) 60%, transparent 75%)',
+      }} />
 
-      {/* Sol accent şerit */}
-      <div className="absolute left-0 top-0 bottom-0 w-0.5" style={{ background: accent }} />
+      {/* Sol şerit */}
+      <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 3, background: accent }} />
 
-      {/* İçerik — alta yapışık, sadece başlık + kaynak */}
-      <div className="absolute bottom-0 left-0 right-0 z-10 px-4 pb-3 pt-2">
-        <h3
-          className="font-bold text-white leading-snug mb-1.5"
-          style={{ fontSize: 'clamp(13px, 2.2vw, 17px)', lineHeight: 1.3 }}
-        >
+      {/* Sadece başlık + kaynak/saat — alta yapışık */}
+      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '12px 14px' }}>
+        <p style={{
+          margin: '0 0 6px',
+          fontWeight: 700,
+          fontSize: 'clamp(13px, 2vw, 16px)',
+          lineHeight: 1.3,
+          color: '#fff',
+        }}>
           {item.title}
-        </h3>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1 text-xs" style={{ color: 'rgba(255,255,255,0.38)' }}>
-            <Globe className="w-3 h-3 flex-shrink-0" />
-            <span className="truncate max-w-[150px]">{item.source}</span>
-          </div>
-          <span className="text-xs font-mono" style={{ color: 'rgba(255,255,255,0.30)' }}>
-            {timeAgo(item.pubDate)}
+        </p>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span style={{ fontSize: 11, color: 'rgba(255,255,255,.38)', maxWidth: 180, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            {item.source}
+          </span>
+          <span style={{ fontSize: 11, color: 'rgba(255,255,255,.28)', fontFamily: 'monospace' }}>
+            {ago(item.pubDate)}
           </span>
         </div>
       </div>
@@ -107,180 +92,123 @@ function NewsCard({ item, city, delay = 0 }: {
   );
 }
 
-// ─── Şehir Sütunu ─────────────────────────────────────────────────────────────
-
-function CityColumn({
-  city, flag, name, accent, items, loading,
-}: {
-  city: 'istanbul' | 'athens';
-  flag: string;
-  name: string;
-  accent: string;
-  items: NewsItem[];
-  loading: boolean;
+/* ── Sütun ────────────────────────────────────────────────────────── */
+function Col({ city, flag, label, accent, items, loading }: {
+  city: 'istanbul' | 'athens'; flag: string; label: string;
+  accent: string; items: NewsItem[]; loading: boolean;
 }) {
-  const [pulse, setPulse] = useState(true);
-  useEffect(() => {
-    const id = setInterval(() => setPulse(p => !p), 1000);
-    return () => clearInterval(id);
-  }, []);
+  const [dot, setDot] = useState(true);
+  useEffect(() => { const t = setInterval(() => setDot(d => !d), 900); return () => clearInterval(t); }, []);
 
   return (
-    <div className="flex flex-col gap-3">
-
-      {/* Şehir başlığı */}
-      <div className="sticky top-0 z-10 flex items-center justify-between py-3 px-1"
-        style={{
-          background: 'hsl(222 47% 5%)',
-          borderBottom: `2px solid ${accent}`,
-        }}>
-        <div className="flex items-center gap-2.5">
-          <span className="text-2xl">{flag}</span>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      <div style={{ position: 'sticky', top: 0, zIndex: 10, padding: '10px 4px', borderBottom: `2px solid ${accent}`, background: 'hsl(222 47% 5%)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <span style={{ fontSize: 22 }}>{flag}</span>
           <div>
-            <div className="font-bold text-lg tracking-wide" style={{ color: accent }}>
-              {name.toUpperCase()}
-            </div>
-            <div className="text-xs font-mono flex items-center gap-1.5"
-              style={{ color: 'hsl(215 20% 45%)' }}>
-              <span className="inline-block w-1.5 h-1.5 rounded-full"
-                style={{ background: pulse ? '#10b981' : '#065f46', transition: 'background 0.5s' }} />
-              {loading ? 'Yükleniyor...' : `${items.length} haber · canlı`}
+            <div style={{ fontWeight: 700, fontSize: 16, letterSpacing: 1, color: accent }}>{label.toUpperCase()}</div>
+            <div style={{ fontSize: 11, fontFamily: 'monospace', color: '#4a6080', display: 'flex', alignItems: 'center', gap: 5 }}>
+              <span style={{ display: 'inline-block', width: 7, height: 7, borderRadius: '50%', background: dot ? '#10b981' : '#064e3b', transition: 'background .4s' }} />
+              {loading ? 'yükleniyor…' : `${items.length} haber`}
             </div>
           </div>
+          <MapPin size={14} style={{ marginLeft: 'auto', color: accent, opacity: .45 }} />
         </div>
-        <MapPin className="w-4 h-4" style={{ color: accent, opacity: 0.5 }} />
       </div>
 
-      {/* Haberler */}
-      {loading ? (
-        <div className="space-y-3">
-          {[...Array(5)].map((_, i) => (
-            <div key={i} className="rounded-2xl animate-pulse"
-              style={{ height: 280, background: 'hsl(222 47% 8%)', opacity: 1 - i * 0.15 }} />
-          ))}
-        </div>
-      ) : (
-        <div className="space-y-3">
-          {items.map((item, i) => (
-            <NewsCard
-              key={item.id}
-              item={item}
-              city={city}
-              delay={Math.min(i * 40, 600)}
-            />
-          ))}
-        </div>
-      )}
+      {loading
+        ? [...Array(4)].map((_, k) => (
+            <div key={k} style={{ height: 260, borderRadius: 16, background: 'hsl(222 47% 8%)', opacity: 1 - k * .2, animation: 'pulse 1.5s infinite' }} />
+          ))
+        : items.map((item, k) => <Card key={item.id} item={item} city={city} i={k} />)
+      }
     </div>
   );
 }
 
-// ─── Ana Sayfa ────────────────────────────────────────────────────────────────
-
+/* ── Sayfa ────────────────────────────────────────────────────────── */
 export default function CitiesPage() {
   const [istanbul, setIstanbul] = useState<NewsItem[]>([]);
   const [athens, setAthens]     = useState<NewsItem[]>([]);
   const [loading, setLoading]   = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
+  const [busy, setBusy]         = useState(false);
   const [lastUpd, setLastUpd]   = useState<Date | null>(null);
-  const [countdown, setCountdown] = useState(30);
-  const [mobileCity, setMobileCity] = useState<'istanbul' | 'athens'>('istanbul');
-  const countRef = useRef(30);
+  const [cd, setCd]             = useState(30);
+  const [tab, setTab]           = useState<'istanbul' | 'athens'>('istanbul');
+  const cdRef = useRef(30);
 
   const load = useCallback(async () => {
-    setRefreshing(true);
+    setBusy(true);
     try {
-      const data = await fetchCitiesNews();
-      if (data.istanbul?.length || data.athens?.length) {
-        setIstanbul(data.istanbul ?? []);
-        setAthens(data.athens ?? []);
+      const d = await fetchCitiesNews();
+      if (d.istanbul?.length || d.athens?.length) {
+        setIstanbul(d.istanbul ?? []);
+        setAthens(d.athens ?? []);
         setLastUpd(new Date());
       }
-    } catch { /* sessiz */ }
+    } catch {}
     setLoading(false);
-    setRefreshing(false);
-    countRef.current = 30;
+    setBusy(false);
+    cdRef.current = 30;
   }, []);
 
   useEffect(() => { load(); }, [load]);
-
   useEffect(() => {
-    const id = setInterval(() => {
-      countRef.current -= 1;
-      setCountdown(countRef.current);
-      if (countRef.current <= 0) load();
+    const t = setInterval(() => {
+      cdRef.current -= 1;
+      setCd(cdRef.current);
+      if (cdRef.current <= 0) load();
     }, 1000);
-    return () => clearInterval(id);
+    return () => clearInterval(t);
   }, [load]);
 
   return (
-    <div className="max-w-screen-2xl mx-auto">
-
+    <div style={{ maxWidth: 1400, margin: '0 auto' }}>
       {/* Üst bar */}
-      <div className="flex items-center justify-between px-4 py-3 border-b"
-        style={{ borderColor: 'hsl(var(--border))' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 16px', borderBottom: '1px solid #1a2535' }}>
         <div>
-          <div className="flex items-center gap-2">
-            <span className="font-bold">🇹🇷 İstanbul</span>
-            <span style={{ color: 'hsl(215 20% 40%)' }}>·</span>
-            <span className="font-bold">🇬🇷 Atina</span>
-            <span className="text-xs font-mono px-2 py-0.5 rounded-full ml-1"
-              style={{ background: 'rgba(16,185,129,0.12)', color: '#10b981', border: '1px solid rgba(16,185,129,0.3)' }}>
-              CANLI
-            </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 600 }}>
+            🇹🇷 İstanbul &nbsp;·&nbsp; 🇬🇷 Atina
+            <span style={{ fontSize: 10, fontFamily: 'monospace', padding: '2px 8px', borderRadius: 999, background: 'rgba(16,185,129,.1)', color: '#10b981', border: '1px solid rgba(16,185,129,.25)' }}>CANLI</span>
           </div>
           {lastUpd && (
-            <p className="text-xs font-mono mt-0.5" style={{ color: 'hsl(215 20% 45%)' }}>
-              {istanbul.length + athens.length} haber · {lastUpd.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })} · {countdown}sn
-            </p>
+            <div style={{ fontSize: 11, fontFamily: 'monospace', color: '#3d5570', marginTop: 2 }}>
+              {istanbul.length + athens.length} haber · {lastUpd.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })} · {cd}sn
+            </div>
           )}
         </div>
-        <button
-          onClick={() => load()}
-          disabled={refreshing}
-          className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border border-border text-muted-foreground hover:text-foreground transition-all"
-        >
-          <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? 'animate-spin' : ''}`} />
+        <button onClick={load} disabled={busy} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, padding: '6px 12px', borderRadius: 8, border: '1px solid #1a2535', background: 'transparent', color: '#4a6080', cursor: 'pointer' }}>
+          <RefreshCw size={13} style={busy ? { animation: 'spin 1s linear infinite' } : {}} />
           Yenile
         </button>
       </div>
 
       {/* Mobil sekme */}
-      <div className="flex md:hidden gap-2 p-3 border-b" style={{ borderColor: 'hsl(var(--border))' }}>
-        {([['istanbul', '🇹🇷 İstanbul', '#0BC5EA'], ['athens', '🇬🇷 Atina', '#a78bfa']] as const).map(([id, label, clr]) => (
-          <button key={id} onClick={() => setMobileCity(id)}
-            className="flex-1 py-2 rounded-xl text-sm font-semibold transition-all"
-            style={{
-              background: mobileCity === id ? `${clr}18` : 'transparent',
-              color: mobileCity === id ? clr : 'hsl(215 20% 50%)',
-              border: `1px solid ${mobileCity === id ? clr + '44' : 'transparent'}`,
+      <div style={{ display: 'flex', gap: 8, padding: 12, borderBottom: '1px solid #1a2535' }} className="md:hidden">
+        {(['istanbul', 'athens'] as const).map((id) => {
+          const [flag, lbl, clr] = id === 'istanbul' ? ['🇹🇷', 'İstanbul', '#0BC5EA'] : ['🇬🇷', 'Atina', '#a78bfa'];
+          return (
+            <button key={id} onClick={() => setTab(id)} style={{
+              flex: 1, padding: '8px 0', borderRadius: 12, fontSize: 13, fontWeight: 600, cursor: 'pointer',
+              background: tab === id ? `${clr}18` : 'transparent',
+              color: tab === id ? clr : '#3d5570',
+              border: `1px solid ${tab === id ? clr + '44' : 'transparent'}`,
+              transition: 'all .2s',
             }}>
-            {label}
-          </button>
-        ))}
+              {flag} {lbl}
+            </button>
+          );
+        })}
       </div>
 
-      {/* İki sütun */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-6 p-3 md:p-4">
-
-        <div className={mobileCity === 'istanbul' ? 'block' : 'hidden md:block'}>
-          <CityColumn
-            city="istanbul" flag="🇹🇷" name="İstanbul"
-            accent="#0BC5EA"
-            items={istanbul}
-            loading={loading}
-          />
+      {/* Grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 24, padding: 16 }} className="cities-grid">
+        <div className={tab === 'istanbul' ? '' : 'hidden md:block'}>
+          <Col city="istanbul" flag="🇹🇷" label="İstanbul" accent="#0BC5EA" items={istanbul} loading={loading} />
         </div>
-
-        <div className={mobileCity === 'athens' ? 'block' : 'hidden md:block'}>
-          <CityColumn
-            city="athens" flag="🇬🇷" name="Atina"
-            accent="#a78bfa"
-            items={athens}
-            loading={loading}
-          />
+        <div className={tab === 'athens' ? '' : 'hidden md:block'}>
+          <Col city="athens" flag="🇬🇷" label="Atina" accent="#a78bfa" items={athens} loading={loading} />
         </div>
-
       </div>
     </div>
   );

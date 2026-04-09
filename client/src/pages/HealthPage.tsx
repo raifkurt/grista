@@ -1,52 +1,37 @@
-/**
- * GRISTA — Sağlık & İyi Haberler
- * Dünyanın her yerinden iyi haberler — sadece başlık
- */
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { RefreshCw, Clock, Globe, Heart } from 'lucide-react';
+import { RefreshCw, Heart } from 'lucide-react';
 import { NewsItem } from '@/lib/data/liveData';
 
-// ─── Resim ───────────────────────────────────────────────────────────────────
-
-const HEALTH_KEYWORDS = [
-  'health,wellness,nature',
-  'medical,science,research',
-  'fitness,yoga,meditation',
-  'food,nutrition,healthy',
-  'nature,forest,green',
-  'sunrise,sky,peaceful',
-  'flowers,garden,beauty',
-  'ocean,water,calm',
-  'running,sport,active',
-  'vegetables,fruit,diet',
+/* ── Resim ────────────────────────────────────────────────────────── */
+const KW = [
+  'health,wellness,nature', 'fitness,yoga,sport', 'food,nutrition,fruit',
+  'medical,science,lab', 'nature,forest,green', 'ocean,calm,blue',
+  'flowers,garden,spring', 'running,active,lifestyle', 'sunrise,sky,peaceful',
 ];
 
-function healthImage(item: NewsItem): string {
+function img(item: NewsItem) {
   if (item.image) return item.image;
-  const hash = item.id.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
-  const kw = HEALTH_KEYWORDS[hash % HEALTH_KEYWORDS.length];
-  const lock = hash % 500;
-  return `https://loremflickr.com/800/500/${kw}?lock=${lock}`;
+  const h = item.id.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+  return `https://loremflickr.com/800/500/${KW[h % KW.length]}?lock=${h % 500}`;
 }
 
-function timeAgo(iso: string) {
+function ago(iso: string) {
   const s = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
-  if (s < 60) return `${s}sn`;
-  if (s < 3600) return `${Math.floor(s / 60)}dk`;
+  if (s < 60)    return `${s}sn`;
+  if (s < 3600)  return `${Math.floor(s / 60)}dk`;
   if (s < 86400) return `${Math.floor(s / 3600)}sa`;
-  return `${Math.floor(s / 86400)} gün`;
+  return `${Math.floor(s / 86400)}g`;
 }
 
-// ─── Haber Kartı ─────────────────────────────────────────────────────────────
-
-function HealthCard({ item, delay = 0 }: { item: NewsItem; delay?: number }) {
-  const [visible, setVisible] = useState(false);
-  const [imgOk, setImgOk] = useState(true);
-  const imgSrc = healthImage(item);
+/* ── Kart ─────────────────────────────────────────────────────────── */
+function Card({ item, i }: { item: NewsItem; i: number }) {
+  const [show, setShow] = useState(false);
+  const [imgErr, setImgErr] = useState(false);
+  const delay = Math.min(i * 40, 600);
 
   useEffect(() => {
-    const id = setTimeout(() => setVisible(true), delay);
-    return () => clearTimeout(id);
+    const t = setTimeout(() => setShow(true), delay);
+    return () => clearTimeout(t);
   }, [delay]);
 
   return (
@@ -54,58 +39,57 @@ function HealthCard({ item, delay = 0 }: { item: NewsItem; delay?: number }) {
       href={item.link}
       target="_blank"
       rel="noopener noreferrer"
-      className="block rounded-2xl overflow-hidden relative group"
       style={{
-        height: 280,
-        opacity: visible ? 1 : 0,
-        transform: visible ? 'translateY(0)' : 'translateY(16px)',
-        transition: `opacity 0.4s ease ${delay}ms, transform 0.4s ease ${delay}ms`,
+        display: 'block',
+        position: 'relative',
+        height: 260,
+        borderRadius: 16,
+        overflow: 'hidden',
+        border: '1px solid rgba(16,185,129,.18)',
         textDecoration: 'none',
-        border: '1px solid rgba(16,185,129,0.18)',
+        opacity: show ? 1 : 0,
+        transform: show ? 'none' : 'translateY(14px)',
+        transition: `opacity .35s ease ${delay}ms, transform .35s ease ${delay}ms`,
       }}
     >
-      {/* Resim — tam kart, filtre yok */}
-      {imgOk ? (
+      {/* Resim */}
+      {!imgErr ? (
         <img
-          src={imgSrc}
+          src={img(item)}
           alt=""
-          onError={() => setImgOk(false)}
-          className="absolute inset-0 w-full h-full object-cover"
+          onError={() => setImgErr(true)}
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
         />
       ) : (
-        <div
-          className="absolute inset-0"
-          style={{ background: 'linear-gradient(135deg, rgba(16,185,129,0.15), hsl(222 47% 10%))' }}
-        />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(16,185,129,.12), #05090f)' }} />
       )}
 
-      {/* Gradient sadece alt bant */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background: 'linear-gradient(to top, rgba(5,13,26,0.97) 0%, rgba(5,13,26,0.88) 22%, rgba(5,13,26,0.08) 52%, rgba(5,13,26,0.00) 68%)',
-        }}
-      />
+      {/* Sadece alt gradyan */}
+      <div style={{
+        position: 'absolute', inset: 0,
+        background: 'linear-gradient(to top, rgba(3,8,20,.97) 0%, rgba(3,8,20,.82) 30%, rgba(3,8,20,.05) 60%, transparent 75%)',
+      }} />
 
       {/* Üst yeşil çizgi */}
-      <div className="absolute top-0 left-0 right-0 h-0.5"
-        style={{ background: 'linear-gradient(to right, #10b981, #34d399)' }} />
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: 'linear-gradient(to right, #10b981, #34d399)' }} />
 
-      {/* İçerik — alta yapışık */}
-      <div className="absolute bottom-0 left-0 right-0 z-10 px-4 pb-3 pt-2">
-        <h2
-          className="font-bold text-white leading-snug mb-1.5"
-          style={{ fontSize: 'clamp(13px, 2.2vw, 17px)', lineHeight: 1.3 }}
-        >
+      {/* Sadece başlık + kaynak/saat — alta yapışık */}
+      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '12px 14px' }}>
+        <p style={{
+          margin: '0 0 6px',
+          fontWeight: 700,
+          fontSize: 'clamp(13px, 2vw, 16px)',
+          lineHeight: 1.3,
+          color: '#fff',
+        }}>
           {item.title}
-        </h2>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1 text-xs" style={{ color: 'rgba(255,255,255,0.38)' }}>
-            <Globe className="w-3 h-3 flex-shrink-0" />
-            <span className="truncate max-w-[170px]">{item.source}</span>
-          </div>
-          <span className="text-xs font-mono" style={{ color: 'rgba(255,255,255,0.30)' }}>
-            {timeAgo(item.pubDate)}
+        </p>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span style={{ fontSize: 11, color: 'rgba(255,255,255,.38)', maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            {item.source}
+          </span>
+          <span style={{ fontSize: 11, color: 'rgba(255,255,255,.28)', fontFamily: 'monospace' }}>
+            {ago(item.pubDate)}
           </span>
         </div>
       </div>
@@ -113,97 +97,77 @@ function HealthCard({ item, delay = 0 }: { item: NewsItem; delay?: number }) {
   );
 }
 
-// ─── Ana Sayfa ────────────────────────────────────────────────────────────────
-
+/* ── Sayfa ────────────────────────────────────────────────────────── */
 export default function HealthPage() {
-  const [news, setNews]       = useState<NewsItem[]>([]);
+  const [news, setNews]   = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
+  const [busy, setBusy]   = useState(false);
   const [lastUpd, setLastUpd] = useState<Date | null>(null);
-  const [countdown, setCountdown] = useState(30);
-  const countRef = useRef(30);
+  const [cd, setCd]       = useState(30);
+  const cdRef = useRef(30);
 
   const load = useCallback(async () => {
-    setRefreshing(true);
+    setBusy(true);
     try {
       const res = await fetch('/api/news/healthgood');
       if (res.ok) {
-        const data = await res.json();
-        if (Array.isArray(data) && data.length > 0) {
-          setNews(data);
-          setLastUpd(new Date());
-        }
+        const d = await res.json();
+        if (Array.isArray(d) && d.length) { setNews(d); setLastUpd(new Date()); }
       }
-    } catch { /* sessiz */ }
+    } catch {}
     setLoading(false);
-    setRefreshing(false);
-    countRef.current = 30;
+    setBusy(false);
+    cdRef.current = 30;
   }, []);
 
   useEffect(() => { load(); }, [load]);
   useEffect(() => {
-    const id = setInterval(() => {
-      countRef.current -= 1;
-      setCountdown(countRef.current);
-      if (countRef.current <= 0) load();
+    const t = setInterval(() => {
+      cdRef.current -= 1;
+      setCd(cdRef.current);
+      if (cdRef.current <= 0) load();
     }, 1000);
-    return () => clearInterval(id);
+    return () => clearInterval(t);
   }, [load]);
 
   return (
-    <div className="p-4 space-y-4 max-w-screen-lg mx-auto">
-
+    <div style={{ maxWidth: 900, margin: '0 auto', padding: 16 }}>
       {/* Başlık */}
-      <div className="flex items-center justify-between flex-wrap gap-3">
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
         <div>
-          <div className="flex items-center gap-2.5">
-            <Heart className="w-5 h-5" style={{ color: '#10b981' }} />
-            <h1 className="text-lg font-bold">Sağlık & İyi Haberler</h1>
-            <span className="text-xs font-mono px-2 py-0.5 rounded-full"
-              style={{ background: 'rgba(16,185,129,0.12)', color: '#10b981', border: '1px solid rgba(16,185,129,0.3)' }}>
-              CANLI
-            </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontWeight: 700, fontSize: 17 }}>
+            <Heart size={18} color="#10b981" />
+            Sağlık & İyi Haberler
+            <span style={{ fontSize: 10, fontFamily: 'monospace', padding: '2px 8px', borderRadius: 999, background: 'rgba(16,185,129,.1)', color: '#10b981', border: '1px solid rgba(16,185,129,.25)' }}>CANLI</span>
           </div>
           {lastUpd && (
-            <p className="text-xs font-mono mt-0.5" style={{ color: 'hsl(215 20% 45%)' }}>
-              Dünyanın her yerinden · {news.length} haber · {lastUpd.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })} · {countdown}sn
-            </p>
+            <div style={{ fontSize: 11, fontFamily: 'monospace', color: '#3d5570', marginTop: 4 }}>
+              {news.length} haber · dünyanın her yerinden · {lastUpd.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })} · {cd}sn
+            </div>
           )}
         </div>
-        <button
-          onClick={() => load()} disabled={refreshing}
-          className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border border-border text-muted-foreground hover:text-foreground transition-all"
-        >
-          <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? 'animate-spin' : ''}`} />
+        <button onClick={load} disabled={busy} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, padding: '6px 12px', borderRadius: 8, border: '1px solid #1a2535', background: 'transparent', color: '#4a6080', cursor: 'pointer' }}>
+          <RefreshCw size={13} style={busy ? { animation: 'spin 1s linear infinite' } : {}} />
           Yenile
         </button>
       </div>
 
       {/* Kartlar */}
       {loading ? (
-        <div className="space-y-3">
-          {[...Array(8)].map((_, i) => (
-            <div key={i} className="rounded-2xl animate-pulse"
-              style={{ height: 280, background: 'hsl(222 47% 8%)', opacity: 1 - i * 0.1 }} />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          {[...Array(6)].map((_, k) => (
+            <div key={k} style={{ height: 260, borderRadius: 16, background: 'hsl(222 47% 8%)', opacity: 1 - k * .12, animation: 'pulse 1.5s infinite' }} />
           ))}
         </div>
       ) : news.length === 0 ? (
-        <div className="rounded-2xl p-12 text-center" style={{ background: 'hsl(222 47% 8%)' }}>
-          <Heart className="w-10 h-10 mx-auto mb-3 opacity-20" style={{ color: '#10b981' }} />
-          <p className="text-muted-foreground">Haberler yükleniyor...</p>
-          <button onClick={() => load()} className="mt-3 text-sm underline" style={{ color: '#10b981' }}>
-            Tekrar dene
-          </button>
+        <div style={{ padding: 60, textAlign: 'center', borderRadius: 16, background: 'hsl(222 47% 8%)' }}>
+          <Heart size={36} color="#10b981" style={{ opacity: .2, marginBottom: 12 }} />
+          <p style={{ color: '#4a6080' }}>Haberler yükleniyor…</p>
+          <button onClick={load} style={{ marginTop: 10, color: '#10b981', fontSize: 13, background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline' }}>Tekrar dene</button>
         </div>
       ) : (
-        <div className="space-y-3">
-          {news.map((item, i) => (
-            <HealthCard key={item.id} item={item} delay={Math.min(i * 40, 800)} />
-          ))}
-          <p className="text-center text-xs font-mono py-4" style={{ color: 'hsl(215 20% 40%)' }}>
-            <Clock className="w-3 h-3 inline mr-1" />
-            Sonraki: {countdown}sn
-          </p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          {news.map((item, k) => <Card key={item.id} item={item} i={k} />)}
         </div>
       )}
     </div>
