@@ -708,8 +708,8 @@ function EnflasyonKarsilastirma() {
 
 /* ── Kamu Maliyesi ───────────────────────────────────────────────── */
 const MALIYE = [
-  {gosterge:'Kamu Borcu / GSYİH',     tr:'%32',      gr:'%160',    trIyi:true,  grIyi:false, not:'GR 2010'da %210 idi — reform var'},
-  {gosterge:'Bütçe Dengesi',          tr:'-%3.8',    gr:'+%1.1',   trIyi:false, grIyi:true,  not:'GR 2024'te fazla verdi'},
+  {gosterge:'Kamu Borcu / GSYİH',     tr:'%32',      gr:'%160',    trIyi:true,  grIyi:false, not:"GR 2010'da %210 idi — reform var"},
+  {gosterge:'Bütçe Dengesi',          tr:'-%3.8',    gr:'+%1.1',   trIyi:false, grIyi:true,  not:"GR 2024'te fazla verdi"},
   {gosterge:'Cari Hesap Dengesi',     tr:'-%4.2',    gr:'-%6.5',   trIyi:false, grIyi:false, not:'İkisi de açık veriyor'},
   {gosterge:'Döviz Rezervi',          tr:'$135B',    gr:'€14B',    trIyi:false, grIyi:null,  not:'ECB desteği GR için avantaj'},
   {gosterge:'Kredi Notu (S&P)',        tr:'B+',       gr:'BBB-',    trIyi:false, grIyi:true,  not:'GR yatırım yapılabilir seviyede'},
@@ -849,20 +849,20 @@ const EKONOMIK_TABLE = [
   {kat:'Genel',items:[
     {gosterge:'GSYİH (nominal)',          tr:'$1.15T',   gr:'$239B',    not:'Türkiye 4.8x büyük'},
     {gosterge:'Kişi Başı GSYİH',         tr:'$13.5K',   gr:'$22.6K',   not:'GR daha yüksek'},
-    {gosterge:'Kişi Başı GSYİH (PPP)',   tr:'$45K',     gr:'$36K',     not:'TR satın alma gücünde önde'},
+    {gosterge:'Kişi Başı GSYİH (PPP)',   tr:'$45K',     gr:'$36K',     not:"TR satın alma gücünde önde"},
     {gosterge:'Nüfus',                   tr:'86M',       gr:'10.4M',    not:''},
   ]},
   {kat:'İşgücü',items:[
     {gosterge:'İşsizlik',                tr:'%8.8',     gr:'%9.5',     not:'Yakın seviyeler'},
-    {gosterge:'Genç İşsizliği',          tr:'%17.2',    gr:'%22.8',    not:'GR gençlik sorunu'},
+    {gosterge:'Genç İşsizliği',          tr:'%17.2',    gr:'%22.8',    not:"GR gençlik sorunu"},
     {gosterge:'İş Kurma Kolaylığı',      tr:'33/190',   gr:'61/190',   not:'Dünya Bankası sıralaması'},
-    {gosterge:'Yolsuzluk Algı Endeksi',  tr:'36/100',   gr:'48/100',   not:'100 = tam temiz'},
+    {gosterge:'Yolsuzluk Algı Endeksi',  tr:'36/100',   gr:'48/100',   not:"100 = tam temiz"},
   ]},
   {kat:'Sektör Ağırlıkları',items:[
-    {gosterge:'Turizm / GSYİH',          tr:'%4.8',     gr:'%20.6',    not:'GR'de dominant sektör'},
-    {gosterge:'Sanayi / GSYİH',          tr:'%29',      gr:'%16',      not:'TR daha sanayi odaklı'},
+    {gosterge:'Turizm / GSYİH',          tr:'%4.8',     gr:'%20.6',    not:"GR'de dominant sektör"},
+    {gosterge:'Sanayi / GSYİH',          tr:'%29',      gr:'%16',      not:"TR daha sanayi odaklı"},
     {gosterge:'Tarım / GSYİH',           tr:'%6.5',     gr:'%3.8',     not:''},
-    {gosterge:'Hizmetler / GSYİH',       tr:'%54',      gr:'%77',      not:'GR hizmet ekonomisi'},
+    {gosterge:'Hizmetler / GSYİH',       tr:'%54',      gr:'%77',      not:"GR hizmet ekonomisi"},
   ]},
 ];
 function KapsamliEkonomik() {
