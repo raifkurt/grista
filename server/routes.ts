@@ -606,5 +606,28 @@ export async function registerRoutes(_httpServer: any, app: Express): Promise<an
     }
   });
 
+
+  // ── Emtia & Döviz — Yahoo Finance ─────────────────────────────────────────
+  app.get('/api/commodities', async (req, res) => {
+    try {
+      if (req.query.force === '1') delete CACHE['commodities'];
+      const data = await cached('commodities', 5 * 60_000, async () => {
+        const ctrl = new AbortController(); setTimeout(() => ctrl.abort(), 10_000);
+        const syms = ['GC=F','BZ=F','SI=F','NG=F','XU100.IS'].join(',');
+        const r = await fetch(
+          `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${syms}`,
+          { signal: ctrl.signal, headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36' } }
+        );
+        const d = await r.json();
+        return (d.quoteResponse?.result ?? []).map((q: any) => ({
+          symbol: q.symbol, name: q.shortName || q.longName || q.symbol,
+          price: q.regularMarketPrice, changePct: q.regularMarketChangePercent,
+          currency: q.currency ?? 'USD',
+        }));
+      });
+      res.json(data);
+    } catch (err: any) { res.status(500).json({ error: err.message }); }
+  });
+
   return _httpServer;
 }

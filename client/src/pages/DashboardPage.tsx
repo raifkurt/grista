@@ -364,8 +364,20 @@ export default function DashboardPage() {
       {/* ════ Hızlı Bilgi Paneli ════ */}
       <HizliBilgi macro={liveMacro} />
 
-      {/* ════ Kavram Rehberi ════ */}
-      <KavramRehberi />
+      {/* ════ Emtia & Altın ════ */}
+      <EmtiaModulu />
+
+      {/* ════ Kripto Piyasa Özeti ════ */}
+      <KriptoPiyasaOzeti />
+
+      {/* ════ İstanbul Mahalle Bazlı Konut ════ */}
+      <IstanbulKonut />
+
+      {/* ════ Atina Konut Piyasası ════ */}
+      <AtinaKonut />
+
+      {/* ════ Ekonomik Takvim ════ */}
+      <EkonomikTakvim />
 
     </div>
   );
@@ -512,43 +524,263 @@ function HizliBilgi({ macro }: { macro: any }) {
   );
 }
 
-// ─── Kavram Rehberi ───────────────────────────────────────────────────────────────
-const KAVRAMLAR = [
-  { term: 'Enflasyon',       icon: '📈', color: '#ef4444', text: 'Fiyatların genel seviyesinin artmasıdır. %30 enflasyon: dün 100₺’ye aldığın şey bugün 130₺. Paranın alım gücü azalır.' },
-  { term: 'Faiz Oranı',     icon: '🏦', color: '#3b82f6', text: 'Bankaya para yatırdığında ya da borç aldığında uygulanan yüzdedir. TCMB %37 = bankalar bu oranla para bulabilir.' },
-  { term: 'Döviz Kuru',     icon: '💱', color: '#10b981', text: 'Bir paranın başka bir paraya göre değeridir. USD/TRY 44 = 1 dolar için 44 TL ödemek gerekiyor demektir.' },
-  { term: 'Borsa Endeksi',   icon: '📊', color: '#8b5cf6', text: 'Seçilmiş hisselerin ortalama değerini gösteren ölçüttür. BIST 100 = İstanbul borsasındaki en büyük 100 şirket.' },
-  { term: 'Volatilite',      icon: '〰️', color: '#6366f1', text: 'Fiyatların ne kadar dalgalandığının ölçüsüdür. Yüksek volatilite = daha yüksek risk ama daha yüksek kazanc fırsatı.' },
-  { term: 'Portföy',         icon: '💼', color: '#0bc5ea', text: 'Sahip olduğun tüm yatırımların toplamıdır. Hisse + altın + dolar + gayrimenkul bir arada portföy oluşturur.' },
-  { term: 'Risk / Getiri',   icon: '⚖️', color: '#f97316', text: 'Daha fazla getiri için daha fazla risk alınır. Mevduat güvenli ama az kazandırır; Bitcoin riskli ama çok kazandırabilir.' },
-  { term: 'Kira Getirisi',   icon: '🏠', color: '#ec4899', text: 'Gayrimenkulden yılda elde edilen kira gelirinin mülk değerine oranıdır. %4 = 1M₺ mülk ayda ~3.333₺ kira.' },
-  { term: 'Piyasa Değeri',   icon: '🏢', color: '#f59e0b', text: 'Bir şirketin borsadaki toplam değeridir. Hisse fiyatı × toplam hisse sayısı. Apple = 3 trilyon dolar piyasa değeri.' },
-  { term: 'VaR (Risk Ölçümü)',icon: '🛡️', color: '#a855f7', text: '%95 güvenle 1 günde kaybedilebilecek maksimum miktardır. VaR 180K₺ = 100 günde en fazla 5 gün bu kadar kaybı aşarsin.' },
-  { term: 'Sentiment',       icon: '🗣️', color: '#22d3ee', text: 'Yatırımcıların genel duygusu/beklentisidir. "Açgözlülük" = herkes alıyor, piyasa üstlenmiş olabilir. "Korku" = satış fırsatı olabilir.' },
-  { term: 'Arbitraj',        icon: '⚡', color: '#84cc16', text: 'Aynı şeyin farklı yerlerde farklı fiyatlandırılmasından kazanç sağlamaktır. Dünyanın en bilinen yatırım stratejilerinden biridir.' },
-];
-function KavramRehberi() {
+// ─── Emtia & Altın ───────────────────────────────────────────────────────────
+function EmtiaModulu() {
+  const [data, setData] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    fetch(`/api/commodities?_=${Date.now()}`, { cache: 'no-store' })
+      .then(r => r.ok ? r.json() : []).catch(() => [])
+      .then(d => { setData(Array.isArray(d) ? d : []); setLoading(false); });
+  }, []);
+  const MAP: Record<string, { label: string; icon: string; color: string }> = {
+    'GC=F':    { label: 'Altın (XAU/USD)',    icon: '🪙', color: '#F59E0B' },
+    'SI=F':    { label: 'Gümüş (XAG/USD)',    icon: '🥈', color: '#94A3B8' },
+    'BZ=F':    { label: 'Brent Ham Petrol',   icon: '🛢️', color: '#6B7280' },
+    'NG=F':    { label: 'Doğal Gaz',          icon: '🔥', color: '#F97316' },
+    'XU100.IS':{ label: 'BIST 100 Endeksi',   icon: '📊', color: '#8B5CF6' },
+  };
+  const UNITS: Record<string, string> = { 'GC=F':'$/oz','SI=F':'$/oz','BZ=F':'$/varil','NG=F':'$/mmBtu','XU100.IS':'puan' };
   return (
-    <div>
+    <div className="metric-card">
       <div className="flex items-center gap-2 mb-3">
-        <Brain className="w-4 h-4 text-cyan-400" />
-        <span className="text-sm font-semibold">Kavram Rehberi</span>
-        <span className="text-xs text-muted-foreground ml-auto">Hiç bilmeyenler için açıklamalar</span>
+        <BarChart3 className="w-4 h-4 text-yellow-400" />
+        <span className="text-sm font-semibold">Emtia & Piyasa Verileri</span>
+        <span className="text-xs text-muted-foreground ml-auto font-mono">Yahoo Finance</span>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        {KAVRAMLAR.map(k => (
-          <div key={k.term} className="p-3 rounded-xl" style={{ background: 'hsl(222 47% 5%)', border: `1px solid ${k.color}20` }}>
-            <div className="flex items-center gap-2 mb-1.5">
-              <span style={{ fontSize: 18 }}>{k.icon}</span>
-              <span className="text-xs font-bold" style={{ color: k.color }}>{k.term}</span>
+      {loading ? (
+        <div className="space-y-2">{[...Array(5)].map((_,i)=><div key={i} style={{ height:36, borderRadius:8, background:'hsl(222 47% 8%)', opacity:1-i*.15 }}/>)}</div>
+      ) : data.length === 0 ? (
+        <div className="text-xs text-muted-foreground text-center py-4">Veri yüklenemedi</div>
+      ) : data.map((d, i) => {
+        const m = MAP[d.symbol] ?? { label: d.name, icon: '📈', color: '#10b981' };
+        const c = d.changePct ?? 0;
+        return (
+          <div key={d.symbol} className="flex items-center justify-between p-2.5 rounded-xl mb-2" style={{ background: 'hsl(222 47% 5%)', border: `1px solid ${m.color}15` }}>
+            <div className="flex items-center gap-3">
+              <span style={{ fontSize: 20 }}>{m.icon}</span>
+              <div>
+                <div className="text-xs font-semibold">{m.label}</div>
+                <div className="text-xs text-muted-foreground font-mono">{UNITS[d.symbol] ?? d.currency}</div>
+              </div>
             </div>
-            <div className="text-xs text-muted-foreground leading-relaxed">{k.text}</div>
+            <div className="text-right">
+              <div className="text-sm font-bold font-mono" style={{ color: m.color }}>
+                {d.price >= 10000 ? d.price.toLocaleString('tr-TR', { maximumFractionDigits: 0 }) : d.price >= 100 ? d.price.toFixed(2) : d.price.toFixed(4)}
+              </div>
+              <div className="text-xs font-mono font-semibold" style={{ color: c >= 0 ? '#10b981' : '#ef4444' }}>
+                {c >= 0 ? '+' : ''}{c.toFixed(2)}%
+              </div>
+            </div>
           </div>
-        ))}
+        );
+      })}
+      <div className="text-xs text-muted-foreground mt-1" style={{ fontSize: 10 }}>
+        Altın: Güvenli liman. Petrol: Küresel ekonomi barometresi. Gaz: Enerji maliyeti göstergesi.
       </div>
     </div>
   );
 }
+
+// ─── Kripto Piyasa Özeti / Fear & Greed ──────────────────────────────────────
+function KriptoPiyasaOzeti() {
+  const [fg, setFg] = useState<any>(null);
+  const [btc, setBtc] = useState<any>(null);
+  useEffect(() => {
+    fetch(`/api/sentiment?_=${Date.now()}`, { cache: 'no-store' }).then(r => r.ok ? r.json() : null).catch(() => null).then(setFg);
+    fetch(`/api/crypto?_=${Date.now()}`, { cache: 'no-store' }).then(r => r.ok ? r.json() : null).catch(() => null).then(setBtc);
+  }, []);
+  const val = fg?.value ?? 50;
+  const label = fg?.label ?? 'Nötr';
+  const labelTR: Record<string, string> = { 'Extreme Fear': 'Aşırı Korku 😱', 'Fear': 'Korku 😰', 'Neutral': 'Nötr 😐', 'Greed': 'Açgözlülük 😈', 'Extreme Greed': 'Aşırı Açgözlülük 🤑' };
+  const gaugeColor = val < 25 ? '#ef4444' : val < 50 ? '#f97316' : val < 75 ? '#84cc16' : '#10b981';
+  const pct = (val / 100) * 180;
+  const rad = (deg: number) => deg * Math.PI / 180;
+  const cx = 60, cy = 60, r = 45;
+  const startAngle = 180, endAngle = startAngle + pct;
+  const x1 = cx + r * Math.cos(rad(startAngle)), y1 = cy + r * Math.sin(rad(startAngle));
+  const x2 = cx + r * Math.cos(rad(endAngle)), y2 = cy + r * Math.sin(rad(endAngle));
+  const large = pct > 90 ? 1 : 0;
+  return (
+    <div className="metric-card">
+      <div className="flex items-center gap-2 mb-3">
+        <Brain className="w-4 h-4 text-purple-400" />
+        <span className="text-sm font-semibold">Kripto Piyasa Özeti</span>
+        <span className="text-xs text-muted-foreground ml-auto font-mono">Alternative.me</span>
+      </div>
+      <div className="grid grid-cols-2 gap-4">
+        {/* Fear & Greed Gauge */}
+        <div className="flex flex-col items-center">
+          <div className="text-xs text-muted-foreground mb-2">Korku & Açgözlülük Endeksi</div>
+          <svg viewBox="0 0 120 70" style={{ width: '100%', maxWidth: 160 }}>
+            <path d={`M ${cx - r} ${cy} A ${r} ${r} 0 0 1 ${cx + r} ${cy}`} fill="none" stroke="hsl(222 47% 10%)" strokeWidth="10" strokeLinecap="round" />
+            {val > 0 && <path d={`M ${x1} ${y1} A ${r} ${r} 0 ${large} 1 ${x2} ${y2}`} fill="none" stroke={gaugeColor} strokeWidth="10" strokeLinecap="round" />}
+            <text x={cx} y={cy - 4} textAnchor="middle" fill={gaugeColor} fontSize="18" fontWeight="700" fontFamily="monospace">{val}</text>
+            <text x={cx} y={cy + 10} textAnchor="middle" fill="#4a6080" fontSize="7">/ 100</text>
+          </svg>
+          <div className="text-xs font-bold mt-1" style={{ color: gaugeColor }}>{labelTR[label] ?? label}</div>
+          <div className="text-xs text-muted-foreground mt-1 text-center" style={{ fontSize: 9 }}>
+            {val < 30 ? 'Piyasa çok korkuyor — alım fırsatı olabilir' : val > 70 ? 'Piyasa açgözlü — dikkatli ol!' : 'Piyasa dengeli seyirde'}
+          </div>
+        </div>
+        {/* BTC özet */}
+        <div className="flex flex-col justify-center gap-2">
+          {[
+            { label: 'Bitcoin', value: btc?.btcusd ? `$${btc.btcusd.toLocaleString('en-US', { maximumFractionDigits: 0 })}` : '—', change: btc?.btcChange24h, color: '#F7931A' },
+            { label: 'Ethereum', value: btc?.ethusd ? `$${btc.ethusd.toLocaleString('en-US', { maximumFractionDigits: 0 })}` : '—', change: btc?.ethChange24h, color: '#627EEA' },
+            { label: 'Solana', value: btc?.solusd ? `$${btc.solusd.toFixed(2)}` : '—', change: null, color: '#9945FF' },
+          ].map(c => (
+            <div key={c.label} className="p-2 rounded-lg" style={{ background: 'hsl(222 47% 5%)' }}>
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-muted-foreground">{c.label}</span>
+                {c.change != null && <span className="text-xs font-mono" style={{ color: c.change >= 0 ? '#10b981' : '#ef4444' }}>{c.change >= 0 ? '+' : ''}{c.change?.toFixed(2)}%</span>}
+              </div>
+              <div className="text-sm font-bold font-mono" style={{ color: c.color }}>{c.value}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── İstanbul Konut ───────────────────────────────────────────────────────────
+const IST_DISTRICTS = [
+  { name: 'Sarıyer',    price: 285000, trend: 1.8 },
+  { name: 'Beşiktaş',  price: 268000, trend: 1.4 },
+  { name: 'Kadıköy',   price: 235000, trend: 1.6 },
+  { name: 'Bakırköy',  price: 208000, trend: 1.2 },
+  { name: 'Şişli',     price: 204000, trend: 1.1 },
+  { name: 'Beyoğlu',   price: 188000, trend: 0.9 },
+  { name: 'Üsküdar',   price: 182000, trend: 1.3 },
+  { name: 'Fatih',     price: 165000, trend: 0.8 },
+  { name: 'Ataşehir',  price: 162000, trend: 1.5 },
+  { name: 'Maltepe',   price: 135000, trend: 1.7 },
+  { name: 'Bağcılar',  price: 95000,  trend: 1.9 },
+  { name: 'Esenyurt',  price: 72000,  trend: 2.1 },
+];
+function IstanbulKonut() {
+  const max = Math.max(...IST_DISTRICTS.map(d => d.price));
+  return (
+    <div className="metric-card">
+      <div className="flex items-center gap-2 mb-1">
+        <Building2 className="w-4 h-4 text-cyan-400" />
+        <span className="text-sm font-semibold">İstanbul — Bölge Bazlı Konut m² Fiyatları</span>
+      </div>
+      <div className="text-xs text-muted-foreground mb-3">Ortalama satış fiyatı · Nisan 2026 · TL/m²</div>
+      <div className="space-y-1.5">
+        {IST_DISTRICTS.map(d => (
+          <div key={d.name} className="flex items-center gap-2">
+            <span className="text-xs text-muted-foreground w-20 shrink-0">{d.name}</span>
+            <div className="flex-1 h-5 rounded-full overflow-hidden" style={{ background: 'hsl(222 47% 8%)' }}>
+              <div className="h-5 rounded-full flex items-center pl-2" style={{ width: `${(d.price / max) * 100}%`, background: `hsl(${199 - (d.price / max) * 40} 95% ${45 + (d.price / max) * 10}%)` }}>
+                <span className="text-xs font-mono font-semibold text-white whitespace-nowrap" style={{ fontSize: 9 }}>
+                  {(d.price / 1000).toFixed(0)}K ₺
+                </span>
+              </div>
+            </div>
+            <span className="text-xs font-mono shrink-0" style={{ color: '#10b981', minWidth: 36, textAlign: 'right', fontSize: 10 }}>+{d.trend.toFixed(1)}%/ay</span>
+          </div>
+        ))}
+      </div>
+      <div className="text-xs text-muted-foreground mt-2 p-2 rounded-lg" style={{ background: 'hsl(222 47% 5%)', fontSize: 10 }}>
+        📍 Sarıyer & Beşiktaş en pahalı bölgeler. Esenyurt & Bağcılar en hızlı değer kazananlar.
+      </div>
+    </div>
+  );
+}
+
+// ─── Atina Konut ──────────────────────────────────────────────────────────────
+const ATH_DISTRICTS = [
+  { name: 'Vouliagmeni', price: 9800, trend: 2.3 },
+  { name: 'Kolonaki',    price: 8200, trend: 1.8 },
+  { name: 'Filothei',    price: 5500, trend: 1.6 },
+  { name: 'Glyfada',     price: 5800, trend: 2.1 },
+  { name: 'Kifisia',     price: 4800, trend: 1.4 },
+  { name: 'Marousi',     price: 3200, trend: 1.2 },
+  { name: 'Pangrati',    price: 2800, trend: 1.1 },
+  { name: 'Piraeus',     price: 2400, trend: 0.9 },
+  { name: 'Kypseli',     price: 2000, trend: 0.8 },
+  { name: 'Exarchia',    price: 1900, trend: 0.7 },
+];
+function AtinaKonut() {
+  const max = Math.max(...ATH_DISTRICTS.map(d => d.price));
+  return (
+    <div className="metric-card">
+      <div className="flex items-center gap-2 mb-1">
+        <Building2 className="w-4 h-4 text-purple-400" />
+        <span className="text-sm font-semibold">Atina — Bölge Bazlı Konut m² Fiyatları</span>
+      </div>
+      <div className="text-xs text-muted-foreground mb-3">Ortalama satış fiyatı · Nisan 2026 · EUR/m²</div>
+      <div className="space-y-1.5">
+        {ATH_DISTRICTS.map(d => (
+          <div key={d.name} className="flex items-center gap-2">
+            <span className="text-xs text-muted-foreground w-24 shrink-0">{d.name}</span>
+            <div className="flex-1 h-5 rounded-full overflow-hidden" style={{ background: 'hsl(222 47% 8%)' }}>
+              <div className="h-5 rounded-full flex items-center pl-2" style={{ width: `${(d.price / max) * 100}%`, background: `hsl(${271 - (d.price / max) * 30} 91% ${55 + (d.price / max) * 10}%)` }}>
+                <span className="text-xs font-mono font-semibold text-white whitespace-nowrap" style={{ fontSize: 9 }}>
+                  €{d.price.toLocaleString()}
+                </span>
+              </div>
+            </div>
+            <span className="text-xs font-mono shrink-0" style={{ color: '#10b981', minWidth: 36, textAlign: 'right', fontSize: 10 }}>+{d.trend.toFixed(1)}%/ay</span>
+          </div>
+        ))}
+      </div>
+      <div className="text-xs text-muted-foreground mt-2 p-2 rounded-lg" style={{ background: 'hsl(222 47% 5%)', fontSize: 10 }}>
+        🏛️ Atina'da Altın Vize etkisi: yabancı yatırımcı talebi fiyatları yukarı çekiyor.
+      </div>
+    </div>
+  );
+}
+
+// ─── Ekonomik Takvim ──────────────────────────────────────────────────────────
+const TAKVIM = [
+  { date: '22 Nisan 2026', event: 'TCMB Para Politikası Kurulu', detail: 'Türkiye faiz kararı açıklanacak', importance: 'yüksek', flag: '🇹🇷' },
+  { date: '29-30 Nisan',   event: 'ECB Yönetim Konseyi',         detail: 'Avrupa Merkez Bankası faiz toplantısı', importance: 'yüksek', flag: '🇪🇺' },
+  { date: '5 Mayıs 2026',  event: 'TÜİK Nisan Enflasyonu',      detail: 'Türkiye aylık enflasyon verisi', importance: 'orta', flag: '🇹🇷' },
+  { date: '6-7 Mayıs',     event: 'Fed FOMC Toplantısı',         detail: 'ABD Merkez Bankası faiz kararı', importance: 'yüksek', flag: '🇺🇸' },
+  { date: '26 Mayıs 2026', event: 'TCMB Mayıs Toplantısı',      detail: 'Türkiye 2. çeyrek faiz kararı', importance: 'yüksek', flag: '🇹🇷' },
+  { date: '5 Haziran',     event: 'ECB Haziran Toplantısı',      detail: 'Euro Bölgesi faiz kararı', importance: 'yüksek', flag: '🇪🇺' },
+];
+function EkonomikTakvim() {
+  const IMP: Record<string, { color: string; label: string }> = {
+    yüksek: { color: '#ef4444', label: '●●●' },
+    orta:   { color: '#f59e0b', label: '●●○' },
+    düşük:  { color: '#4b5563', label: '●○○' },
+  };
+  return (
+    <div className="metric-card">
+      <div className="flex items-center gap-2 mb-3">
+        <Zap className="w-4 h-4 text-yellow-400" />
+        <span className="text-sm font-semibold">Önemli Ekonomik Takvim</span>
+        <span className="text-xs text-muted-foreground ml-auto">Nisan–Haziran 2026</span>
+      </div>
+      <div className="space-y-2">
+        {TAKVIM.map((ev, i) => (
+          <div key={i} className="flex items-start gap-3 p-2.5 rounded-xl" style={{ background: 'hsl(222 47% 5%)' }}>
+            <div className="text-center shrink-0" style={{ minWidth: 70 }}>
+              <div className="text-xs font-mono font-bold text-cyan-400">{ev.flag}</div>
+              <div className="text-xs font-mono text-muted-foreground leading-tight" style={{ fontSize: 9 }}>{ev.date}</div>
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="text-xs font-semibold">{ev.event}</div>
+              <div className="text-xs text-muted-foreground">{ev.detail}</div>
+            </div>
+            <div className="shrink-0 text-right">
+              <div className="text-xs font-mono" style={{ color: IMP[ev.importance].color, letterSpacing: 1 }}>{IMP[ev.importance].label}</div>
+              <div className="text-xs text-muted-foreground" style={{ fontSize: 9 }}>{ev.importance}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="text-xs text-muted-foreground mt-2" style={{ fontSize: 10 }}>
+        ●●● Yüksek etkili · ●●○ Orta etkili · Piyasalar bu tarihlerde volatil olabilir.
+      </div>
+    </div>
+  );
+}
+
 
 // ─── Inline SVG Chart ─────────────────────────────────────────────────────────
 function MiniLineChart({ series, forecast, anomalies, height }: {
