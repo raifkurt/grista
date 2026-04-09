@@ -43,7 +43,6 @@ function KanalROI() {
           </div>
         </div>
       ))}
-      <PazarlamaModulleri />
     </div>
   );
 }
