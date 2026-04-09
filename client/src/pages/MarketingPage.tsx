@@ -3,42 +3,44 @@ import { generateCampaigns, generateChannelAttribution, generateCampaignTimeSeri
 import { Megaphone, TrendingUp, Users, Target, DollarSign } from 'lucide-react';
 
 
-/* ══ PAZARLAMA BİLGİ MODÜLLERİ ══════════════════════════════════════ */
+/* ══ GAYRIMENKUL PAZARLAMA MODÜLLERİ — İSTANBUL & ATİNA ════════════ */
 
-/* 1. Kanal ROI Karsilastirma */
-const KANAL_ROI = [
-  {kanal:"SEO / Organik",   roi:748,  cac:28,   renk:"#10b981", ikon:"🔍", not:"Uzun vadeli, dusuk CAC"},
-  {kanal:"Email Pazarlama", roi:4200, cac:12,   renk:"#3B82F6", ikon:"📧", not:"En yuksek ROI kanalı"},
-  {kanal:"Google Ads (PPC)",roi:200,  cac:85,   renk:"#F7931A", ikon:"🎯", not:"Anlık trafik, yuksek CAC"},
-  {kanal:"Meta Reklam",     roi:180,  cac:92,   renk:"#1877F2", ikon:"📘", not:"Genis hedefleme, gorseller"},
-  {kanal:"Influencer",      roi:520,  cac:45,   renk:"#EC4899", ikon:"👤", not:"Marka guveni + erisim"},
-  {kanal:"YouTube Ads",     roi:160,  cac:110,  renk:"#EF4444", ikon:"▶️", not:"Video dikkat suresi uzun"},
-  {kanal:"LinkedIn Ads",    roi:280,  cac:155,  renk:"#0077B5", ikon:"💼", not:"B2B icin en etkili"},
-  {kanal:"Affiliate",       roi:340,  cac:32,   renk:"#8B5CF6", ikon:"🔗", not:"Performans bazli odeme"},
+/* 1. Gayrimenkul Kanal ROI */
+const GR_KANAL = [
+  {kanal:'Sahibinden / Emlakjet',     roi:920,  cpl:85,   renk:'#10b981',ikon:'🏠',not:'TR portalleri — kira+satis'},
+  {kanal:'Google Ads (arama)',         roi:680,  cpl:120,  renk:'#F7931A',ikon:'🔍',not:'Niyet bazlı, yuksek donusum'},
+  {kanal:'Meta Reklam (video)',        roi:540,  cpl:95,   renk:'#1877F2',ikon:'📘',not:'Gorsel proje tanitimi'},
+  {kanal:'Instagram Reels',           roi:480,  cpl:75,   renk:'#E1306C',ikon:'📸',not:'Daire turu, mahalle videosu'},
+  {kanal:'Email (yatirimci listesi)', roi:1840, cpl:12,   renk:'#8B5CF6',ikon:'📧',not:'En yuksek ROI — sicak liste'},
+  {kanal:'LinkedIn (kurumsal)',        roi:420,  cpl:180,  renk:'#0077B5',ikon:'💼',not:'Expat, kurumsal yatirimci'},
+  {kanal:'WhatsApp Broadcast',        roi:720,  cpl:8,    renk:'#25D366',ikon:'💬',not:'Direkt, kisisel dokunma'},
+  {kanal:'YouTube (proje turu)',       roi:380,  cpl:145,  renk:'#EF4444',ikon:'▶️',not:'Uzun vadeli marka'},
+  {kanal:'Spitogatos / Atina Portali',roi:760,  cpl:110,  renk:'#1d63ed',ikon:'🇬🇷',not:'Atina icin zorunlu'},
+  {kanal:'SEO / Blog (mahalle rehb.)',roi:1260, cpl:28,   renk:'#84CC16',ikon:'📝',not:'Uzun vadeli organik'},
 ];
-function KanalROI() {
-  const maxROI = Math.max(...KANAL_ROI.map(k=>k.roi));
+function GRKanalROI() {
+  const maxROI = Math.max(...GR_KANAL.map(k=>k.roi));
   return (
     <div className="metric-card">
       <div className="flex items-center gap-2 mb-3">
         <TrendingUp className="w-4 h-4 text-emerald-400"/>
-        <span className="text-sm font-semibold">Dijital Pazarlama Kanalları — ROI Karşılaştırması</span>
+        <span className="text-sm font-semibold">Gayrimenkul Pazarlama Kanalları — ROI & CPL</span>
       </div>
-      <div className="text-xs text-muted-foreground mb-3">Sektör ortalaması · ROI = (Gelir-Maliyet)/Maliyet × 100</div>
-      {KANAL_ROI.sort((a,b)=>b.roi-a.roi).map(k=>(
+      <div className="text-xs text-muted-foreground mb-3">Maliyet/Lead (CPL) ve ROI · İstanbul & Atina portföy satışları</div>
+      {GR_KANAL.sort((a,b)=>b.roi-a.roi).map(k=>(
         <div key={k.kanal} className="mb-2">
           <div className="flex items-center justify-between mb-1">
             <div className="flex items-center gap-2">
-              <span style={{fontSize:14}}>{k.ikon}</span>
+              <span style={{fontSize:13}}>{k.ikon}</span>
               <span className="text-xs font-semibold">{k.kanal}</span>
-              <span className="text-xs text-muted-foreground">{k.not}</span>
+              <span className="text-xs text-muted-foreground" style={{fontSize:9}}>{k.not}</span>
             </div>
             <div className="flex items-center gap-3">
-              <span className="text-xs text-muted-foreground font-mono">CAC ₺{k.cac}</span>
+              <span className="text-xs text-muted-foreground font-mono">CPL ₺{k.cpl}</span>
               <span className="text-sm font-bold font-mono" style={{color:k.renk}}>%{k.roi}</span>
             </div>
           </div>
-          <div className="h-2 rounded-full" style={{background:"hsl(222 47% 8%)"}}>
+          <div className="h-2 rounded-full" style={{background:'hsl(222 47% 8%)'}}>
             <div className="h-2 rounded-full" style={{width:`${(k.roi/maxROI)*100}%`,background:k.renk,opacity:.85}}/>
           </div>
         </div>
@@ -47,97 +49,311 @@ function KanalROI() {
   );
 }
 
-/* 2. Donusum Hunisi */
-const HUNI = [
-  {kat:"TOFU",full:"Farkındalık (Awareness)",oran:100,renk:"#3B82F6",ikon:"👁️",
-   icerik:['Blog yazısı','Sosyal medya','YouTube video','Podcast'],
-   metrik:"Erisim, Gorunum, Tiklama"},
-  {kat:"MOFU",full:"Degerlendirme (Consideration)",oran:22,renk:"#8B5CF6",ikon:"🤔",
-   icerik:['Webinar','Case study','Demo','Karsilastirma'],
-   metrik:"Lead, Form, Email kaydı"},
-  {kat:"BOFU",full:"Karar (Decision)",oran:8,renk:"#EC4899",ikon:"✅",
-   icerik:['Ucretsiz deneme','Referanslar','Ozel teklif','1-1 gorusme'],
-   metrik:"Satis, Anlaşma, ROAS"},
-  {kat:"Sadakat",full:"Elde Tutma (Retention)",oran:5,renk:"#10b981",ikon:"💚",
-   icerik:['Onboarding','NPS anketi','Loyalty program','Upsell'],
-   metrik:"LTV, Churn rate, NPS"},
+/* 2. Alıcı Yolculugu Huniusu */
+const ALICI_HUNI = [
+  {kat:'Farkındalık',  oran:100,renk:'#3B82F6',ikon:'👁',
+   kim:'Kira odemekten sikkan kiracı / Yatirimci / Expat',
+   mesaj:'İstanbul\'da kira mı, kredi mi? Hesapla',
+   kanal:['Blog: mahalle rehberi','Instagram Reels: daire turu','Google: konut fiyatlari'],
+   metrik:'Erisim, gorunum, blog okuma'},
+  {kat:'İlgi',        oran:28, renk:'#8B5CF6',ikon:'🤔',
+   kim:'Aktif arastiran, bolgeli hesaplar yapan',
+   mesaj:'Beşiktaş\'ta 2+1 — m2 başı ₺268K · 5 dk yuruyus metro',
+   kanal:['Email: bolge raporu','Retargeting: gezdigi ilanlar','WhatsApp: fiyat listesi'],
+   metrik:'Lead formu, WhatsApp mesaj, email kaydi'},
+  {kat:'Değerlendirme',oran:12, renk:'#EC4899',ikon:'📊',
+   kim:'2-3 proje karsilastiran, fizibilite yapan',
+   mesaj:'Atina vs Istanbul: €250K yatirimin 5 yil projeksiyonu',
+   kanal:['1-1 Zoom gorusme','Fiziksel tur','Hesaplayici arac'],
+   metrik:'Gorusme, tur rezervasyonu, teklif istegi'},
+  {kat:'Karar',       oran:6,  renk:'#10b981',ikon:'✅',
+   kim:'Sozlesme imzalamaya hazir',
+   mesaj:'Bu hafta sozlesme: noterde randevu + tapu sureci',
+   kanal:['Kisisel agent teması','Acil teklif (son 2 daire)','Referans musteri'],
+   metrik:'On sozlesme, depozito, tapu'},
 ];
-function DonusumHunisi() {
+function AliciYolculugu() {
   const [sel,setSel] = useState(0);
-  const h = HUNI[sel];
+  const h = ALICI_HUNI[sel];
   return (
     <div className="metric-card">
       <div className="flex items-center gap-2 mb-3">
         <Target className="w-4 h-4 text-purple-400"/>
-        <span className="text-sm font-semibold">Dönüşüm Hunisi — TOFU / MOFU / BOFU</span>
+        <span className="text-sm font-semibold">Gayrimenkul Alıcı Yolculuğu — 4 Aşamalı Huni</span>
       </div>
       <div className="flex gap-1.5 mb-3">
-        {HUNI.map((ht,i)=>(
+        {ALICI_HUNI.map((ah,i)=>(
           <button key={i} onClick={()=>setSel(i)}
             className="flex-1 text-xs py-1.5 rounded-lg font-semibold"
-            style={{background:sel===i?ht.renk:`${ht.renk}20`,color:sel===i?'#fff':ht.renk,border:`1px solid ${ht.renk}40`,cursor:"pointer"}}>
-            {ht.kat}
+            style={{background:sel===i?ah.renk:`${ah.renk}20`,color:sel===i?'#fff':ah.renk,border:`1px solid ${ah.renk}40`,cursor:'pointer'}}>
+            {ah.kat}
           </button>
         ))}
       </div>
-      <div className="flex items-end gap-1 h-20 mb-3">
-        {HUNI.map((ht,i)=>(
+      <div className="flex items-end gap-1 h-16 mb-3">
+        {ALICI_HUNI.map((ah,i)=>(
           <div key={i} className="flex-1 rounded-t flex items-end justify-center"
-            style={{height:`${ht.oran}%`,background:i===sel?ht.renk:`${ht.renk}40`,cursor:"pointer"}}
+            style={{height:`${ah.oran}%`,background:i===sel?ah.renk:`${ah.renk}40`,cursor:'pointer'}}
             onClick={()=>setSel(i)}>
-            <span className="text-white font-mono font-bold" style={{fontSize:9}}>{ht.oran}%</span>
+            <span className="text-white font-mono font-bold" style={{fontSize:9}}>{ah.oran}%</span>
           </div>
         ))}
       </div>
-      <div className="p-3 rounded-xl" style={{background:"hsl(222 47% 5%)",border:`2px solid ${h.renk}30`}}>
-        <div className="text-xs font-bold mb-2" style={{color:h.renk}}>{h.ikon} {h.full}</div>
-        <div className="grid grid-cols-2 gap-2">
-          <div>
-            <div className="text-xs font-semibold text-muted-foreground mb-1">İçerik Türleri</div>
-            {h.icerik.map(ic=><div key={ic} className="text-xs text-muted-foreground">• {ic}</div>)}
-          </div>
-          <div>
-            <div className="text-xs font-semibold text-muted-foreground mb-1">Takip Metrikleri</div>
-            <div className="text-xs text-muted-foreground">{h.metrik}</div>
-          </div>
-        </div>
+      <div className="p-3 rounded-xl" style={{background:'hsl(222 47% 5%)',border:`2px solid ${h.renk}30`}}>
+        <div className="text-xs font-bold mb-1" style={{color:h.renk}}>{h.ikon} {h.kat} — Kim bunlar?</div>
+        <div className="text-xs text-muted-foreground mb-2">{h.kim}</div>
+        <div className="text-xs font-semibold mb-1" style={{color:h.renk}}>Mesaj:</div>
+        <div className="text-xs text-muted-foreground italic mb-2">"{h.mesaj}"</div>
+        <div className="text-xs font-semibold mb-1" style={{color:h.renk}}>Kanallar:</div>
+        {h.kanal.map((c,k)=><div key={k} className="text-xs text-muted-foreground">→ {c}</div>)}
       </div>
     </div>
   );
 }
 
-/* 3. Temel Pazarlama Formulleri */
-const FORMULLER = [
-  {isim:"ROAS",         form:"Reklam Geliri ÷ Reklam Harcaması",     ornek:"₺500K ÷ ₺100K = 5x ROAS", iyi:"≥3x iyi, ≥5x mükemmel",renk:"#10b981"},
-  {isim:"CAC",          form:"Toplam Pazarlama Maliyeti ÷ Yeni Müşteri",ornek:"₺50K ÷ 100 = ₺500 CAC",iyi:"CAC < LTV/3 olmalı",renk:"#F7931A"},
-  {isim:"LTV/CLV",      form:"Ort.Satış × Satın Alma Sıklığı × Müşteri Ömrü",ornek:"₺1K × 4 × 3yıl = ₺12K",iyi:"LTV:CAC > 3:1 hedef",renk:"#3B82F6"},
-  {isim:"CTR",          form:"Tıklama ÷ Gösterim × 100",              ornek:"500 ÷ 50K × 100 = %1 CTR",iyi:"Display %0.5, Search %5-10",renk:"#8B5CF6"},
-  {isim:"CVR",          form:"Dönüşüm ÷ Ziyaretçi × 100",            ornek:"50 ÷ 2K × 100 = %2.5",    iyi:"E-ticaret ort. %2-4",renk:"#EC4899"},
-  {isim:"CPA",          form:"Toplam Harcama ÷ Dönüşüm Sayısı",      ornek:"₺50K ÷ 200 = ₺250",       iyi:"Ürün margin'ın %30'u altı",renk:"#EF4444"},
+/* 3. Gayrimenkul KPI'lar */
+const GR_KPI = [
+  {isim:'Maliyet/Lead (CPL)',      hedef:'₺50-150',        iyi:'<₺80',         renk:'#F7931A',aciklama:'Bir potansiyel alıcının elde edilme maliyeti'},
+  {isim:'Lead-to-Tour Orani',      hedef:'%15-25',          iyi:'>%20',         renk:'#10b981',aciklama:'Leadlerin kaca fiziksel tur yaptiginiz'},
+  {isim:'Tour-to-Offer Orani',     hedef:'%20-35',          iyi:'>%30',         renk:'#3B82F6',aciklama:'Tur yapanlarin kaca teklif verdigini'},
+  {isim:'Offer-to-Close Orani',    hedef:'%60-80',          iyi:'>%70',         renk:'#8B5CF6',aciklama:'Tekliften sozlesmeye donusum'},
+  {isim:'Satis Suresi (Gunden)',   hedef:'30-90 gun',       iyi:'<45 gun',      renk:'#EC4899',aciklama:'Listeden sozlesmeye gecen sure'},
+  {isim:'Maliyet/Satis (CPS)',     hedef:'₺5K-25K',        iyi:'<₺12K',        renk:'#EF4444',aciklama:'Bir satis kapamak icin toplam pazarlama harcamasi'},
+  {isim:'Musteri LTV',             hedef:'₺40K-150K',      iyi:'>₺80K',        renk:'#84CC16',aciklama:'Tekrar satis + yonlendirme + kira yonetimi geliri'},
+  {isim:'NPS (Musteri Tavsiyesi)', hedef:'50-70',           iyi:'>60',          renk:'#06B6D4',aciklama:'Net Promoter Score — musteri memnuniyeti'},
 ];
-function PazarlamaFormulleri() {
-  const [sel,setSel] = useState(0);
-  const f = FORMULLER[sel];
+function GayrimenkulKPI() {
   return (
     <div className="metric-card">
       <div className="flex items-center gap-2 mb-3">
-        <DollarSign className="w-4 h-4 text-amber-400"/>
-        <span className="text-sm font-semibold">Temel Pazarlama Formülleri & Benchmark</span>
+        <span style={{fontSize:18}}>📊</span>
+        <span className="text-sm font-semibold">Gayrimenkul Pazarlama KPI Dashboard</span>
       </div>
-      <div className="flex flex-wrap gap-1.5 mb-4">
-        {FORMULLER.map((fo,i)=>(
+      {GR_KPI.map((k,i)=>(
+        <div key={i} className="flex items-center gap-2 py-1.5" style={{borderBottom:'1px solid rgba(255,255,255,.05)'}}>
+          <div style={{width:3,height:32,background:k.renk,borderRadius:2,flexShrink:0}}/>
+          <div className="flex-1 min-w-0">
+            <div className="text-xs font-semibold">{k.isim}</div>
+            <div className="text-xs text-muted-foreground" style={{fontSize:9}}>{k.aciklama}</div>
+          </div>
+          <div className="text-right shrink-0">
+            <div className="text-xs font-bold font-mono" style={{color:k.renk}}>{k.iyi}</div>
+            <div className="text-xs text-muted-foreground font-mono" style={{fontSize:9}}>Ortalama: {k.hedef}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* 4. Meta Reklam — Konut */
+const META_KONUT = [
+  {format:'Video Tur (60sn)',   sonuc:'En yuksek CTR',  maliyet:'Orta',  ipucu:'Drone giris + daire icinden + manzara. Hook: "Bu fiyata son 2 daire"'},
+  {format:'Carousel — Proje',  sonuc:'Cok unit goster',maliyet:'Dusuk', ipucu:'Her kart: farkli kat plani. Son kart: fiyat + CTA'},
+  {format:'Reels — Mahalle',   sonuc:'Organik his',     maliyet:'Dusuk', ipucu:'Metro/market/okul mesafesi. Muzik trendi + altyazi'},
+  {format:'Single Image — ROI',sonuc:'Yatirimci hedef', maliyet:'Dusuk', ipucu:'Rakam one ciksin: %4.8 kira getirisi, 5 yil +%112'},
+  {format:'Lead Form Reklamlari',sonuc:'Anlik lead',    maliyet:'Orta',  ipucu:'3 alan max: Ad, Telefon, Ilgilendigi bolge'},
+];
+const META_HEDEF_KITLE = [
+  {segment:'Yerel Alıcı',      yas:'28-45',gelir:'Ust orta+',ilgi:'Konut, yatirim, mortgage',renk:'#EF4444'},
+  {segment:'Yabanci Yatirimci',yas:'35-55',gelir:'Yuksek',   ilgi:'Turiye, GR, global',     renk:'#1877F2'},
+  {segment:'Expat Kiracı',     yas:'25-40',gelir:'Orta+',    ilgi:'Expat gruplari, Atina',   renk:'#10b981'},
+  {segment:'Lookalike',        yas:'Otomatik',gelir:'Benzer',ilgi:'Mevcut musteriler x%3',  renk:'#8B5CF6'},
+];
+function MetaKonutReklam() {
+  return (
+    <div className="metric-card">
+      <div className="flex items-center gap-2 mb-3">
+        <span style={{fontSize:18}}>📘</span>
+        <span className="text-sm font-semibold">Meta Reklam — Konut & Proje Pazarlama</span>
+      </div>
+      <div className="text-xs font-semibold text-muted-foreground mb-2">Format Stratejisi (funnel asamasina gore)</div>
+      <div className="space-y-1.5 mb-3">
+        {META_KONUT.map((m,i)=>(
+          <div key={i} className="p-2 rounded-xl" style={{background:'hsl(222 47% 5%)'}}>
+            <div className="flex items-center justify-between mb-0.5">
+              <span className="text-xs font-bold text-blue-400">{m.format}</span>
+              <div className="flex gap-2">
+                <span className="text-xs text-emerald-400 font-mono">{m.sonuc}</span>
+                <span className="text-xs text-muted-foreground">Maliyet:{m.maliyet}</span>
+              </div>
+            </div>
+            <div className="text-xs text-muted-foreground">{m.ipucu}</div>
+          </div>
+        ))}
+      </div>
+      <div className="text-xs font-semibold text-muted-foreground mb-2">Hedef Kitle Segmentleri</div>
+      <div className="grid grid-cols-2 gap-2">
+        {META_HEDEF_KITLE.map((hk,i)=>(
+          <div key={i} className="p-2 rounded-xl" style={{background:'hsl(222 47% 5%)',border:`1px solid ${hk.renk}25`}}>
+            <div className="text-xs font-bold mb-1" style={{color:hk.renk}}>{hk.segment}</div>
+            <div className="text-xs text-muted-foreground">Yas: {hk.yas}</div>
+            <div className="text-xs text-muted-foreground" style={{fontSize:9}}>{hk.ilgi}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* 5. Google Ads — Emlak Keywords */
+const ANAHTAR_KELIMELER = [
+  {tur:'Yuksek Niyet (BOFU)', renk:'#10b981', kelimeler:['istanbul satilik daire','istanbul daire fiyatlari 2026','besiktas 2+1 fiyat','atina daire satin al','athens apartment buy','golden visa greece property']},
+  {tur:'Orta Niyet (MOFU)',   renk:'#F7931A', kelimeler:['istanbul konut yatirim','atina gayrimenkul getiri','istanbul mahalle karsilastirma','besiktas vs kadikoy fiyat','athens real estate roi','greece property investment 2026']},
+  {tur:'Bilgi Arayanlar (TOFU)',renk:'#3B82F6',kelimeler:['istanbul kira mi kredi mi','atina golden visa nedir','istanbul konut endeksi','m2 fiyatlari istanbul 2026','athens rent vs buy','greece golden visa cost']},
+  {tur:'Marka + Rakip',       renk:'#8B5CF6', kelimeler:['sahibinden alternatifleri','istanbul emlak ofisi','atina ev kiralik','turkiye konut yatirim','en iyi istanbul ilce']},
+];
+function GoogleAdsEmlak() {
+  const [sel,setSel] = useState(0);
+  const ak = ANAHTAR_KELIMELER[sel];
+  return (
+    <div className="metric-card">
+      <div className="flex items-center gap-2 mb-3">
+        <span style={{fontSize:18}}>🎯</span>
+        <span className="text-sm font-semibold">Google Ads — Gayrimenkul Anahtar Kelime Stratejisi</span>
+      </div>
+      <div className="flex flex-wrap gap-1.5 mb-3">
+        {ANAHTAR_KELIMELER.map((ak,i)=>(
           <button key={i} onClick={()=>setSel(i)}
-            className="text-xs px-2.5 py-1 rounded-lg font-bold"
-            style={{background:sel===i?fo.renk:`${fo.renk}20`,color:sel===i?'#fff':fo.renk,border:`1px solid ${fo.renk}40`,cursor:"pointer"}}>
-            {fo.isim}
+            className="text-xs px-2 py-1 rounded-lg font-semibold"
+            style={{background:sel===i?ak.renk:`${ak.renk}20`,color:sel===i?'#fff':ak.renk,border:`1px solid ${ak.renk}40`,cursor:'pointer'}}>
+            {ak.tur}
           </button>
         ))}
       </div>
-      <div className="p-4 rounded-xl" style={{background:"hsl(222 47% 5%)",border:`2px solid ${f.renk}30`}}>
-        <div className="text-base font-bold mb-3" style={{color:f.renk}}>{f.isim}</div>
-        {[{l:"Formül",v:f.form},{l:"Örnek",v:f.ornek},{l:"İyi Benchmark",v:f.iyi}].map(r=>(
-          <div key={r.l} className="flex gap-2 mb-2">
-            <span className="text-xs font-semibold shrink-0" style={{color:f.renk,minWidth:100}}>{r.l}</span>
+      <div className="p-3 rounded-xl" style={{background:'hsl(222 47% 5%)',border:`2px solid ${ak.renk}30`}}>
+        <div className="flex flex-wrap gap-2">
+          {ak.kelimeler.map((kw,i)=>(
+            <span key={i} className="text-xs px-2 py-1 rounded-full" style={{background:`${ak.renk}15`,color:ak.renk,border:`1px solid ${ak.renk}30`}}>
+              {kw}
+            </span>
+          ))}
+        </div>
+      </div>
+      <div className="grid grid-cols-3 gap-2 mt-3">
+        {[{l:'Ort. CPC (TR)',v:'₺8-35'},{l:'Ort. CPC (GR)',v:'€0.8-3.5'},{l:'Hedef CVR',v:'%3-8'}].map(k=>(
+          <div key={k.l} className="p-2 rounded-xl text-center" style={{background:'hsl(222 47% 5%)'}}>
+            <div className="text-sm font-bold font-mono" style={{color:ak.renk}}>{k.v}</div>
+            <div className="text-xs text-muted-foreground">{k.l}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* 6. SEO — Mahalle & Bolge Icerik */
+const SEO_ICERIK = [
+  {tip:'Mahalle Rehberi',   oncelik:5,renk:'#10b981',ornekler:['Besiktas\'ta Yasam Rehberi 2026','Kadikoy vs Atasehir: Hangisi Daha Iyi?','Kolonaki, Atina: Sakin ve Fiyat Rehberi'],    aciklama:'Organik trafik icin en etkili. Uzun kuyruklu kelimeler.'},
+  {tip:'Piyasa Raporu',     oncelik:5,renk:'#3B82F6',ornekler:['Istanbul Konut Fiyat Endeksi Nisan 2026','Atina Kira Piyasasi Q1 2026 Raporu','Turkiye Gayrimenkul Yatirim Rehberi'],  aciklama:'Backlink ceker, B2B ve yatirimcilara ulasirir.'},
+  {tip:'Karsilastirma',     oncelik:4,renk:'#F7931A',ornekler:['Istanbul vs Atina: 250K Yatirim Karsilastirma','Kira mi Kredi mi? 2026 Hesaplamalari','Golden Visa: GR vs PT vs MT'],          aciklama:'Yuksek niyet, karar asamasindaki okuyucular.'},
+  {tip:'Hesaplayici Araclar',oncelik:4,renk:'#8B5CF6',ornekler:['Istanbul Kira Getiri Hesaplayici','Mortgage Odeme Plani','Golden Visa Yatirim Tutari Hesapla'],                          aciklama:'Uzun oturma suresi, backlink, lead generator.'},
+  {tip:'Sss (FAQ) Icerik',  oncelik:3,renk:'#EC4899',ornekler:['Yabanci Uyruklu Ev Alabilir mi?','Tapu Masraflari Ne Kadar?','Atina\'da Kira Getirisi Yuzde Kac?'],                         aciklama:'Google Featured Snippet icin optimize edilir.'},
+];
+function SEOGayrimenkul() {
+  return (
+    <div className="metric-card">
+      <div className="flex items-center gap-2 mb-3">
+        <span style={{fontSize:18}}>🔍</span>
+        <span className="text-sm font-semibold">SEO Stratejisi — Gayrimenkul İçerik Planlama</span>
+      </div>
+      {SEO_ICERIK.map((si,i)=>(
+        <div key={i} className="p-2.5 rounded-xl mb-2" style={{background:'hsl(222 47% 5%)',border:`1px solid ${si.renk}20`}}>
+          <div className="flex items-center justify-between mb-1">
+            <span className="text-xs font-bold" style={{color:si.renk}}>{si.tip}</span>
+            <div className="flex gap-0.5">
+              {[...Array(5)].map((_,k)=><div key={k} style={{width:6,height:6,borderRadius:'50%',background:k<si.oncelik?si.renk:'hsl(222 47% 15%)'}}/>)}
+            </div>
+          </div>
+          <div className="text-xs text-muted-foreground mb-1" style={{fontSize:9}}>{si.aciklama}</div>
+          <div className="flex flex-wrap gap-1">
+            {si.ornekler.map((o,k)=><span key={k} className="text-xs px-1.5 py-0.5 rounded" style={{background:`${si.renk}15`,color:si.renk,fontSize:9}}>{o}</span>)}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* 7. Email — Yatirimci Segmentleri */
+const EMAIL_SEGMENTLER = [
+  {segment:'Sicak Lead (siteyi gezen)',oran:'%42',ctr:'%18',konu:'[Son 2 Daire] Besiktasta Baktıgınız Proje',renk:'#10b981',
+   icerik:'Goruntulenen daireyi hatırlat, kısıtlı stok vurgusu, whatsapp CTA'},
+  {segment:'Soguk Yatirimci',          oran:'%21',ctr:'%6', konu:'Istanbul 2026: m2 Basına Ortalama ₺268K Neden?',renk:'#3B82F6',
+   icerik:'Piyasa verisi, yatirim mantığı, bölge karşılaştırması, rapor indirme'},
+  {segment:'Yabanci (EN)',             oran:'%28',ctr:'%11',konu:'Athens Golden Visa: €250K + Schengen Residency',renk:'#1d63ed',
+   icerik:'Ingilizce, hukuki bilgi, ROI hesabı, konsültasyon CTA'},
+  {segment:'Mevcut Musteri (Upsell)',  oran:'%38',ctr:'%14',konu:'Portfoyunuze Atina Ekleyin: €250K Baslangiç',renk:'#8B5CF6',
+   icerik:'Kisisellestirilmis, onceki alim referansı, exclusive teklif'},
+  {segment:'Re-engagement (6ay+)',    oran:'%15',ctr:'%4', konu:'Piyasa Cok Degisti — Ne Kaybettiniz?',renk:'#F7931A',
+   icerik:'Fiyat artisi verisi, kacirilmis firsat duygusu, yeni liste'},
+];
+function EmailYatirimci() {
+  return (
+    <div className="metric-card">
+      <div className="flex items-center gap-2 mb-3">
+        <span style={{fontSize:18}}>📧</span>
+        <span className="text-sm font-semibold">Email Pazarlama — Yatırımcı Segmentleri & Stratejisi</span>
+      </div>
+      {EMAIL_SEGMENTLER.map((es,i)=>(
+        <div key={i} className="p-2.5 rounded-xl mb-2" style={{background:'hsl(222 47% 5%)',border:`1px solid ${es.renk}20`}}>
+          <div className="flex items-center justify-between mb-1">
+            <span className="text-xs font-bold" style={{color:es.renk}}>{es.segment}</span>
+            <div className="flex gap-3">
+              <span className="text-xs font-mono text-emerald-400">Acılma:{es.oran}</span>
+              <span className="text-xs font-mono text-blue-400">CTR:{es.ctr}</span>
+            </div>
+          </div>
+          <div className="text-xs text-amber-400 italic mb-1" style={{fontSize:10}}>Konu: "{es.konu}"</div>
+          <div className="text-xs text-muted-foreground">{es.icerik}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* 8. Yabanci Yatirimci Pazarlama */
+const YABANCI_SEGMENTLER = [
+  {ulke:'Körfez Ülkeleri (UAE/KSA)',   renk:'#F7931A',dil:'Arapça + İngilizce',
+   motivasyon:'Güvenli liman, Istanbul\'un İslami kültürü, mülkiyet hakkı',
+   kanal:'Instagram (Arapça), WhatsApp, Dubai fuarları',
+   mesaj:'Istanbul: Avrupa\'nın kapısında güvenli yatırım',benchmark:'CPL ~$180, LTV ~$280K'},
+  {ulke:'Rusya / CIS Ülkeleri',        renk:'#EF4444',dil:'Rusça + İngilizce',
+   motivasyon:'Yaptırımlardan kaçış, vatandaşlık, kıyı mülkleri',
+   kanal:'Telegram, Rusça SEO, yurtdışı fuarlar',
+   mesaj:'Istanbul\'da 400K$ ile Türk vatandaşlığı',benchmark:'CPL ~$210, LTV ~$420K'},
+  {ulke:'Avrupa Expat (GR için)',       renk:'#1d63ed',dil:'İngilizce',
+   motivasyon:'Golden Visa, Schengen ikamet, yatırım getirisi',
+   kanal:'LinkedIn, Google EN, expat forumları',
+   mesaj:'Athens: €250K + EU residency + %4.8 rental yield',benchmark:'CPL ~€145, LTV ~€310K'},
+  {ulke:'Türk Diaspora (DE/NL/AUS)',   renk:'#10b981',dil:'Türkçe + yerel dil',
+   motivasyon:'Memlekete yatırım, emeklilik, kira geliri',
+   kanal:'Facebook TR grupları, YouTube, WhatsApp',
+   mesaj:'Almanya\'dan İstanbul\'a Yatırım: 2026 Rehberi',benchmark:'CPL ~€85, LTV ~₺2.4M'},
+];
+function YabanciYatirimci() {
+  const [sel,setSel] = useState(0);
+  const y = YABANCI_SEGMENTLER[sel];
+  return (
+    <div className="metric-card">
+      <div className="flex items-center gap-2 mb-3">
+        <span style={{fontSize:18}}>🌍</span>
+        <span className="text-sm font-semibold">Yabancı Yatırımcı Segmentleri — Hedefleme Stratejisi</span>
+      </div>
+      <div className="flex flex-wrap gap-1.5 mb-3">
+        {YABANCI_SEGMENTLER.map((ys,i)=>(
+          <button key={i} onClick={()=>setSel(i)}
+            className="text-xs px-2 py-1 rounded-lg"
+            style={{background:sel===i?ys.renk:`${ys.renk}20`,color:sel===i?'#fff':ys.renk,border:`1px solid ${ys.renk}40`,cursor:'pointer'}}>
+            {ys.ulke.split(' ')[0]}
+          </button>
+        ))}
+      </div>
+      <div className="p-3 rounded-xl" style={{background:'hsl(222 47% 5%)',border:`2px solid ${y.renk}30`}}>
+        <div className="text-sm font-bold mb-2" style={{color:y.renk}}>{y.ulke} · {y.dil}</div>
+        {[{l:'Motivasyon',v:y.motivasyon},{l:'Kanallar',v:y.kanal},{l:'Ana Mesaj',v:y.mesaj},{l:'Benchmark',v:y.benchmark}].map(r=>(
+          <div key={r.l} className="flex gap-2 mb-1.5">
+            <span className="text-xs font-bold shrink-0" style={{color:y.renk,minWidth:80}}>{r.l}</span>
             <span className="text-xs text-muted-foreground">{r.v}</span>
           </div>
         ))}
@@ -146,269 +362,104 @@ function PazarlamaFormulleri() {
   );
 }
 
-/* 4. Meta Reklam Rehberi */
-const META_FORMATLAR = [
-  {tip:"Single Image",  boyut:"1200×628",ogrenme:50,kullanim:"Urun, marka fark.",en:"Basit, hizli test"},
-  {tip:"Carousel",      boyut:"1080×1080",ogrenme:75,kullanim:"Cok urun, hikaye",en:"CTR x3 yuksek"},
-  {tip:"Video (15sn)",  boyut:"1080×1080",ogrenme:100,kullanim:"Dikkat, RetargetEN",en:"Thumb-stop onemli"},
-  {tip:"Reels",         boyut:"1080×1920",ogrenme:120,kullanim:"GenZ, organik hiss",en:"Dogal icerik"},
-  {tip:"Stories",       boyut:"1080×1920",ogrenme:80,kullanim:"Hizli teklif",en:"Tam ekran etki"},
-  {tip:"Collection",    boyut:"1200×628",ogrenme:90,kullanim:"E-ticaret katalog",en:"Anlik satin alma"},
+/* 9. Proje Lansman Stratejisi */
+const LANSMAN_ASAMALAR = [
+  {gun:'6 Ay Once',  renk:'#3B82F6',baslik:'Pre-Marketing',adimlar:['Landing page + bekleme listesi','Teasure video (drone + render)','VIP liste: mevcut musteri + referans','PR: sehir gazetesi + yatirim haberleri']},
+  {gun:'3 Ay Once',  renk:'#8B5CF6',baslik:'Soft Launch',  adimlar:['VIP onizleme: %5-10 indirim','WhatsApp broadcast: davet','Kapasite sinirli etkinlik (showroom)','Sosyal kanit: ilk rezervasyonlar']},
+  {gun:'1 Ay Once',  renk:'#F7931A',baslik:'Pre-Sale',     adimlar:['Tum kanallar aktif: Meta + Google','Erken rezervasyon avantajlari','Influencer tur videosu (yerel)','Countdown timer: acilis tarihine']},
+  {gun:'Acilis Gunu',renk:'#10b981',baslik:'Grand Launch', adimlar:['Canli etkinlik / fiziksel acilis','24 saat ozel fiyat kampanyasi','Basinda yer almak (PR)','Ilk gun satis hedefi: %15-20']},
 ];
-const META_HEDEFLER = ['Farkındalık','Erisim','Trafik','Etkileşim','Lead','Uygulama','Video Goruntulemesi','Satis'];
-function MetaReklamRehberi() {
-  return (
-    <div className="metric-card">
-      <div className="flex items-center gap-2 mb-3">
-        <span style={{fontSize:18}}>📘</span>
-        <span className="text-sm font-semibold">Meta (Facebook & Instagram) Reklam Rehberi</span>
-      </div>
-      <div className="text-xs text-muted-foreground mb-2">Reklam formatları ve optimum kullanım:</div>
-      <div className="space-y-1.5 mb-3">
-        {META_FORMATLAR.map(f=>(
-          <div key={f.tip} className="flex items-center gap-2 p-2 rounded-lg" style={{background:"hsl(222 47% 5%)"}}>
-            <span className="text-xs font-bold text-blue-400 shrink-0" style={{minWidth:90}}>{f.tip}</span>
-            <span className="text-xs text-muted-foreground shrink-0 font-mono" style={{minWidth:75,fontSize:9}}>{f.boyut}</span>
-            <div className="flex-1 h-2 rounded-full" style={{background:"hsl(222 47% 8%)"}}>
-              <div className="h-2 rounded-full" style={{width:`${(f.ogrenme/120)*100}%`,background:"#1877F2"}}/>
-            </div>
-            <span className="text-xs text-muted-foreground shrink-0" style={{maxWidth:120}}>{f.en}</span>
-          </div>
-        ))}
-      </div>
-      <div className="text-xs font-semibold text-blue-400 mb-1">Kampanya Hedefleri (Funnel'a gore sec):</div>
-      <div className="flex flex-wrap gap-1">
-        {META_HEDEFLER.map(h=>(
-          <span key={h} className="text-xs px-2 py-0.5 rounded-full" style={{background:"#1877F220",color:"#1877F2",border:"1px solid #1877F230"}}>{h}</span>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-/* 5. Google Ads Optimizasyon */
-const ESLESME_TIPLERI = [
-  {tip:"Genel Eşleme",  ikon:"[...]",renk:"#EF4444",kapsam:"En genis",maliyet:"Dusuk CPC",kullanim:"Kefs, kitleyi genislet"},
-  {tip:"Ifade Eslesme", ikon:'"..."',renk:"#F7931A",kapsam:"Orta",    maliyet:"Orta CPC",  kullanim:"Yeni kampanyalar"},
-  {tip:"Tam Eslesme",   ikon:"[...]",renk:"#10b981",kapsam:"Dar",     maliyet:"Yuksek CPC",kullanim:"Donusum kampanyasi"},
-];
-const KALITE_PUAN = [
-  {faktor:"Beklenen TTO (CTR)",agirlik:"%35",ipucu:"Reklam metni test et, duygusal baslik kullan"},
-  {faktor:"Reklam Alaka Duzeyi",agirlik:"%35",ipucu:"Anahtar kelime reklam metninde gecmeli"},
-  {faktor:"Acilis Sayfasi",      agirlik:"%30",ipucu:"Sayfa hizi, mobil, kullanici niyeti eslesmeli"},
-];
-function GoogleAdsOptimizasyon() {
-  return (
-    <div className="metric-card">
-      <div className="flex items-center gap-2 mb-3">
-        <span style={{fontSize:18}}>🎯</span>
-        <span className="text-sm font-semibold">Google Ads — Kalite Puanı & Optimizasyon</span>
-      </div>
-      <div className="text-xs font-semibold text-muted-foreground mb-2">Anahtar Kelime Eşleme Tipleri</div>
-      <div className="grid grid-cols-3 gap-2 mb-3">
-        {ESLESME_TIPLERI.map(e=>(
-          <div key={e.tip} className="p-2 rounded-xl" style={{background:"hsl(222 47% 5%)",border:`1px solid ${e.renk}30`}}>
-            <div className="text-xs font-bold font-mono mb-1" style={{color:e.renk}}>{e.ikon}</div>
-            <div className="text-xs font-semibold" style={{color:e.renk}}>{e.tip}</div>
-            <div className="text-xs text-muted-foreground">{e.kapsam} · {e.maliyet}</div>
-            <div className="text-xs text-muted-foreground mt-1" style={{fontSize:9}}>{e.kullanim}</div>
-          </div>
-        ))}
-      </div>
-      <div className="text-xs font-semibold text-muted-foreground mb-2">Kalite Puanı Faktörleri (CPC'yi doğrudan etkiler)</div>
-      {KALITE_PUAN.map(kp=>(
-        <div key={kp.faktor} className="flex items-start gap-2 p-2 rounded-lg mb-1.5" style={{background:"hsl(222 47% 5%)"}}>
-          <div className="shrink-0">
-            <div className="text-xs font-bold text-amber-400">{kp.faktor}</div>
-            <div className="text-xs font-mono" style={{color:"#10b981"}}>{kp.agirlik}</div>
-          </div>
-          <div className="text-xs text-muted-foreground">{kp.ipucu}</div>
-        </div>
-      ))}
-      <div className="p-2 rounded-lg mt-1" style={{background:"hsl(222 47% 5%)",fontSize:10}}>
-        Kalite Puanı 1-10: 7+ = CPC indirim, 4- = CPC ek maliyet. Hedef: 8-10.
-      </div>
-    </div>
-  );
-}
-
-/* 6. SEO Temelleri */
-const SEO_KATEGORI = [
-  {kat:"On-Page SEO",renk:"#10b981",maddeler:[
-    'Title tag: 50-60 karakter, anahtar kelime basta',
-    'Meta description: 150-160 karakter, CTA icermeli',
-    'H1 bir tane, H2-H6 hiyerarsi',
-    'URL kisa, anlamli, kucuk harf',
-    'Alt text her gorsele',
-    'IC linkleme: ortalama 3-5 link/sayfa',
-  ]},
-  {kat:"Off-Page SEO",renk:"#3B82F6",maddeler:[
-    'Backlink kalitesi > miktari',
-    'DA/DR yuksek sitelerden link',
-    'Anchor text cesitlendirme',
-    'Guest post, HARO, dijital PR',
-    'Sosyal sinyal: paylasilabilir icerik',
-    'E-E-A-T: Uzmanlik, Deneyim, Otorite, Guven',
-  ]},
-  {kat:"Teknik SEO",renk:"#F7931A",maddeler:[
-    'Core Web Vitals: LCP <2.5sn, CLS <0.1',
-    'Mobil uyumluluk (Mobile-First Index)',
-    'HTTPS zorunlu',
-    'Sitemap.xml ve robots.txt',
-    'Canonical tag ile kopya icerik onleme',
-    'Schema markup / structured data',
-  ]},
-];
-function SeoTemelleri() {
+function ProjeLansman() {
   const [sel,setSel] = useState(0);
-  const sc = SEO_KATEGORI[sel];
+  const la = LANSMAN_ASAMALAR[sel];
   return (
     <div className="metric-card">
       <div className="flex items-center gap-2 mb-3">
-        <span style={{fontSize:18}}>🔍</span>
-        <span className="text-sm font-semibold">SEO & İçerik Pazarlaması Kontrol Listesi</span>
+        <span style={{fontSize:18}}>🚀</span>
+        <span className="text-sm font-semibold">Proje Lansman Stratejisi — 4 Aşamalı Plan</span>
       </div>
-      <div className="flex gap-2 mb-3">
-        {SEO_KATEGORI.map((sk,i)=>(
+      <div className="flex gap-1.5 mb-3">
+        {LANSMAN_ASAMALAR.map((la,i)=>(
           <button key={i} onClick={()=>setSel(i)}
-            className="flex-1 text-xs py-1.5 rounded-lg font-semibold"
-            style={{background:sel===i?sk.renk:`${sk.renk}20`,color:sel===i?'#fff':sk.renk,border:`1px solid ${sk.renk}40`,cursor:"pointer"}}>
-            {sk.kat}
+            className="flex-1 text-xs py-1.5 rounded-lg"
+            style={{background:sel===i?la.renk:`${la.renk}20`,color:sel===i?'#fff':la.renk,border:`1px solid ${la.renk}40`,cursor:'pointer'}}>
+            {la.baslik}
           </button>
         ))}
       </div>
-      <div className="p-3 rounded-xl" style={{background:"hsl(222 47% 5%)",border:`2px solid ${sc.renk}30`}}>
-        {sc.maddeler.map((m,i)=>(
+      <div className="p-3 rounded-xl" style={{background:'hsl(222 47% 5%)',border:`2px solid ${la.renk}30`}}>
+        <div className="text-xs font-bold mb-2" style={{color:la.renk}}>⏱ {la.gun} — {la.baslik}</div>
+        {la.adimlar.map((ad,i)=>(
           <div key={i} className="flex items-start gap-2 mb-1.5">
-            <span style={{color:sc.renk,flexShrink:0}}>✓</span>
-            <span className="text-xs text-muted-foreground">{m}</span>
+            <span className="font-bold text-xs shrink-0" style={{color:la.renk}}>{i+1}.</span>
+            <span className="text-xs text-muted-foreground">{ad}</span>
           </div>
         ))}
+      </div>
+      <div className="mt-2 p-2 rounded-lg" style={{background:'hsl(222 47% 5%)',fontSize:10}}>
+        🎯 Hedef: Lansman gunu %20 satis, 3. ayda %60, 6. ayda tam kapasite
       </div>
     </div>
   );
 }
 
-/* 7. Email Pazarlama Benchmark */
-const EMAIL_SEKTORLER = [
-  {sektor:"E-ticaret",     acilma:"%15.7",tiklama:"%2.1",iptal:"%0.1",renk:"#10b981"},
-  {sektor:"SaaS / Teknoloji",acilma:"%21.3",tiklama:"%2.8",iptal:"%0.2",renk:"#3B82F6"},
-  {sektor:"B2B",           acilma:"%24.8",tiklama:"%3.6",iptal:"%0.3",renk:"#F7931A"},
-  {sektor:"Finans",        acilma:"%20.4",tiklama:"%2.5",iptal:"%0.2",renk:"#8B5CF6"},
-  {sektor:"Gayrimenkul",   acilma:"%18.9",tiklama:"%1.9",iptal:"%0.1",renk:"#EC4899"},
+/* 10. Fiyat Konumlandirma */
+const FIYAT_STRATEJILERI = [
+  {strateji:'Manzara & Konum Primi',   etki:'+%15-40',renk:'#10b981',aciklama:'Bosphorus manzarası, metro 300m, merkezi lokasyon prime fiyat yaratır'},
+  {strateji:'Fiyatı Parcala',          etki:'CVR+%25', renk:'#3B82F6',aciklama:'"₺2M" yerine "aylik ₺8.500 kredi ödemesi ile" — algı yönetimi'},
+  {strateji:'Karsilastirmali Sunum',   etki:'LTV+%18', renk:'#F7931A',aciklama:'"Kira mi, kredi mi?" hesaplayici: 10 yilda kira toplami > satis fiyati'},
+  {strateji:'Iskonto Psikolojisi',     etki:'CVR+%30', renk:'#8B5CF6',aciklama:'%5 erken rezervasyon indirimi yerine "geri kalan 3 daire" urgency'},
+  {strateji:'Deger Paketleme',         etki:'+%8-15',  renk:'#EC4899',aciklama:'Beyaz esya dahil, otopark dahil, 1 yil site aidati dahil — fiyat algisi artmaz'},
+  {strateji:'Dolar / Euro Bazlı Fiyat',etki:'Stres-',  renk:'#06B6D4',aciklama:'Yabanci yatirimciya USD/EUR fiyatla: TRY volatilitesini bertaraf eder'},
 ];
-const EMAIL_IPUCLARI = [
-  {l:"Gonderim Saati",v:"Sali-Persembe, 10:00 veya 15:00"},
-  {l:"Konu Satiri",v:"40-50 karakter, emoji dikkat ceker, kisisellestirilmis"},
-  {l:"Segmentasyon",v:"Davranissal (tiklama, satin alma) listeleri x4 acilma orani"},
-  {l:"A/B Testi",v:"Konu satiri en onemli, %20 liste ile test"},
-];
-function EmailPazarlama() {
+function FiyatKonumlandirma() {
   return (
     <div className="metric-card">
       <div className="flex items-center gap-2 mb-3">
-        <span style={{fontSize:18}}>📧</span>
-        <span className="text-sm font-semibold">Email Pazarlama — Sektör Benchmark 2025</span>
+        <DollarSign className="w-4 h-4 text-amber-400"/>
+        <span className="text-sm font-semibold">Gayrimenkul Fiyat & Değer Konumlandırması</span>
       </div>
-      <div className="grid grid-cols-4 gap-1 mb-1">
-        {['Sektör','Açılma','Tıklama','İptal'].map(h=>(
-          <div key={h} className="text-xs font-semibold text-muted-foreground text-center">{h}</div>
-        ))}
-      </div>
-      {EMAIL_SEKTORLER.map(e=>(
-        <div key={e.sektor} className="grid grid-cols-4 gap-1 py-1.5" style={{borderBottom:"1px solid rgba(255,255,255,.04)"}}>
-          <div className="text-xs font-semibold" style={{color:e.renk}}>{e.sektor}</div>
-          <div className="text-xs font-mono text-center text-emerald-400">{e.acilma}</div>
-          <div className="text-xs font-mono text-center text-blue-400">{e.tiklama}</div>
-          <div className="text-xs font-mono text-center text-muted-foreground">{e.iptal}</div>
+      {FIYAT_STRATEJILERI.map((fs,i)=>(
+        <div key={i} className="flex items-start gap-2 p-2.5 rounded-xl mb-2" style={{background:'hsl(222 47% 5%)',border:`1px solid ${fs.renk}20`}}>
+          <div className="shrink-0">
+            <div className="text-xs font-bold" style={{color:fs.renk}}>{fs.strateji}</div>
+            <div className="text-xs font-mono font-bold" style={{color:fs.renk}}>{fs.etki}</div>
+          </div>
+          <div className="text-xs text-muted-foreground">{fs.aciklama}</div>
         </div>
       ))}
-      <div className="space-y-1.5 mt-3">
-        {EMAIL_IPUCLARI.map((ip,i)=>(
-          <div key={i} className="flex gap-2">
-            <span className="text-xs font-bold text-amber-400 shrink-0" style={{minWidth:90}}>{ip.l}</span>
-            <span className="text-xs text-muted-foreground">{ip.v}</span>
-          </div>
-        ))}
-      </div>
     </div>
   );
 }
 
-/* 8. Musteri Yasam Boyu Degeri */
-const LTV_SENARYO = [
-  {tip:"Duşük LTV",     cac:50,  ltv:150,  oran:3, renk:"#EF4444",not:"Kabul edilebilir minimum"},
-  {tip:"Orta LTV",      cac:100, ltv:500,  oran:5, renk:"#F7931A",not:"Saglikli isletme"},
-  {tip:"Yuksek LTV",    cac:200, ltv:2000, oran:10,renk:"#10b981",not:"Olceklenir buyume"},
-  {tip:"Elite LTV",     cac:500, ltv:10000,oran:20,renk:"#3B82F6",not:"SaaS, premium hizmet"},
+/* 11. LTV Gayrimenkul */
+const LTV_SENARYO_GR = [
+  {tip:'Tek Seferlik Alici',  ltv:85000,  cac:8500, oran:10,renk:'#EF4444',not:'Referans veya tekrar satis yok'},
+  {tip:'Kira Yonetimi',       ltv:142000, cac:8500, oran:17,renk:'#F7931A',not:'+%5/yil komisyon, uzun iliski'},
+  {tip:'Portfoy Yatirimci',   ltv:380000, cac:12000,oran:32,renk:'#10b981',not:'3+ islem, referans makinesi'},
+  {tip:'Kurumsal / Fon',      ltv:950000, cac:25000,oran:38,renk:'#3B82F6',not:'Toplu alim, proje yatirimcisi'},
 ];
-function MusteriLTVAnaliz() {
+function GayrimenkulLTV() {
   return (
     <div className="metric-card">
       <div className="flex items-center gap-2 mb-3">
         <Users className="w-4 h-4 text-cyan-400"/>
-        <span className="text-sm font-semibold">Müşteri Yaşam Boyu Değeri (LTV) Analizi</span>
+        <span className="text-sm font-semibold">Gayrimenkul Müşteri LTV — Segment Analizi</span>
       </div>
-      <div className="p-2 rounded-lg mb-3 text-xs" style={{background:"hsl(222 47% 5%)"}}>
-        <div className="font-bold text-cyan-400 mb-1">LTV Formülü</div>
-        <div className="text-muted-foreground">LTV = Ort.Sipariş Değeri × Yıllık Satın Alma × Müşteri Ömrü (yıl)</div>
-        <div className="text-muted-foreground mt-1">Örnek: ₺500 × 4/yıl × 3 yıl = <span className="text-cyan-400 font-bold">₺6.000 LTV</span></div>
+      <div className="p-2 rounded-lg mb-3 text-xs" style={{background:'hsl(222 47% 5%)'}}>
+        <div className="font-bold text-cyan-400 mb-1">Gayrimenkul LTV Formulu</div>
+        <div className="text-muted-foreground">LTV = (Satis Komisyonu) + (Kira Yonetimi × Yil × %5) + (Tekrar Satis) + (Referans Degeri)</div>
+        <div className="text-muted-foreground mt-1">Ort. araci komisyonu: %2-3 satis bedeli — ₺5M dairede ₺100-150K</div>
       </div>
-      <div className="text-xs font-semibold text-muted-foreground mb-2">LTV:CAC Oranı Senaryoları</div>
-      {LTV_SENARYO.map(sc=>(
-        <div key={sc.tip} className="flex items-center gap-2 p-2 rounded-lg mb-1.5" style={{background:"hsl(222 47% 5%)",border:`1px solid ${sc.renk}20`}}>
+      {LTV_SENARYO_GR.map(sc=>(
+        <div key={sc.tip} className="flex items-center gap-2 p-2 rounded-lg mb-1.5" style={{background:'hsl(222 47% 5%)',border:`1px solid ${sc.renk}20`}}>
           <div className="flex-1">
             <span className="text-xs font-bold" style={{color:sc.renk}}>{sc.tip}</span>
-            <div className="text-xs text-muted-foreground">CAC: ₺{sc.cac} → LTV: ₺{sc.ltv.toLocaleString()}</div>
-          </div>
-          <div className="text-right">
-            <div className="text-sm font-bold font-mono" style={{color:sc.renk}}>{sc.oran}:1</div>
+            <div className="text-xs text-muted-foreground">CAC: ₺{sc.cac.toLocaleString('tr')} → LTV: ₺{sc.ltv.toLocaleString('tr')}</div>
             <div className="text-xs text-muted-foreground" style={{fontSize:9}}>{sc.not}</div>
           </div>
-        </div>
-      ))}
-      <div className="text-xs text-emerald-400 mt-2">Hedef: LTV:CAC orani min 3:1, ideal 5:1+</div>
-    </div>
-  );
-}
-
-/* 9. AB Testi Rehberi */
-const AB_ELEMENTLER = [
-  {el:"Başlık (H1)",   etki:5, sure:"1-2 hafta", ipucu:"En etkili degisken — ilk deneyin"},
-  {el:"CTA Butonu",   etki:4, sure:"1-2 hafta", ipucu:"Renk, metin, yer — tek degisen test"},
-  {el:"Gorsel/Video", etki:4, sure:"2-3 hafta", ipucu:"Insan yuzu vs urun — kontekste gore"},
-  {el:'Fiyat Gorunum',etki:3, sure:'2-4 hafta', ipucu:'Fiyat cerceveleme: aylik vs yillik paket karsilastirma'},
-  {el:"Form Alanlar", etki:3, sure:"1-2 hafta", ipucu:"Az alan = yuksek tamamlama orani"},
-  {el:"Sayfa Yapisi", etki:2, sure:"3-4 hafta", ipucu:"Buyuk degisim, cok ziyaretci gerek"},
-];
-function ABTestRehberi() {
-  return (
-    <div className="metric-card">
-      <div className="flex items-center gap-2 mb-3">
-        <span style={{fontSize:18}}>🧪</span>
-        <span className="text-sm font-semibold">A/B Testi Rehberi — Metodoloji & Öncelikler</span>
-      </div>
-      <div className="grid grid-cols-3 gap-2 mb-3">
-        {[{l:"Minimum Trafik",v:"1.000+/varyant",renk:"#F7931A"},{l:"Güven Seviyesi",v:"%95 istatistiksel",renk:"#10b981"},{l:"Test Süresi",v:"Min. 2 hafta",renk:"#3B82F6"}].map(k=>(
-          <div key={k.l} className="p-2 rounded-xl text-center" style={{background:"hsl(222 47% 5%)"}}>
-            <div className="text-sm font-bold font-mono" style={{color:k.renk}}>{k.v}</div>
-            <div className="text-xs text-muted-foreground">{k.l}</div>
-          </div>
-        ))}
-      </div>
-      <div className="text-xs font-semibold text-muted-foreground mb-2">Test Edilecek Elementler (Öncelik Sırasına Göre)</div>
-      {AB_ELEMENTLER.map(ab=>(
-        <div key={ab.el} className="flex items-center gap-2 py-1.5" style={{borderBottom:"1px solid rgba(255,255,255,.04)"}}>
-          <div style={{width:3,height:28,background:"#8B5CF6",opacity:ab.etki/5,borderRadius:2,flexShrink:0}}/>
-          <div className="flex-1">
-            <div className="text-xs font-semibold">{ab.el}</div>
-            <div className="text-xs text-muted-foreground" style={{fontSize:9}}>{ab.ipucu}</div>
-          </div>
-          <div className="text-right shrink-0">
-            <div className="flex gap-0.5 justify-end mb-0.5">
-              {[...Array(5)].map((_,k)=><div key={k} style={{width:6,height:6,borderRadius:"50%",background:k<ab.etki?'#8B5CF6':'hsl(222 47% 15%)'}}/>)}
-            </div>
-            <div className="text-xs text-muted-foreground font-mono" style={{fontSize:9}}>{ab.sure}</div>
+          <div className="text-right">
+            <div className="text-lg font-bold font-mono" style={{color:sc.renk}}>{sc.oran}:1</div>
           </div>
         </div>
       ))}
@@ -416,213 +467,117 @@ function ABTestRehberi() {
   );
 }
 
-/* 10. Attribution Modelleri */
-const ATTRIBUTION = [
-  {model:"Son Tıklama",    renk:"#EF4444",puan:[0,0,0,0,100],   aciklama:"Satışı son kanala verir. Google Ads favorisi. Dönüşüm kanalını ödüllendirir."},
-  {model:"İlk Tıklama",   renk:"#F7931A",puan:[100,0,0,0,0],   aciklama:"Keşif kanalını ödüllendirir. Marka farkındalığı kampanyaları için uygun."},
-  {model:"Doğrusal",       renk:"#10b981",puan:[20,20,20,20,20],aciklama:"Tüm kanallar eşit kredi alır. Basit ama gerçekçi değil."},
-  {model:"Zamana Dayalı",  renk:"#3B82F6",puan:[5,10,20,30,35], aciklama:"Satışa yakın temas noktaları daha fazla kredi alır."},
-  {model:"Shapley (Data)", renk:"#8B5CF6",puan:[15,25,22,18,20],aciklama:"Oyun teorisi tabanlı, gerçek katkıyı ölçer. En doğru model."},
+/* 12. Sosyal Medya — Konut Icerigi */
+const SM_FORMATLARI = [
+  {format:'Daire Turu (Reels)',   platform:'Instagram/TikTok',eng:'%8-15',renk:'#E1306C',
+   ipucu:'30-60sn, muzikli, alt ucte metin: "2+1 · 95m2 · Besiktas · ₺6.8M". Drone giris + ic mekan + manzara'},
+  {format:'Mahalle Rehberi',      platform:'YouTube/Reels',  eng:'%5-10',renk:'#EF4444',
+   ipucu:'"Kadikoy\'de yasam" — kahvalti kafe, metro, pazar, yesil alan. Insan yuzu kamera ceker'},
+  {format:'Yatirim Infografigi',  platform:'LinkedIn/Twitter',eng:'%3-6', renk:'#0077B5',
+   ipucu:'Rakam one ciksin: "10 yilda Istanbul konut +%840". Basit, okunabilir tipografi'},
+  {format:'Musteri Hikayesi',     platform:'Tum Platformlar',eng:'%10-18',renk:'#10b981',
+   ipucu:'"Almanya\'dan satın aldık" — gercek musteri, gercek hikaye. En guvenilir icerik'},
+  {format:'Piyasa Guncelleme',    platform:'Instagram Story', eng:'%6-12',renk:'#F7931A',
+   ipucu:'Her hafta: 1 rakam. "Bu hafta Besiktas ort. m2 fiyati: ₺271K". Anket ile katilim artir'},
 ];
-const KANALLAR = ['SEO','Email','Meta','Display','Google'];
-function AttributionModelleri() {
-  const [sel,setSel] = useState(4);
-  const at = ATTRIBUTION[sel];
-  return (
-    <div className="metric-card">
-      <div className="flex items-center gap-2 mb-3">
-        <Megaphone className="w-4 h-4 text-purple-400"/>
-        <span className="text-sm font-semibold">Pazarlama Attribution Modelleri</span>
-      </div>
-      <div className="flex flex-wrap gap-1.5 mb-3">
-        {ATTRIBUTION.map((at,i)=>(
-          <button key={i} onClick={()=>setSel(i)}
-            className="text-xs px-2 py-1 rounded-lg"
-            style={{background:sel===i?at.renk:`${at.renk}20`,color:sel===i?'#fff':at.renk,border:`1px solid ${at.renk}40`,cursor:"pointer"}}>
-            {at.model}
-          </button>
-        ))}
-      </div>
-      <div className="p-3 rounded-xl mb-3" style={{background:"hsl(222 47% 5%)",border:`2px solid ${at.renk}30`}}>
-        <div className="text-xs text-muted-foreground mb-2">{at.aciklama}</div>
-        <div className="flex items-end gap-2 h-16">
-          {at.puan.map((p,i)=>(
-            <div key={i} className="flex-1 flex flex-col items-center gap-1">
-              <span className="text-xs font-mono font-bold" style={{color:at.renk}}>{p}%</span>
-              <div className="w-full rounded-t" style={{height:`${Math.max(4,(p/100)*48)}px`,background:at.renk,opacity:.85}}/>
-              <span className="text-muted-foreground" style={{fontSize:8}}>{KANALLAR[i]}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* 11. Sosyal Medya Algoritma Rehberi */
-const SM_PLATFORMLAR = [
-  {p:"Instagram",renk:"#E1306C",sıralar:['Kaydetme ve paylaşım > beğeni','Reels organik erişim x4','Story anket/soru: katılım artırır','İlk 30 dakika performansı kritik','Hashtag: 5-10 ilgili, niş tercih et']},
-  {p:"TikTok",  renk:"#010101",siralar:["Tamamlanma oranı en onemli metrik","Ses trendi gorunurluk artırır","Dikey video, alt ucte metin","Ilk 3 saniye hook zorunlu","Niche toplulugu hedefle FYP"]},
-  {p:"LinkedIn",renk:"#0077B5",sıralar:['Metin odaklı gönderi daha fazla erişim','Bağlantı olmadan harici link','Yorum sayısı paylaşımdan değerli','PDF carousel: x3 etkileşim','Kişisel profil > şirket sayfası']},
-  {p:"YouTube", renk:"#EF4444",sıralar:['İzleme süresi > tıklama oranı','Thumbnail CTR: %4-10 hedef','İlk 30sn izleyici bağlama','Oynatma listesi saat geçirme süresini artırır','Anahtar kelime başlık + açıklama ilk 2 satır']},
-];
-function SosyalMedyaAlgoritmalar() {
-  const [sel,setSel] = useState(0);
-  const sm = SM_PLATFORMLAR[sel];
+function SosyalMedyaKonut() {
   return (
     <div className="metric-card">
       <div className="flex items-center gap-2 mb-3">
         <span style={{fontSize:18}}>📱</span>
-        <span className="text-sm font-semibold">Sosyal Medya Algoritma Rehberi 2025</span>
+        <span className="text-sm font-semibold">Sosyal Medya — Gayrimenkul İçerik Stratejisi</span>
       </div>
-      <div className="flex gap-2 mb-3">
-        {SM_PLATFORMLAR.map((pl,i)=>(
-          <button key={i} onClick={()=>setSel(i)}
-            className="flex-1 text-xs py-1.5 rounded-lg font-semibold"
-            style={{background:sel===i?pl.renk:`${pl.renk}20`,color:sel===i?'#fff':pl.renk,border:`1px solid ${pl.renk}40`,cursor:"pointer"}}>
-            {pl.p}
-          </button>
-        ))}
-      </div>
-      <div className="p-3 rounded-xl" style={{background:"hsl(222 47% 5%)",border:`2px solid ${sm.renk}30`}}>
-        {sm.sıralar.map((si,i)=>(
-          <div key={i} className="flex items-start gap-2 mb-1.5">
-            <span className="font-bold shrink-0 text-xs" style={{color:sm.renk}}>{i+1}.</span>
-            <span className="text-xs text-muted-foreground">{si}</span>
+      {SM_FORMATLARI.map((sm,i)=>(
+        <div key={i} className="p-2.5 rounded-xl mb-2" style={{background:'hsl(222 47% 5%)',border:`1px solid ${sm.renk}20`}}>
+          <div className="flex items-center justify-between mb-1">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold" style={{color:sm.renk}}>{sm.format}</span>
+              <span className="text-xs text-muted-foreground" style={{fontSize:9}}>{sm.platform}</span>
+            </div>
+            <span className="text-xs font-mono text-emerald-400">Eng:{sm.eng}</span>
           </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-/* 12. Influencer Pazarlama */
-const INFLUENCER_TIPLERI = [
-  {tip:"Nano",   takipci:"1K-10K",  eng:"%5-10",cpe:"Dusuk", renk:"#10b981",guclu:"Guvenir, niş, samimi"},
-  {tip:"Micro",  takipci:"10K-100K",eng:"%3-5", cpe:"Orta",  renk:"#3B82F6",guclu:"Hedefli kitle, iyi ROI"},
-  {tip:"Macro",  takipci:"100K-1M", eng:"%1-3", cpe:"Yuksek",renk:"#F7931A",guclu:"Genis erisim, marka"},
-  {tip:"Mega/C", takipci:"1M+",     eng:"%0.5-1",cpe:"Cok Y",renk:"#8B5CF6",guclu:"Maxim goruntuleme"},
-];
-function InfluencerPazarlama() {
-  return (
-    <div className="metric-card">
-      <div className="flex items-center gap-2 mb-3">
-        <span style={{fontSize:18}}>👤</span>
-        <span className="text-sm font-semibold">Influencer Pazarlama — Tier Analizi & Metrikler</span>
-      </div>
-      <div className="grid grid-cols-2 gap-2 mb-3">
-        {INFLUENCER_TIPLERI.map(it=>(
-          <div key={it.tip} className="p-2.5 rounded-xl" style={{background:"hsl(222 47% 5%)",border:`1px solid ${it.renk}25`}}>
-            <div className="text-xs font-bold mb-1" style={{color:it.renk}}>{it.tip} Influencer</div>
-            <div className="text-xs text-muted-foreground">{it.takipci} takipçi</div>
-            <div className="text-xs text-muted-foreground">Eng: {it.eng} · CPE: {it.cpe}</div>
-            <div className="text-xs mt-1" style={{color:it.renk,fontSize:9}}>✦ {it.guclu}</div>
-          </div>
-        ))}
-      </div>
-      <div className="text-xs font-semibold text-muted-foreground mb-2">Performans Metrikleri</div>
-      {[
-        {l:"CPE (Etkileşim Başı Maliyet)",f:"Toplam Maliyet ÷ Toplam Etkileşim"},
-        {l:"EMV (Kazanılan Medya Değeri)",f:"Etkileşim × Medya Değer Katsayısı"},
-        {l:"Engagement Rate",             f:"(Beğeni+Yorum+Paylaşım) ÷ Takipçi × 100"},
-        {l:"Story CTR",                   f:"Yukarı Kaydırma ÷ Görüntüleme × 100"},
-      ].map(m=>(
-        <div key={m.l} className="flex gap-2 py-1" style={{borderBottom:"1px solid rgba(255,255,255,.04)"}}>
-          <span className="text-xs font-semibold text-pink-400 shrink-0" style={{minWidth:140}}>{m.l}</span>
-          <span className="text-xs text-muted-foreground">{m.f}</span>
+          <div className="text-xs text-muted-foreground">{sm.ipucu}</div>
         </div>
       ))}
     </div>
   );
 }
 
-/* 13. Marka Konumlandirma */
-const KONUMLANDIRMA_MATRISI = [
-  {marka:"Premium/Uzman",   fiyat:"Yuksek",kalite:"Yuksek",renk:"#10b981",ornek:"Apple, Rolex, McKinsey"},
-  {marka:"Deger Odakli",    fiyat:"Orta",  kalite:"Yuksek",renk:"#3B82F6",ornek:"IKEA, Zara, Toyota"},
-  {marka:"Lider & Hacimci", fiyat:"Dusuk", kalite:"Orta",  renk:"#F7931A",ornek:"Amazon, Walmart, Shein"},
-  {marka:"Niş Uzman",       fiyat:"Yuksek",kalite:"Niş",   renk:"#8B5CF6",ornek:"Red Bull, GoPro, Tesla"},
+/* 13. Dijital Showroom & 3D Tur */
+const SHOWROOM_ARACLAR = [
+  {arac:'Matterport 3D Tur', maliyet:'₺3.500-8.000',etki:'Lead kalitesi x2.4',renk:'#8B5CF6',not:'Yabanci yatirimci icin zorunlu. Uzaktan satin alma imkani'},
+  {arac:'Drone Cekimi',       maliyet:'₺1.500-4.000',etki:'Sosyal media x3 erisim',renk:'#3B82F6',not:'Konum analizi icin de kullanilir. 4K video simdilerde standart'},
+  {arac:'360 Foto (iphone)',  maliyet:'₺500-1.500',  etki:'Web sitesi dwell +68%',renk:'#10b981',not:'Ucuz ama etkili. Google Street View entegrasyonu'},
+  {arac:'AR Mobilya Planlama',maliyet:'₺0 (app)',    etki:'Satinalma niyet +35%', renk:'#F7931A',not:'IKEA Place benzeri app — bos daireyi doldurur'},
+  {arac:'AI Render (bos→dolu)',maliyet:'₺200-800',   etki:'Empati +40%',          renk:'#EC4899',not:'Bos dairenin nasil gozukecegini goster — Midjourney/AI tools'},
+  {arac:'WhatsApp Video Tur', maliyet:'₺0',           etki:'Lead-to-tour +28%',   renk:'#25D366',not:'Hizli, kisisel. Ilk temas sonrasi 24 saat icinde gonder'},
 ];
-const KONUM_ADİMLARI = [
-  'Hedef kitleyi net tanımla (Jobs-to-be-done)',
-  'Rakipler analizi: güçlü/zayıf yönler haritala',
-  'Benzersiz değer önerisi (UVP) yaz: "X için Y yapan tek Z"',
-  'Marka sesi ve ton belirleme (formal/samimi/teknik)',
-  'Tutarlı görsel kimlik: renk, tipografi, ikon',
-  'Mesaj testi: hangi önerme en yüksek CTR?',
-];
-function MarkaKonumlandirma() {
+function DijitalShowroom() {
   return (
     <div className="metric-card">
       <div className="flex items-center gap-2 mb-3">
-        <span style={{fontSize:18}}>🏆</span>
-        <span className="text-sm font-semibold">Marka Konumlandırma Matrisi & Stratejisi</span>
+        <span style={{fontSize:18}}>🏗️</span>
+        <span className="text-sm font-semibold">Dijital Showroom & Görsel Pazarlama Araçları</span>
       </div>
-      <div className="text-xs text-muted-foreground mb-2">Fiyat — Kalite Ekseni Konumlandırma:</div>
-      <div className="grid grid-cols-2 gap-2 mb-3">
-        {KONUMLANDIRMA_MATRISI.map(k=>(
-          <div key={k.marka} className="p-2.5 rounded-xl" style={{background:"hsl(222 47% 5%)",border:`1px solid ${k.renk}25`}}>
-            <div className="text-xs font-bold" style={{color:k.renk}}>{k.marka}</div>
-            <div className="text-xs text-muted-foreground">Fiyat: {k.fiyat} · Kalite: {k.kalite}</div>
-            <div className="text-xs mt-1 text-muted-foreground" style={{fontSize:9}}>Örnek: {k.ornek}</div>
+      {SHOWROOM_ARACLAR.map((sa,i)=>(
+        <div key={i} className="flex items-center gap-2 p-2 rounded-lg mb-1.5" style={{background:'hsl(222 47% 5%)',border:`1px solid ${sa.renk}20`}}>
+          <div style={{width:3,height:36,background:sa.renk,borderRadius:2,flexShrink:0}}/>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-0.5">
+              <span className="text-xs font-bold" style={{color:sa.renk}}>{sa.arac}</span>
+              <span className="text-xs font-mono text-emerald-400" style={{fontSize:9}}>{sa.etki}</span>
+            </div>
+            <div className="text-xs text-muted-foreground" style={{fontSize:9}}>{sa.not}</div>
           </div>
-        ))}
-      </div>
-      <div className="text-xs font-semibold text-muted-foreground mb-1">Konumlandırma Adımları:</div>
-      {KONUM_ADİMLARI.map((ad,i)=>(
-        <div key={i} className="flex gap-2 py-1" style={{borderBottom:"1px solid rgba(255,255,255,.04)"}}>
-          <span className="text-xs font-bold shrink-0" style={{color:"#8B5CF6",minWidth:16}}>{i+1}.</span>
-          <span className="text-xs text-muted-foreground">{ad}</span>
+          <div className="text-xs font-mono text-muted-foreground shrink-0">{sa.maliyet}</div>
         </div>
       ))}
     </div>
   );
 }
 
-/* 14. Pazarlama Metrikleri KPI Dashboard */
-const KPI_METRIKLER = [
-  {grup:"Trafik",    renk:"#3B82F6",metrikler:[
-    {isim:"Organik Trafik",      hedef:">%10/ay art.",birim:''},
-    {isim:"Bounсe Rate",         hedef:"<%50",         birim:''},
-    {isim:"Sayfa/Oturum",        hedef:">2.5",         birim:''},
-    {isim:"Ort. Oturum Suresi",  hedef:">2 dk",        birim:''},
-  ]},
-  {grup:"Donusum",   renk:"#10b981",metrikler:[
-    {isim:"CVR (Genel)",         hedef:"%2-4",          birim:''},
-    {isim:"Lead CVR",            hedef:"%5-15",         birim:''},
-    {isim:"Cart Abandon Rate",   hedef:"<%70",          birim:''},
-    {isim:"Checkout CVR",        hedef:"%2-5",          birim:''},
-  ]},
-  {grup:"Musteri",   renk:"#F7931A",metrikler:[
-    {isim:"NPS Puanı",           hedef:">50 = iyi",     birim:''},
-    {isim:"Churn Rate (SaaS)",   hedef:"<%5/ay",        birim:''},
-    {isim:"MRR Buyume",          hedef:">%10/ay",       birim:''},
-    {isim:"CSAT Skoru",          hedef:">%80 memnun",   birim:''},
-  ]},
+/* 14. CRM & Referans Sistemi */
+const CRM_ASAMALAR = [
+  {asan:'Lead Girisi',    renk:'#3B82F6',islem:'Form → otomatik WhatsApp: "Merhaba [isim], [bölge] ilginiz icin tesekkur ederiz..."',sure:'<5 dakika'},
+  {asan:'Nitelendirme',   renk:'#F7931A',islem:'3 soru: Butce? Kullanim (oturma/yatirim)? Zaman cercevesi? CRM\'e kayit',sure:'Ilk gorusme'},
+  {asan:'Tur Planlamasi', renk:'#8B5CF6',islem:'Takvim linki gonder → onay → hatirllatma (1 gun + 1 saat once)',sure:'48 saat icinde'},
+  {asan:'Takip (No show)',renk:'#EF4444',islem:'48 saat: "Gosteremedigimiz icin uzgunum, yeni tarih?" — silikonvadi taktigi',sure:'48 saat'},
+  {asan:'Post-Satis',     renk:'#10b981',islem:'30 gun: memnuniyet anketi. 90 gun: referans istegi. 1 yil: portfoy guncellemesi',sure:'Otomatik'},
 ];
-function PazarlamaKPIDashboard() {
-  const [sel,setSel] = useState(0);
-  const gk = KPI_METRIKLER[sel];
+const REFERANS = [
+  {tip:'Musteri Referansi',      odul:'₺10.000-25.000',aktiflik:'%12 musteri referans verir',renk:'#10b981'},
+  {tip:'Aracı Ortakligi',        odul:'%1-1.5 komisyon', aktiflik:'Sigorta, avukat, bankaci',renk:'#3B82F6'},
+  {tip:'Influencer Ortakligi',   odul:'Sabit ucret + bonus',aktiflik:'Yerel sehir influencer',renk:'#EC4899'},
+  {tip:'Otomotik Yonlendirme',  odul:'CRM izleme kodu',  aktiflik:'Hangi kanaldan geldigi',renk:'#F7931A'},
+];
+function CRMReferans() {
   return (
     <div className="metric-card">
       <div className="flex items-center gap-2 mb-3">
-        <span style={{fontSize:18}}>📊</span>
-        <span className="text-sm font-semibold">Pazarlama KPI Dashboard — Takip Edilmesi Gerekenler</span>
+        <span style={{fontSize:18}}>🤝</span>
+        <span className="text-sm font-semibold">CRM Süreci & Referans Sistemi</span>
       </div>
-      <div className="flex gap-2 mb-3">
-        {KPI_METRIKLER.map((gk,i)=>(
-          <button key={i} onClick={()=>setSel(i)}
-            className="flex-1 text-xs py-1.5 rounded-lg font-semibold"
-            style={{background:sel===i?gk.renk:`${gk.renk}20`,color:sel===i?'#fff':gk.renk,border:`1px solid ${gk.renk}40`,cursor:"pointer"}}>
-            {gk.grup}
-          </button>
+      <div className="space-y-1.5 mb-3">
+        {CRM_ASAMALAR.map((ca,i)=>(
+          <div key={i} className="flex items-start gap-2 p-2 rounded-lg" style={{background:'hsl(222 47% 5%)'}}>
+            <div style={{width:3,minHeight:20,background:ca.renk,borderRadius:2,flexShrink:0,marginTop:2}}/>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-0.5">
+                <span className="text-xs font-bold" style={{color:ca.renk}}>{ca.asan}</span>
+                <span className="text-xs text-muted-foreground font-mono">{ca.sure}</span>
+              </div>
+              <div className="text-xs text-muted-foreground">{ca.islem}</div>
+            </div>
+          </div>
         ))}
       </div>
-      <div className="p-3 rounded-xl" style={{background:"hsl(222 47% 5%)",border:`2px solid ${gk.renk}30`}}>
-        {gk.metrikler.map((m,i)=>(
-          <div key={i} className="flex items-center justify-between py-1.5" style={{borderBottom:i<3?'1px solid rgba(255,255,255,.05)':''}}>
-            <span className="text-xs font-semibold">{m.isim}</span>
-            <span className="text-xs font-mono font-bold" style={{color:gk.renk}}>{m.hedef}</span>
+      <div className="text-xs font-semibold text-muted-foreground mb-2">Referans Programa Tipleri</div>
+      <div className="grid grid-cols-2 gap-2">
+        {REFERANS.map((r,i)=>(
+          <div key={i} className="p-2 rounded-xl" style={{background:'hsl(222 47% 5%)',border:`1px solid ${r.renk}25`}}>
+            <div className="text-xs font-bold" style={{color:r.renk}}>{r.tip}</div>
+            <div className="text-xs text-muted-foreground">{r.odul}</div>
+            <div className="text-xs text-muted-foreground" style={{fontSize:9}}>{r.aktiflik}</div>
           </div>
         ))}
       </div>
@@ -630,42 +585,50 @@ function PazarlamaKPIDashboard() {
   );
 }
 
-/* 15. Pazarlama Otomasyon Aracları */
-const OTOMASYON_ARACLAR = [
-  {kategori:"Email Mkt",    renk:"#3B82F6",araclar:['Klaviyo (e-tic, segment)','Mailchimp (baslangic)','ActiveCampaign (otomasyon)','HubSpot (CRM entegre)']},
-  {kategori:"CRM",          renk:"#10b981",araclar:['HubSpot (ucretsiz plan+)','Salesforce (kurumsal)','Pipedrive (satis odakli)','Notion CRM (basit)']},
-  {kategori:"Sosyal Medya", renk:"#EC4899",araclar:['Buffer (planlama)','Hootsuite (analitik+)','Later (Instagram odakli)','Sprout Social (ajans)']},
-  {kategori:"Analitik",     renk:"#F7931A",araclar:['GA4 (zorunlu)','Hotjar (isi haritasi)','Mixpanel (davranissal)','Amplitude (product)']},
-  {kategori:"SEO",          renk:"#8B5CF6",araclar:['Ahrefs (backlink)','SEMrush (anahtar kl.)','Screaming Frog (teknik)','Surfer SEO (icerik)']},
+/* 15. Reklam Metinleri & Hook'lar */
+const HOOK_ORNEKLERI = [
+  {kategori:'Aciliyet / Kıtlık',renk:'#EF4444',hooklar:['Bu fiyata son 3 daire — yarın zamlanıyor','Reservasyon tarihi bugün bitiyor','Bu haftaki fiyatı bir sonra göremeyebilirsiniz']},
+  {kategori:'Rakam / Veri',    renk:'#F7931A',hooklar:['₺1M kira ödemek yerine — 10 yıl hesabı','%4.8 kira getirisi: paranız çalışıyor','2026\'da İstanbul m²: ₺268K — neden yükseliyor?']},
+  {kategori:'Empati / Problem',renk:'#10b981',hooklar:['Kira ödedikçe ev sahibiniz zenginleşiyor — değil mi?','Her yıl kira zammı — artık yeter mi?','Almanya\'dan uzaktan ev almak mümkün mü?']},
+  {kategori:'Sosyal Kanıt',    renk:'#3B82F6',hooklar:['237 aile bu yıl bizimle ev sahibi oldu','Müşterimiz Ahmet B.: "En iyi kararım"','Körfezden 89 yabancı yatırımcı seçti']},
+  {kategori:'Merak / Soru',   renk:'#8B5CF6',hooklar:['Atina\'da €250K ile ne alınır?','İstanbul\'un en hızlı değerlenen 5 ilçesi','Golden Visa: neden herkes Yunanistan\'ı seçiyor?']},
 ];
-function PazarlamaOtomasyon() {
+const CTA_ORNEKLERI = ['Ücretsiz Danışmanlık Al','Fiyat Listesini Gör','Tur Rezervasyonu Yap','Bölge Raporunu İndir','WhatsApp\'tan Sor'];
+function ReklamMetinleri() {
   const [sel,setSel] = useState(0);
-  const ot = OTOMASYON_ARACLAR[sel];
+  const ho = HOOK_ORNEKLERI[sel];
   return (
     <div className="metric-card">
       <div className="flex items-center gap-2 mb-3">
-        <span style={{fontSize:18}}>⚙️</span>
-        <span className="text-sm font-semibold">Pazarlama Araçları & Otomasyon Stack</span>
+        <Megaphone className="w-4 h-4 text-pink-400"/>
+        <span className="text-sm font-semibold">Gayrimenkul Reklam Metinleri & Hook Stratejisi</span>
       </div>
       <div className="flex flex-wrap gap-1.5 mb-3">
-        {OTOMASYON_ARACLAR.map((ot,i)=>(
+        {HOOK_ORNEKLERI.map((ho,i)=>(
           <button key={i} onClick={()=>setSel(i)}
-            className="text-xs px-2.5 py-1 rounded-lg font-semibold"
-            style={{background:sel===i?ot.renk:`${ot.renk}20`,color:sel===i?'#fff':ot.renk,border:`1px solid ${ot.renk}40`,cursor:"pointer"}}>
-            {ot.kategori}
+            className="text-xs px-2 py-1 rounded-lg"
+            style={{background:sel===i?ho.renk:`${ho.renk}20`,color:sel===i?'#fff':ho.renk,border:`1px solid ${ho.renk}40`,cursor:'pointer'}}>
+            {ho.kategori}
           </button>
         ))}
       </div>
-      <div className="p-3 rounded-xl" style={{background:"hsl(222 47% 5%)",border:`2px solid ${ot.renk}30`}}>
-        {ot.araclar.map((ar,i)=>(
-          <div key={i} className="flex items-center gap-2 py-1.5" style={{borderBottom:i<3?'1px solid rgba(255,255,255,.05)':''}}>
-            <div style={{width:8,height:8,borderRadius:"50%",background:ot.renk,flexShrink:0}}/>
-            <span className="text-xs text-muted-foreground">{ar}</span>
+      <div className="p-3 rounded-xl mb-3" style={{background:'hsl(222 47% 5%)',border:`2px solid ${ho.renk}30`}}>
+        <div className="text-xs font-bold mb-2" style={{color:ho.renk}}>{ho.kategori} Hook Örnekleri:</div>
+        {ho.hooklar.map((hk,i)=>(
+          <div key={i} className="flex items-start gap-2 mb-1.5">
+            <span className="font-bold text-xs shrink-0" style={{color:ho.renk}}>{i+1}.</span>
+            <span className="text-xs text-muted-foreground italic">"{hk}"</span>
           </div>
         ))}
       </div>
-      <div className="mt-3 p-2 rounded-lg" style={{background:"hsl(222 47% 5%)",fontSize:10}}>
-        Otomasyon Altın Kuralı: Önce süreci optimize et, sonra otomatikleştir. Kötü sürecin otomasyonu kötü sonuçları hızlandırır.
+      <div className="text-xs font-semibold text-muted-foreground mb-2">Gayrimenkul CTA Örnekleri (En Yüksek CVR):</div>
+      <div className="flex flex-wrap gap-2">
+        {CTA_ORNEKLERI.map((cta,i)=>(
+          <span key={i} className="text-xs px-2.5 py-1.5 rounded-xl font-semibold"
+            style={{background:'linear-gradient(135deg,#10b981,#3B82F6)',color:'#fff'}}>
+            {cta}
+          </span>
+        ))}
       </div>
     </div>
   );
@@ -674,22 +637,22 @@ function PazarlamaOtomasyon() {
 /* ══ WRAPPER ════════════════════════════════════════════════════════ */
 function PazarlamaModulleri() {
   return (
-    <div style={{display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(340px, 1fr))", gap:16, marginTop:24}}>
-      <KanalROI />
-      <DonusumHunisi />
-      <PazarlamaFormulleri />
-      <MetaReklamRehberi />
-      <GoogleAdsOptimizasyon />
-      <SeoTemelleri />
-      <EmailPazarlama />
-      <MusteriLTVAnaliz />
-      <ABTestRehberi />
-      <AttributionModelleri />
-      <SosyalMedyaAlgoritmalar />
-      <InfluencerPazarlama />
-      <MarkaKonumlandirma />
-      <PazarlamaKPIDashboard />
-      <PazarlamaOtomasyon />
+    <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(340px, 1fr))', gap:16, marginTop:24}}>
+      <GRKanalROI />
+      <AliciYolculugu />
+      <GayrimenkulKPI />
+      <MetaKonutReklam />
+      <GoogleAdsEmlak />
+      <SEOGayrimenkul />
+      <EmailYatirimci />
+      <YabanciYatirimci />
+      <ProjeLansman />
+      <FiyatKonumlandirma />
+      <GayrimenkulLTV />
+      <SosyalMedyaKonut />
+      <DijitalShowroom />
+      <CRMReferans />
+      <ReklamMetinleri />
     </div>
   );
 }
