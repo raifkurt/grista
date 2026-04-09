@@ -9,10 +9,11 @@ const PRIMARY = [
   { href: '/',       icon: LayoutDashboard, label: 'Panel' },
   { href: '/live',   icon: Radio,           label: 'Canlı' },
   { href: '/cities', icon: MapPin,          label: 'Şehirler' },
-  { href: '/financial', icon: DollarSign,   label: 'Finans' },
+  { href: '/health', icon: Heart,           label: 'Sağlık' },
 ];
 
 const MORE = [
+  { href: '/financial', icon: DollarSign,  label: 'Finans' },
   { href: '/market',    icon: TrendingUp,  label: 'Piyasa İstihbaratı' },
   { href: '/property',  icon: Building2,   label: 'Emlak Değerleme' },
   { href: '/wellness',  icon: Heart,       label: 'Sağlık & Wellness' },
