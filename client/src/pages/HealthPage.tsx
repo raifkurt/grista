@@ -170,6 +170,9 @@ export default function HealthPage() {
         </button>
       </div>
 
+      {/* Sağlık Modülleri */}
+      <SaglikModulleri />
+
       {/* Kartlar */}
       {loading ? (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
