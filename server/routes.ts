@@ -629,5 +629,33 @@ export async function registerRoutes(_httpServer: any, app: Express): Promise<an
     } catch (err: any) { res.status(500).json({ error: err.message }); }
   });
 
+
+  // ── Yunanistan Borsası — ATHEX ────────────────────────────────────────────
+  app.get('/api/greece/stocks', async (req, res) => {
+    try {
+      if (req.query.force === '1') delete CACHE['greece_stocks'];
+      const data = await cached('greece_stocks', 5 * 60_000, async () => {
+        const syms = ['^ATF','ETE.AT','EUROB.AT','OPAP.AT','MYTIL.AT','TITC.AT','FFGRP.AT','BELA.AT','PPC.AT','ADMIE.AT'].join(',');
+        const ctrl = new AbortController(); setTimeout(() => ctrl.abort(), 10_000);
+        const r = await fetch(
+          `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${syms}`,
+          { signal: ctrl.signal, headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36' } }
+        );
+        const d = await r.json();
+        return (d.quoteResponse?.result ?? []).map((q: any) => ({
+          symbol: q.symbol?.replace('.AT','') ?? q.symbol,
+          name: q.shortName || q.longName || q.symbol,
+          price: q.regularMarketPrice,
+          changePct: q.regularMarketChangePercent,
+          change: q.regularMarketChange,
+          volume: q.regularMarketVolume,
+          currency: q.currency ?? 'EUR',
+          isIndex: q.symbol?.startsWith('^'),
+        }));
+      });
+      res.json(data);
+    } catch (err: any) { res.status(500).json({ error: err.message }); }
+  });
+
   return _httpServer;
 }
