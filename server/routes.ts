@@ -434,5 +434,38 @@ export async function registerRoutes(_httpServer: any, app: Express): Promise<an
     } catch (err: any) { res.status(500).json({ error: err.message }); }
   });
 
+
+  // ── Kripto Detay: BTC+ETH + Top 10 Altcoin Yükseleni ─────────────────────
+  app.get('/api/cryptodetail', async (req, res) => {
+    try {
+      if (req.query.force === '1') delete CACHE['cryptodetail'];
+      const data = await cached('cryptodetail', 5 * 60_000, async () => {
+        const ctrl = new AbortController();
+        setTimeout(() => ctrl.abort(), 12_000);
+        // BTC + ETH detayı
+        const [r1, r2] = await Promise.all([
+          fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin,ethereum&order=market_cap_desc&per_page=2&page=1&sparkline=false&price_change_percentage=24h', { signal: ctrl.signal }),
+          fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=price_change_percentage_24h_desc&per_page=30&page=1&sparkline=false', { signal: ctrl.signal }),
+        ]);
+        const [majors, gainersRaw] = await Promise.all([r1.json(), r2.json()]);
+        const fmt = (c: any) => ({
+          id: c.id, symbol: c.symbol.toUpperCase(), name: c.name,
+          price: c.current_price, change24h: c.price_change_percentage_24h,
+          marketCap: c.market_cap, image: c.image,
+          high24h: c.high_24h, low24h: c.low_24h,
+          volume: c.total_volume,
+        });
+        const btc = majors.find((c: any) => c.id === 'bitcoin');
+        const eth = majors.find((c: any) => c.id === 'ethereum');
+        const gainers = gainersRaw
+          .filter((c: any) => !['bitcoin', 'ethereum'].includes(c.id) && c.price_change_percentage_24h > 0)
+          .slice(0, 10)
+          .map(fmt);
+        return { btc: btc ? fmt(btc) : null, eth: eth ? fmt(eth) : null, gainers, updatedAt: new Date().toISOString() };
+      });
+      res.json(data);
+    } catch (err: any) { res.status(500).json({ error: err.message }); }
+  });
+
   return _httpServer;
 }

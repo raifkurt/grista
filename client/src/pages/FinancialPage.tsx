@@ -3,7 +3,7 @@ import { fetchNewsByCategory, NewsItem } from '@/lib/data/liveData';
 import { MonteCarloEngine } from '@/lib/algorithms/monteCarlo';
 import { KalmanFilter } from '@/lib/algorithms/kalman';
 import { generateCurrencyData } from '@/lib/data/marketData';
-import { DollarSign, Activity, RefreshCw } from 'lucide-react';
+import { DollarSign, Activity, RefreshCw, TrendingUp, Bitcoin } from 'lucide-react';
 
 /* ── Yardımcı ─────────────────────────────────────────────────── */
 function ago(iso: string) {
@@ -12,6 +12,84 @@ function ago(iso: string) {
   if (s < 3600)  return `${Math.floor(s / 60)}dk`;
   if (s < 86400) return `${Math.floor(s / 3600)}sa`;
   return `${Math.floor(s / 86400)}g`;
+}
+
+
+/* ── Kripto yardımcıları ──────────────────────────────────────────────── */
+function fmtPrice(p: number): string {
+  if (!p) return '—';
+  if (p >= 1000)  return '$' + p.toLocaleString('en-US', { maximumFractionDigits: 0 });
+  if (p >= 1)     return '$' + p.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  if (p >= 0.01)  return '$' + p.toFixed(4);
+  if (p >= 0.0001)return '$' + p.toFixed(6);
+  return '$' + p.toExponential(2);
+}
+function fmtMcap(v: number): string {
+  if (!v) return '—';
+  if (v >= 1e12) return '$' + (v / 1e12).toFixed(2) + 'T';
+  if (v >= 1e9)  return '$' + (v / 1e9).toFixed(1) + 'B';
+  return '$' + (v / 1e6).toFixed(0) + 'M';
+}
+function chgColor(c: number) { return c >= 0 ? '#10b981' : '#ef4444'; }
+
+/* ── Büyük coin kartı (BTC / ETH) ─────────────────────────────────────── */
+function BigCoinCard({ coin }: { coin: any }) {
+  if (!coin) return null;
+  const c = coin.change24h ?? 0;
+  const pos = c >= 0;
+  return (
+    <div className="metric-card" style={{ borderTop: `2px solid ${pos ? '#10b981' : '#ef4444'}` }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
+        <img src={coin.image} alt={coin.symbol} style={{ width: 36, height: 36, borderRadius: '50%' }} />
+        <div>
+          <div style={{ fontWeight: 700, fontSize: 15 }}>{coin.name}</div>
+          <div style={{ fontSize: 11, color: '#4a6080', fontFamily: 'monospace' }}>{coin.symbol}</div>
+        </div>
+        <div style={{ marginLeft: 'auto', textAlign: 'right' }}>
+          <div style={{ fontWeight: 700, fontSize: 18, fontFamily: 'monospace' }}>{fmtPrice(coin.price)}</div>
+          <div style={{ fontSize: 12, fontWeight: 600, color: chgColor(c) }}>
+            {pos ? '+' : ''}{c.toFixed(2)}%
+          </div>
+        </div>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 6 }}>
+        {[
+          { label: 'Piyasa Değeri', value: fmtMcap(coin.marketCap) },
+          { label: 'Hacim (24s)', value: fmtMcap(coin.volume) },
+          { label: 'Aralık (24s)', value: `${fmtPrice(coin.low24h)} – ${fmtPrice(coin.high24h)}` },
+        ].map(m => (
+          <div key={m.label} style={{ background: 'hsl(222 47% 5%)', borderRadius: 8, padding: '6px 8px', textAlign: 'center' }}>
+            <div style={{ fontSize: 10, color: '#3d5570', marginBottom: 2 }}>{m.label}</div>
+            <div style={{ fontSize: 11, fontFamily: 'monospace', fontWeight: 600, color: '#8eb4d8' }}>{m.value}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ── Altcoin satırı ────────────────────────────────────────────────────── */
+function AltRow({ coin, rank }: { coin: any; rank: number }) {
+  const c = coin.change24h ?? 0;
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 0', borderBottom: '1px solid rgba(255,255,255,.04)' }}>
+      <span style={{ fontSize: 11, color: '#3d5570', fontFamily: 'monospace', width: 18, textAlign: 'right' }}>{rank}</span>
+      <img src={coin.image} alt={coin.symbol} style={{ width: 26, height: 26, borderRadius: '50%', flexShrink: 0 }} />
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ fontSize: 12, fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{coin.name}</div>
+        <div style={{ fontSize: 10, color: '#4a6080', fontFamily: 'monospace' }}>{coin.symbol}</div>
+      </div>
+      <div style={{ textAlign: 'right', flexShrink: 0 }}>
+        <div style={{ fontSize: 12, fontFamily: 'monospace', fontWeight: 600 }}>{fmtPrice(coin.price)}</div>
+        <div style={{ fontSize: 11, fontWeight: 700, color: chgColor(c) }}>
+          +{c.toFixed(2)}%
+        </div>
+      </div>
+      <div style={{ width: 60, height: 4, borderRadius: 2, background: 'hsl(222 47% 8%)', flexShrink: 0, overflow: 'hidden' }}>
+        <div style={{ height: '100%', borderRadius: 2, background: '#10b981', width: `${Math.min(100, c * 2)}%` }} />
+      </div>
+    </div>
+  );
 }
 
 const FIN_KW = [
@@ -107,6 +185,11 @@ export default function FinancialPage() {
   const [kalmanForex, setKalmanForex] = useState<number[]>([]);
   const [running, setRunning] = useState(false);
 
+  /* Kripto detay */
+  const [cryptoData, setCryptoData] = useState<any>(null);
+  const [cryptoCd, setCryptoCd]     = useState(300);
+  const cryptoCdRef = useRef(300);
+
   /* Finans haberleri */
   const [finNews, setFinNews] = useState<NewsItem[]>([]);
   const [newsLoading, setNewsLoading] = useState(true);
@@ -163,6 +246,24 @@ export default function FinancialPage() {
     newsCdRef.current = 30;
   }, []);
 
+  // Kripto yükle
+  const loadCrypto = useCallback(async (force = false) => {
+    try {
+      const r = await fetch(`/api/cryptodetail?${force ? 'force=1&' : ''}_=${Date.now()}`, { cache: 'no-store' });
+      if (r.ok) setCryptoData(await r.json());
+    } catch {}
+    cryptoCdRef.current = 300;
+  }, []);
+  useEffect(() => { loadCrypto(); }, [loadCrypto]);
+  useEffect(() => {
+    const t = setInterval(() => {
+      cryptoCdRef.current -= 1;
+      setCryptoCd(cryptoCdRef.current);
+      if (cryptoCdRef.current <= 0) loadCrypto();
+    }, 1000);
+    return () => clearInterval(t);
+  }, [loadCrypto]);
+
   useEffect(() => { loadFinNews(); }, [loadFinNews]);
 
   /* Pull-to-refresh */
@@ -196,6 +297,44 @@ export default function FinancialPage() {
 
   return (
     <div className="p-4 space-y-4 max-w-screen-2xl mx-auto">
+      {/* ── Kripto Paneli ─────────────────────────────────────────────────── */}
+      <div>
+        <div style={{ display:'flex', alignItems:'center', gap:10, fontWeight:700, fontSize:16, padding:'4px 0 12px' }}>
+          <Bitcoin size={16} color="#F7931A" />
+          Kripto Piyasası
+          <span style={{ fontSize:10, fontFamily:'monospace', padding:'2px 8px', borderRadius:999, background:'rgba(247,147,26,.1)', color:'#F7931A', border:'1px solid rgba(247,147,26,.25)' }}>CANLI</span>
+          {cryptoData && (
+            <span style={{ fontSize:10, fontFamily:'monospace', color:'#3d5570', marginLeft:'auto' }}>
+              {cryptoCd}sn
+            </span>
+          )}
+        </div>
+
+        {/* BTC + ETH */}
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:12, marginBottom:12 }}>
+          <BigCoinCard coin={cryptoData?.btc} />
+          <BigCoinCard coin={cryptoData?.eth} />
+        </div>
+
+        {/* Top 10 Altcoin Yükseleni */}
+        <div className="metric-card">
+          <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:8 }}>
+            <TrendingUp size={14} color="#10b981" />
+            <span style={{ fontWeight:700, fontSize:13 }}>En Çok Yükselen 10 Altcoin</span>
+            <span style={{ fontSize:10, color:'#3d5570', fontFamily:'monospace', marginLeft:'auto' }}>24 saatlik değişim</span>
+          </div>
+          {!cryptoData ? (
+            <div style={{ padding:'20px 0', textAlign:'center', color:'#3d5570', fontSize:12 }}>Yükleniyor…</div>
+          ) : cryptoData.gainers?.length === 0 ? (
+            <div style={{ padding:'20px 0', textAlign:'center', color:'#3d5570', fontSize:12 }}>Veri yok</div>
+          ) : (
+            cryptoData.gainers?.map((coin: any, i: number) => (
+              <AltRow key={coin.id} coin={coin} rank={i + 1} />
+            ))
+          )}
+        </div>
+      </div>
+
       {/* Controls */}
       <div className="metric-card">
         <div className="flex items-center gap-2 mb-3">
