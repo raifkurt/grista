@@ -21,13 +21,30 @@ const EMTIA_META: Record<string, { label: string; icon: string; color: string; u
   'NG=F':     { label: 'Doğal Gaz',    icon: '🔥', color: '#F97316', unit: '$/mmBtu' },
   'XU100.IS': { label: 'BIST 100',     icon: '📊', color: '#8B5CF6', unit: 'puan'    },
 };
+// Statik fallback — API başarısız olursa
+const EMTIA_FALLBACK = [
+  { symbol:'GC=F',     price:3162.40, changePct:0.32  },
+  { symbol:'SI=F',     price:33.18,   changePct:0.54  },
+  { symbol:'BZ=F',     price:71.85,   changePct:-0.28 },
+  { symbol:'NG=F',     price:3.412,   changePct:-1.14 },
+  { symbol:'XU100.IS', price:9821.4,  changePct:0.78  },
+];
 function EmtiaModulu() {
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isFallback, setIsFallback] = useState(false);
   useEffect(() => {
     fetch(`/api/commodities?_=${Date.now()}`, { cache: 'no-store' })
-      .then(r => r.ok ? r.json() : []).catch(() => [])
-      .then(d => { setData(Array.isArray(d) ? d : []); setLoading(false); });
+      .then(r => r.ok ? r.json() : null).catch(() => null)
+      .then(d => {
+        if (Array.isArray(d) && d.length > 0) {
+          setData(d);
+        } else {
+          setData(EMTIA_FALLBACK);
+          setIsFallback(true);
+        }
+        setLoading(false);
+      });
   }, []);
   return (
     <div className="metric-card">

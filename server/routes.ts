@@ -612,18 +612,31 @@ export async function registerRoutes(_httpServer: any, app: Express): Promise<an
     try {
       if (req.query.force === '1') delete CACHE['commodities'];
       const data = await cached('commodities', 5 * 60_000, async () => {
-        const ctrl = new AbortController(); setTimeout(() => ctrl.abort(), 10_000);
-        const syms = ['GC=F','BZ=F','SI=F','NG=F','XU100.IS'].join(',');
-        const r = await fetch(
-          `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${syms}`,
-          { signal: ctrl.signal, headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36' } }
-        );
-        const d = await r.json();
-        return (d.quoteResponse?.result ?? []).map((q: any) => ({
-          symbol: q.symbol, name: q.shortName || q.longName || q.symbol,
-          price: q.regularMarketPrice, changePct: q.regularMarketChangePercent,
-          currency: q.currency ?? 'USD',
-        }));
+        const syms = ['GC=F','SI=F','BZ=F','NG=F','XU100.IS'].join(',');
+        const urls = [
+          `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${syms}&fields=regularMarketPrice,regularMarketChangePercent,shortName,currency`,
+          `https://query2.finance.yahoo.com/v7/finance/quote?symbols=${syms}&fields=regularMarketPrice,regularMarketChangePercent,shortName,currency`,
+        ];
+        for (const url of urls) {
+          try {
+            const ctrl = new AbortController(); setTimeout(() => ctrl.abort(), 8_000);
+            const r = await fetch(url, { signal: ctrl.signal, headers: {
+              'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+              'Accept': 'application/json',
+              'Accept-Language': 'en-US,en;q=0.9',
+            }});
+            if (!r.ok) continue;
+            const d = await r.json();
+            const results = d.quoteResponse?.result ?? [];
+            if (results.length === 0) continue;
+            return results.map((q: any) => ({
+              symbol: q.symbol, name: q.shortName || q.longName || q.symbol,
+              price: q.regularMarketPrice, changePct: q.regularMarketChangePercent,
+              currency: q.currency ?? 'USD',
+            }));
+          } catch { continue; }
+        }
+        return []; // Her iki URL de başarısız
       });
       res.json(data);
     } catch (err: any) { res.status(500).json({ error: err.message }); }
