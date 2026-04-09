@@ -894,6 +894,297 @@ function KapsamliEkonomik() {
 }
 
 
+
+/* ── Faiz Oranları Tarihi ────────────────────────────────────────── */
+const FAIZ_TARIHI = [
+  {tarih:"Oca'23",tcmb:8.5,ecb:2.5},{tarih:"Mar'23",tcmb:8.5,ecb:3.5},
+  {tarih:"May'23",tcmb:8.5,ecb:3.75},{tarih:"Haz'23",tcmb:15,ecb:4.0},
+  {tarih:"Ağu'23",tcmb:25,ecb:4.25},{tarih:"Eyl'23",tcmb:30,ecb:4.5},
+  {tarih:"Kas'23",tcmb:40,ecb:4.5},{tarih:"Oca'24",tcmb:45,ecb:4.5},
+  {tarih:"Mar'24",tcmb:50,ecb:4.5},{tarih:"Haz'24",tcmb:50,ecb:4.0},
+  {tarih:"Eyl'24",tcmb:50,ecb:3.5},{tarih:"Ara'24",tcmb:47.5,ecb:3.0},
+  {tarih:"Oca'25",tcmb:45,ecb:2.75},{tarih:"Mar'25",tcmb:42.5,ecb:2.5},
+  {tarih:"Haz'25",tcmb:40,ecb:2.25},{tarih:"Eyl'25",tcmb:38,ecb:2.0},
+  {tarih:"Oca'26",tcmb:37.5,ecb:2.0},{tarih:"Mar'26",tcmb:37,ecb:2.0},
+];
+function FaizTarihi() {
+  const maxV = Math.max(...FAIZ_TARIHI.map(d=>d.tcmb));
+  const H=80, W=100, n=FAIZ_TARIHI.length;
+  const tcmbPath = FAIZ_TARIHI.map((d,i)=>`${i===0?"M":"L"}${(i/(n-1))*W},${H-((d.tcmb/maxV)*H)}`).join(" ");
+  const ecbPath  = FAIZ_TARIHI.map((d,i)=>`${i===0?"M":"L"}${(i/(n-1))*W},${H-((d.ecb/maxV)*H)}`).join(" ");
+  const last = FAIZ_TARIHI[FAIZ_TARIHI.length-1];
+  return (
+    <div className="metric-card">
+      <div className="flex items-center gap-2 mb-2">
+        <Landmark className="w-4 h-4 text-amber-400"/>
+        <span className="text-sm font-semibold">Merkez Bankası Faiz Tarihi — TCMB vs ECB</span>
+      </div>
+      <div className="flex gap-3 mb-3">
+        <div className="flex-1 p-2 rounded-xl text-center" style={{background:"hsl(222 47% 5%)",border:"1px solid #ef444430"}}>
+          <div className="text-xs text-muted-foreground">🇹🇷 TCMB (Mart 2026)</div>
+          <div className="text-2xl font-bold font-mono text-red-400">%{last.tcmb}</div>
+          <div className="text-xs text-muted-foreground">Zirve: %50 (Mar-Eyl 2024)</div>
+        </div>
+        <div className="flex-1 p-2 rounded-xl text-center" style={{background:"hsl(222 47% 5%)",border:"1px solid #3b82f630"}}>
+          <div className="text-xs text-muted-foreground">🇬🇷 ECB (Mart 2026)</div>
+          <div className="text-2xl font-bold font-mono text-blue-400">%{last.ecb}</div>
+          <div className="text-xs text-muted-foreground">Zirve: %4.5 (Ağu 2023)</div>
+        </div>
+        <div className="flex-1 p-2 rounded-xl text-center" style={{background:"hsl(222 47% 5%)",border:"1px solid #10b98130"}}>
+          <div className="text-xs text-muted-foreground">Fark</div>
+          <div className="text-2xl font-bold font-mono text-emerald-400">%{(last.tcmb-last.ecb).toFixed(1)}</div>
+          <div className="text-xs text-muted-foreground">TR yüksek faiz primi</div>
+        </div>
+      </div>
+      <svg viewBox={`0 0 ${W} ${H}`} style={{width:"100%",height:H,display:"block"}} preserveAspectRatio="none">
+        <path d={tcmbPath} fill="none" stroke="#ef4444" strokeWidth="1.5"/>
+        <path d={ecbPath}  fill="none" stroke="#3b82f6" strokeWidth="1.5"/>
+      </svg>
+      <div className="flex justify-between text-xs font-mono text-muted-foreground mt-1">
+        <span>Oca 2023</span><span>Ort.</span><span>Mar 2026</span>
+      </div>
+      <div className="flex gap-4 mt-2 text-xs">
+        <span className="flex items-center gap-1"><span className="w-3 h-0.5 bg-red-400 inline-block"/> TCMB</span>
+        <span className="flex items-center gap-1"><span className="w-3 h-0.5 bg-blue-400 inline-block"/> ECB</span>
+      </div>
+    </div>
+  );
+}
+
+/* ── €250K Yatırım Senaryosu ─────────────────────────────────────── */
+const SENARYO = {
+  atina:{
+    baslik:"Atina — Pangrati / Kypseli",flag:"🇬🇷",color:"#1d63ed",
+    yatirim:"€250.000",alinanM2:"125 m²",aidat:"€120/ay",
+    kiraAylik:"€950",kiraYillik:"€11.400",kiraGetiri:"%4.6",
+    degerArtis:"Yıllık +%8-12",sermaye5Yil:"€370.000-€440.000",
+    altinVize:"✅ Schengen ikamet hakkı",vergi:"Kira geliri %15",
+    artı:["Schengen vizesi","EUR bazlı getiri","AB hukuku","Turizm talebi"],
+    eksi:["Yüksek tapu maliyeti","Uzaktan yönetim","Dil engeli"],
+  },
+  istanbul:{
+    baslik:"İstanbul — Kadıköy / Ataşehir",flag:"🇹🇷",color:"#ef4444",
+    yatirim:"₺11.000.000 (~€250K)",alinanM2:"47 m²",aidat:"₺3.500/ay",
+    kiraAylik:"₺42.000",kiraYillik:"₺504.000",kiraGetiri:"%4.6",
+    degerArtis:"Yıllık +%25-35",sermaye5Yil:"₺30M-₺40M (USD değeri değişken)",
+    altinVize:"❌ Yok",vergi:"Kira geliri %15-35",
+    artı:["TRY bazlı yüksek artış","Yerel piyasa bilgisi","Hukuki kolaylık"],
+    eksi:["TRY değer kaybı riski","Dolar bazında getiri belirsiz","Yüksek enflasyon"],
+  },
+};
+function YatirimSenaryosu() {
+  return (
+    <div className="metric-card">
+      <div className="flex items-center gap-2 mb-3">
+        <Building2 className="w-4 h-4 text-purple-400"/>
+        <span className="text-sm font-semibold">€250.000 Yatırım Senaryosu — Atina vs İstanbul</span>
+      </div>
+      <div className="grid grid-cols-2 gap-4">
+        {[SENARYO.atina, SENARYO.istanbul].map(c => (
+          <div key={c.flag} className="p-3 rounded-xl" style={{background:"hsl(222 47% 5%)",border:`1px solid ${c.color}30`}}>
+            <div className="text-xs font-bold mb-2" style={{color:c.color}}>{c.flag} {c.baslik}</div>
+            {[
+              {l:"Yatırım",v:c.yatirim},{l:"Alınan m²",v:c.alinanM2},
+              {l:"Aylık Kira",v:c.kiraAylik},{l:"Kira Getiri",v:c.kiraGetiri},
+              {l:"Değer Artışı",v:c.degerArtis},{l:"5 Yıl Sonra",v:c.sermaye5Yil},
+              {l:"Altın Vize",v:c.altinVize},
+            ].map(row => (
+              <div key={row.l} className="flex items-start justify-between py-0.5 gap-1" style={{borderBottom:"1px solid rgba(255,255,255,.04)"}}>
+                <span className="text-xs text-muted-foreground shrink-0">{row.l}</span>
+                <span className="text-xs font-mono font-semibold text-right" style={{color:c.color,fontSize:10}}>{row.v}</span>
+              </div>
+            ))}
+            <div className="mt-2">
+              <div className="text-xs font-semibold text-emerald-400 mb-1">Avantajlar</div>
+              {c.artı.map(a=><div key={a} className="text-xs text-muted-foreground">+ {a}</div>)}
+              <div className="text-xs font-semibold text-red-400 mt-1 mb-1">Riskler</div>
+              {c.eksi.map(e=><div key={e} className="text-xs text-muted-foreground">- {e}</div>)}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ── Borsalar Performansı ────────────────────────────────────────── */
+const BORSA_5YIL = [
+  {yil:"2020",bist:26,athex:2,usd:-30},
+  {yil:"2021",bist:67,athex:18,usd:19},
+  {yil:"2022",bist:197,athex:8,usd:-34},
+  {yil:"2023",bist:85,athex:40,usd:20},
+  {yil:"2024",bist:29,athex:18,usd:25},
+  {yil:"5Y Toplam (TRY/EUR)",bist:1820,athex:122,usd:42},
+];
+function BorsaPerformans() {
+  const maxV = 150;
+  return (
+    <div className="metric-card">
+      <div className="flex items-center gap-2 mb-2">
+        <TrendingUp className="w-4 h-4 text-emerald-400"/>
+        <span className="text-sm font-semibold">Borsa Performansı — BIST 100 vs ATHEX vs S&P 500</span>
+      </div>
+      <div className="text-xs text-muted-foreground mb-3">Yıllık getiri (yerel para birimi cinsinden)</div>
+      <div className="space-y-2">
+        {BORSA_5YIL.slice(0,5).map(r => (
+          <div key={r.yil}>
+            <div className="flex justify-between text-xs mb-1">
+              <span className="font-semibold text-muted-foreground">{r.yil}</span>
+              <div className="flex gap-3">
+                <span style={{color:"#ef4444",minWidth:52,textAlign:"right"}} className="font-mono text-xs">BIST {r.bist>0?"+":""}{r.bist}%</span>
+                <span style={{color:"#1d63ed",minWidth:62,textAlign:"right"}} className="font-mono text-xs">ATHEX {r.athex>0?"+":""}{r.athex}%</span>
+                <span style={{color:"#10b981",minWidth:58,textAlign:"right"}} className="font-mono text-xs">S&P {r.usd>0?"+":""}{r.usd}%</span>
+              </div>
+            </div>
+            <div className="flex gap-1 h-3">
+              <div className="flex-1 h-3 rounded-sm overflow-hidden" style={{background:"hsl(222 47% 8%)"}}>
+                <div style={{width:`${Math.min(100,(Math.abs(r.bist)/maxV)*100)}%`,height:"100%",background:r.bist>=0?"#ef4444":"#374151"}}/>
+              </div>
+              <div className="flex-1 h-3 rounded-sm overflow-hidden" style={{background:"hsl(222 47% 8%)"}}>
+                <div style={{width:`${Math.min(100,(Math.abs(r.athex)/maxV)*100)}%`,height:"100%",background:r.athex>=0?"#1d63ed":"#374151"}}/>
+              </div>
+              <div className="flex-1 h-3 rounded-sm overflow-hidden" style={{background:"hsl(222 47% 8%)"}}>
+                <div style={{width:`${Math.min(100,(Math.abs(r.usd)/maxV)*100)}%`,height:"100%",background:r.usd>=0?"#10b981":"#374151"}}/>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="mt-3 p-2 rounded-xl" style={{background:"hsl(222 47% 5%)",border:"1px solid rgba(255,255,255,.06)"}}>
+        <div className="text-xs font-bold text-muted-foreground mb-1">5 Yıllık Kümülatif (2020-2024)</div>
+        <div className="flex gap-3">
+          <div className="text-center flex-1">
+            <div className="text-sm font-bold font-mono text-red-400">+%1820</div>
+            <div className="text-xs text-muted-foreground">BIST (TRY)</div>
+            <div className="text-xs text-red-300" style={{fontSize:9}}>~+%60 (USD bazında)</div>
+          </div>
+          <div className="text-center flex-1">
+            <div className="text-sm font-bold font-mono text-blue-400">+%122</div>
+            <div className="text-xs text-muted-foreground">ATHEX (EUR)</div>
+            <div className="text-xs text-blue-300" style={{fontSize:9}}>~+%98 (USD bazında)</div>
+          </div>
+          <div className="text-center flex-1">
+            <div className="text-sm font-bold font-mono text-emerald-400">+%85</div>
+            <div className="text-xs text-muted-foreground">S&P 500 (USD)</div>
+            <div className="text-xs text-emerald-300" style={{fontSize:9}}>Global benchmark</div>
+          </div>
+        </div>
+      </div>
+      <div className="text-xs text-muted-foreground mt-2" style={{fontSize:10}}>⚠️ BIST TRY bazında çok yüksek görünse de TRY değer kaybı nedeniyle USD bazında ATHEX gerisinde kaldı.</div>
+    </div>
+  );
+}
+
+/* ── Bankacılık Sektörü ──────────────────────────────────────────── */
+const TR_BANKALAR = [
+  {isim:"Ziraat Bankası",     aktif:"$162B",sermaye:"%18.2",npl:"%2.1",puan:4},
+  {isim:"Türkiye İş Bankası", aktif:"$141B",sermaye:"%16.8",npl:"%2.4",puan:4},
+  {isim:"Garanti BBVA",       aktif:"$138B",sermaye:"%17.5",npl:"%2.2",puan:5},
+  {isim:"Akbank",             aktif:"$115B",sermaye:"%18.9",npl:"%1.9",puan:4},
+];
+const GR_BANKALAR = [
+  {isim:"National Bank of GR",aktif:"€71B", sermaye:"%18.5",npl:"%3.8",puan:4},
+  {isim:"Eurobank",            aktif:"€68B", sermaye:"%17.2",npl:"%3.5",puan:4},
+  {isim:"Piraeus Bank",        aktif:"€64B", sermaye:"%16.8",npl:"%4.1",puan:3},
+  {isim:"Alpha Bank",          aktif:"€58B", sermaye:"%16.5",npl:"%4.4",puan:3},
+];
+function BankacilikSektoru() {
+  return (
+    <div className="metric-card">
+      <div className="flex items-center gap-2 mb-3">
+        <Landmark className="w-4 h-4 text-blue-400"/>
+        <span className="text-sm font-semibold">Bankacılık Sektörü — TR vs GR Büyük Bankalar</span>
+      </div>
+      <div className="grid grid-cols-2 gap-4">
+        {[{flag:"🇹🇷",color:"#ef4444",banks:TR_BANKALAR},{flag:"🇬🇷",color:"#1d63ed",banks:GR_BANKALAR}].map(g=>(
+          <div key={g.flag}>
+            <div className="text-xs font-bold mb-2" style={{color:g.color}}>{g.flag} Top 4 Banka</div>
+            {g.banks.map(b=>(
+              <div key={b.isim} className="mb-2 p-2 rounded-lg" style={{background:"hsl(222 47% 5%)"}}>
+                <div className="text-xs font-semibold mb-1 truncate">{b.isim}</div>
+                <div className="grid grid-cols-3 gap-1">
+                  <div className="text-center">
+                    <div className="font-mono font-bold" style={{fontSize:10,color:g.color}}>{b.aktif}</div>
+                    <div className="text-muted-foreground" style={{fontSize:8}}>Aktif</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="font-mono font-bold" style={{fontSize:10,color:"#10b981"}}>{b.sermaye}</div>
+                    <div className="text-muted-foreground" style={{fontSize:8}}>Sermaye</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="font-mono font-bold" style={{fontSize:10,color:parseFloat(b.npl)>3?"#f59e0b":"#10b981"}}>{b.npl}</div>
+                    <div className="text-muted-foreground" style={{fontSize:8}}>NPL</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+            <div className="text-xs text-muted-foreground" style={{fontSize:9}}>
+              {g.flag==="🇹🇷"?"BDDK denetimi · Basel III uyumlu":"SSM denetimi · ECB gözetiminde"}
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="text-xs text-muted-foreground mt-2 p-2 rounded-lg" style={{background:"hsl(222 47% 5%)",fontSize:10}}>
+        NPL (Takipteki Kredi Oranı): Düşük daha iyi. Sermaye Yeterliliği: Yüksek daha güvenli.
+      </div>
+    </div>
+  );
+}
+
+/* ── Risk & Yatırım Ortamı ───────────────────────────────────────── */
+const RISK_DATA = [
+  {kriter:"Ekonomik Özgürlük (Heritage)", trPuan:54,  grPuan:61,  maxP:100, birimi:"/ 100", not:"Yüksek = daha özgür piyasa"},
+  {kriter:"Yolsuzluk Algı (TI)",          trPuan:36,  grPuan:48,  maxP:100, birimi:"/ 100", not:"Yüksek = daha temiz"},
+  {kriter:"İş Kurma Kolaylığı (WB)",       trPuan:72,  grPuan:62,  maxP:100, birimi:"/ 100", not:"Yüksek = daha kolay"},
+  {kriter:"Siyasi İstikrar",              trPuan:35,  grPuan:62,  maxP:100, birimi:"/ 100", not:"WorldBank governance"},
+  {kriter:"Ülke Risk Skoru (OECD)",        trPuan:74,  grPuan:42,  maxP:100, birimi:"/ 100", not:"Yüksek = daha riskli"},
+  {kriter:"Mülkiyet Hakları Endeksi",     trPuan:51,  grPuan:63,  maxP:100, birimi:"/ 100", not:"Property Rights Alliance"},
+];
+function RiskYatirim() {
+  return (
+    <div className="metric-card">
+      <div className="flex items-center gap-2 mb-3">
+        <Shield className="w-4 h-4 text-purple-400"/>
+        <span className="text-sm font-semibold">Yatırım Riski & Ortam Puanları — TR vs GR</span>
+      </div>
+      <div className="text-xs text-muted-foreground mb-3">Uluslararası endeksler · 100 üzerinden</div>
+      <div className="space-y-3">
+        {RISK_DATA.map(r=>{
+          const trBetter = r.kriter.includes("Risk") ? r.trPuan < r.grPuan : r.trPuan > r.grPuan;
+          const grBetter = r.kriter.includes("Risk") ? r.grPuan < r.trPuan : r.grPuan > r.trPuan;
+          return (
+            <div key={r.kriter}>
+              <div className="flex justify-between text-xs mb-1">
+                <span className="text-muted-foreground font-semibold">{r.kriter}</span>
+                <span className="text-muted-foreground" style={{fontSize:9}}>{r.not}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-10 text-xs font-bold font-mono text-right" style={{color:trBetter?"#10b981":"#ef4444"}}>🇹🇷 {r.trPuan}</div>
+                <div className="flex-1 h-4 rounded-full overflow-hidden relative" style={{background:"hsl(222 47% 8%)"}}>
+                  <div className="absolute left-0 top-0 h-4 rounded-l-full" style={{width:`${(r.trPuan/r.maxP)*50}%`,background:"#ef4444",opacity:0.7}}/>
+                  <div className="absolute right-0 top-0 h-4 rounded-r-full" style={{width:`${(r.grPuan/r.maxP)*50}%`,background:"#1d63ed",opacity:0.7}}/>
+                </div>
+                <div className="w-10 text-xs font-bold font-mono" style={{color:grBetter?"#10b981":"#ef4444"}}>🇬🇷 {r.grPuan}</div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <div className="grid grid-cols-2 gap-3 mt-3">
+        <div className="p-2 rounded-xl text-center" style={{background:"hsl(222 47% 5%)"}}>
+          <div className="text-xs text-muted-foreground mb-1">🇹🇷 TR Avantajları</div>
+          <div className="text-xs">Büyük iç pazar · Genç nüfus · Coğrafi konum · İş kurma hızı</div>
+        </div>
+        <div className="p-2 rounded-xl text-center" style={{background:"hsl(222 47% 5%)"}}>
+          <div className="text-xs text-muted-foreground mb-1">🇬🇷 GR Avantajları</div>
+          <div className="text-xs">AB üyeliği · EUR istikrarı · Hukuk güvenliği · Schengen erişimi</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
 /* ════════════════════════════════════════════════════════════════════
    ANA DASHBOARD SAYFASI
 ════════════════════════════════════════════════════════════════════ */
@@ -1130,6 +1421,11 @@ export default function DashboardPage() {
       <UcretYasam />
       <DisTicaret />
       <KapsamliEkonomik />
+      <FaizTarihi />
+      <YatirimSenaryosu />
+      <BorsaPerformans />
+      <BankacilikSektoru />
+      <RiskYatirim />
 
     </div>
   );
