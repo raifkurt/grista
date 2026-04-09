@@ -65,7 +65,8 @@ const CRYPTO_FALLBACK: LiveCrypto = {
 
 async function apiFetch<T>(path: string, fallback: T): Promise<T> {
   try {
-    const res = await fetch(path, { cache: 'no-store' });
+    const sep = path.includes('?') ? '&' : '?';
+    const res = await fetch(`${path}${sep}_=${Date.now()}`, { cache: 'no-store' });
     if (!res.ok) return fallback;
     return await res.json() as T;
   } catch {

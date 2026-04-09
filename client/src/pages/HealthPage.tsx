@@ -109,7 +109,7 @@ export default function HealthPage() {
   const load = useCallback(async () => {
     setBusy(true);
     try {
-      const res = await fetch('/api/news/healthgood', { cache: 'no-store' });
+      const res = await fetch(`/api/news/healthgood?_=${Date.now()}`, { cache: 'no-store' });
       if (res.ok) {
         const d = await res.json();
         if (Array.isArray(d) && d.length) {
