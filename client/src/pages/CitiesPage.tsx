@@ -142,8 +142,9 @@ export default function CitiesPage() {
     try {
       const d = await fetchCitiesNews();
       if (d.istanbul?.length || d.athens?.length) {
-        setIstanbul(d.istanbul ?? []);
-        setAthens(d.athens ?? []);
+        const srt = (arr: NewsItem[]) => [...arr].sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime());
+        setIstanbul(srt(d.istanbul ?? []));
+        setAthens(srt(d.athens ?? []));
         setLastUpd(new Date());
       }
     } catch {}
@@ -153,6 +154,14 @@ export default function CitiesPage() {
   }, []);
 
   useEffect(() => { load(); }, [load]);
+
+  /* Pull-to-refresh */
+  useEffect(() => {
+    const handler = () => load();
+    window.addEventListener('ptr', handler);
+    return () => window.removeEventListener('ptr', handler);
+  }, [load]);
+
   useEffect(() => {
     const t = setInterval(() => {
       cdRef.current -= 1;

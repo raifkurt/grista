@@ -112,7 +112,11 @@ export default function HealthPage() {
       const res = await fetch('/api/news/healthgood');
       if (res.ok) {
         const d = await res.json();
-        if (Array.isArray(d) && d.length) { setNews(d); setLastUpd(new Date()); }
+        if (Array.isArray(d) && d.length) {
+          const sorted = [...d].sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime());
+          setNews(sorted);
+          setLastUpd(new Date());
+        }
       }
     } catch {}
     setLoading(false);
@@ -121,6 +125,14 @@ export default function HealthPage() {
   }, []);
 
   useEffect(() => { load(); }, [load]);
+
+  /* Pull-to-refresh */
+  useEffect(() => {
+    const handler = () => load();
+    window.addEventListener('ptr', handler);
+    return () => window.removeEventListener('ptr', handler);
+  }, [load]);
+
   useEffect(() => {
     const t = setInterval(() => {
       cdRef.current -= 1;

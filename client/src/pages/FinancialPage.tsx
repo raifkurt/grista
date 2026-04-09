@@ -147,7 +147,11 @@ export default function FinancialPage() {
     setNewsBusy(true);
     try {
       const items = await fetchNewsByCategory('finans');
-      if (items.length) { setFinNews(items); setNewsLastUpd(new Date()); }
+      if (items.length) {
+      const sorted = [...items].sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime());
+      setFinNews(sorted);
+      setNewsLastUpd(new Date());
+    }
     } catch {}
     setNewsLoading(false);
     setNewsBusy(false);
@@ -155,6 +159,14 @@ export default function FinancialPage() {
   }, []);
 
   useEffect(() => { loadFinNews(); }, [loadFinNews]);
+
+  /* Pull-to-refresh */
+  useEffect(() => {
+    const handler = () => loadFinNews();
+    window.addEventListener('ptr', handler);
+    return () => window.removeEventListener('ptr', handler);
+  }, [loadFinNews]);
+
   useEffect(() => {
     const t = setInterval(() => {
       newsCdRef.current -= 1;
