@@ -435,36 +435,52 @@ export async function registerRoutes(_httpServer: any, app: Express): Promise<an
   });
 
 
-  // ── Kripto Detay: BTC+ETH + Top 20 Altcoin ───────────────────────────────
+  // ── Kripto Detay — Binance API (rate limit yok, ücretsiz) ────────────────
   app.get('/api/cryptodetail', async (req, res) => {
     try {
       if (req.query.force === '1') delete CACHE['cryptodetail'];
-      const data = await cached('cryptodetail', 10 * 60_000, async () => {
-        const hdr = { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36' };
-        const EXCLUDE = new Set(['tether','usd-coin','binance-usd','dai','true-usd','ethena-usde',
-          'frax','usdd','first-digital-usd','paypal-usd','mountain-protocol-usdm',
-          'liquity-usd','fei-usd','gemini-dollar','nusd','celo-dollar','bitcoin','ethereum']);
+      const data = await cached('cryptodetail', 5 * 60_000, async () => {
+        const NAMES: Record<string,string> = {
+          BTC:'Bitcoin',ETH:'Ethereum',BNB:'BNB',SOL:'Solana',XRP:'XRP',ADA:'Cardano',
+          DOGE:'Dogecoin',TRX:'TRON',AVAX:'Avalanche',SHIB:'Shiba Inu',DOT:'Polkadot',
+          LINK:'Chainlink',LTC:'Litecoin',UNI:'Uniswap',ATOM:'Cosmos',OP:'Optimism',
+          ARB:'Arbitrum',APT:'Aptos',NEAR:'NEAR Protocol',SUI:'Sui',HBAR:'Hedera',
+          FIL:'Filecoin',FET:'Fetch.ai',RNDR:'Render',WLD:'Worldcoin',SEI:'Sei',
+          TIA:'Celestia',PEPE:'Pepe',BONK:'Bonk',WIF:'dogwifhat',TON:'Toncoin',
+          NOT:'Notcoin',FLOKI:'FLOKI',PENDLE:'Pendle',ENA:'Ethena',JUP:'Jupiter',
+          CAKE:'PancakeSwap',RUNE:'THORChain',VET:'VeChain',THETA:'Theta',
+          ALGO:'Algorand',FTM:'Fantom',SAND:'The Sandbox',MANA:'Decentraland',
+          AXS:'Axie Infinity',GMT:'StepN',APE:'ApeCoin',CHZ:'Chiliz',FLOW:'Flow',
+          GRT:'The Graph',AAVE:'Aave',MKR:'Maker',EGLD:'MultiversX',
+        };
+        const logo = (sym: string) => `https://assets.coincap.io/assets/icons/${sym.toLowerCase()}@2x.png`;
 
-        // BTC + ETH — ayrı try/catch
-        let btc: any = null, eth: any = null;
-        try {
-          const ctrl1 = new AbortController(); setTimeout(() => ctrl1.abort(), 10_000);
-          const r1 = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin,ethereum&order=market_cap_desc&per_page=2&page=1&sparkline=false&price_change_percentage=24h', { signal: ctrl1.signal, headers: hdr });
-          const majors = await r1.json();
-          const fmt = (c: any) => ({ id:c.id, symbol:c.symbol.toUpperCase(), name:c.name, price:c.current_price, change24h:c.price_change_percentage_24h, marketCap:c.market_cap, image:c.image, high24h:c.high_24h, low24h:c.low_24h, volume:c.total_volume });
-          btc = majors.find((c:any)=>c.id==='bitcoin') ? fmt(majors.find((c:any)=>c.id==='bitcoin')) : null;
-          eth = majors.find((c:any)=>c.id==='ethereum') ? fmt(majors.find((c:any)=>c.id==='ethereum')) : null;
-        } catch { /* BTC/ETH çekilemedi */ }
+        const STABLE = new Set(['USDT','USDC','BUSD','DAI','TUSD','FDUSD','USDE','USDS','USDP','SUSD','GUSD','FRAX','LUSD']);
 
-        // Altcoin gainers — ayrı try/catch
-        let gainers: any[] = [];
-        try {
-          const ctrl2 = new AbortController(); setTimeout(() => ctrl2.abort(), 10_000);
-          const r2 = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=price_change_percentage_24h_desc&per_page=100&page=1&sparkline=false', { signal: ctrl2.signal, headers: hdr });
-          const raw = await r2.json();
-          const fmt2 = (c: any) => ({ id:c.id, symbol:c.symbol.toUpperCase(), name:c.name, price:c.current_price, change24h:c.price_change_percentage_24h, marketCap:c.market_cap, image:c.image, volume:c.total_volume });
-          gainers = raw.filter((c:any)=>!EXCLUDE.has(c.id) && Math.abs((c.current_price??1)-1)>0.05).slice(0,20).map(fmt2);
-        } catch { /* altcoin çekilemedi */ }
+        const ctrl = new AbortController(); setTimeout(() => ctrl.abort(), 12_000);
+        const r = await fetch('https://api.binance.com/api/v3/ticker/24hr', { signal: ctrl.signal });
+        const all: any[] = await r.json();
+
+        const usdt = all.filter((t:any) => t.symbol.endsWith('USDT'));
+        const fmt = (t: any) => {
+          const sym = t.symbol.replace('USDT','');
+          return {
+            id: sym.toLowerCase(), symbol: sym, name: NAMES[sym] ?? sym,
+            price: parseFloat(t.lastPrice), change24h: parseFloat(t.priceChangePercent),
+            high24h: parseFloat(t.highPrice), low24h: parseFloat(t.lowPrice),
+            volume: parseFloat(t.quoteVolume), image: logo(sym),
+          };
+        };
+
+        const btcT = usdt.find((t:any)=>t.symbol==='BTCUSDT');
+        const ethT = usdt.find((t:any)=>t.symbol==='ETHUSDT');
+        const btc = btcT ? fmt(btcT) : null;
+        const eth = ethT ? fmt(ethT) : null;
+
+        const gainers = usdt
+          .filter((t:any)=>{ const sym=t.symbol.replace('USDT',''); return !STABLE.has(sym) && sym!=='BTC' && sym!=='ETH'; })
+          .sort((a:any,b:any)=>parseFloat(b.priceChangePercent)-parseFloat(a.priceChangePercent))
+          .slice(0,20).map(fmt);
 
         return { btc, eth, gainers, updatedAt: new Date().toISOString() };
       });
