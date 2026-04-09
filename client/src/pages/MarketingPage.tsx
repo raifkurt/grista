@@ -913,6 +913,7 @@ export default function MarketingPage() {
           </div>
         </div>
       )}
+      <PazarlamaModulleri />
     </div>
   );
 }
