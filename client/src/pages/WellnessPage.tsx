@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import NewsStrip from '@/components/ui/NewsStrip';
+import { fetchNewsByCategory, NewsItem } from '@/lib/data/liveData';
 import { SUPPLEMENT_DATABASE, pkModel, computeInteractionMatrix, generateFitnessData } from '@/lib/data/wellnessData';
-import { Heart, Clock, AlertTriangle, CheckCircle2, TrendingUp } from 'lucide-react';
+import { Heart, Clock, AlertTriangle, CheckCircle2, TrendingUp , RefreshCw } from 'lucide-react';
 
 export default function WellnessPage() {
   const [selected, setSelected] = useState<number[]>([0, 1, 2, 3, 4]);
@@ -212,8 +212,8 @@ export default function WellnessPage() {
         </div>
       </div>
 
-      {/* Sağlık Haberleri */}
-      <NewsStrip category="saglik" limit={6} />
+      {/* Sağlık Haberleri — büyük kartlar */}
+      <HealthNewsCards />
     </div>
   );
 }
@@ -257,5 +257,113 @@ function MiniSparkline({ data, color, height }: { data: number[]; color: string;
     <svg viewBox={`0 0 100 ${height}`} className="w-full" style={{ height, display: 'block', marginTop: 4 }} preserveAspectRatio="none">
       <path d={path} fill="none" stroke={color} strokeWidth="1" />
     </svg>
+  );
+}
+
+/* ── Sağlık Haberleri Büyük Kartlar ─────────────────────────────── */
+function HealthCard({ item, i }: { item: NewsItem; i: number }) {
+  const [show, setShow] = useState(false);
+  const [imgErr, setImgErr] = useState(false);
+  const delay = Math.min(i * 40, 400);
+
+  useEffect(() => {
+    const t = setTimeout(() => setShow(true), delay);
+    return () => clearTimeout(t);
+  }, [delay]);
+
+  const imgSrc = item.image || (() => {
+    const kw = ['health,wellness,nature','fitness,yoga,sport','food,nutrition,fruit','medical,science,lab','ocean,calm,blue'];
+    const h = item.id.split('').reduce((a,c)=>a+c.charCodeAt(0),0);
+    return `https://loremflickr.com/800/500/${kw[h%kw.length]}?lock=${h%500}`;
+  })();
+
+  const ago = (iso: string) => {
+    const s = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
+    if (s < 60) return `${s}sn`;
+    if (s < 3600) return `${Math.floor(s/60)}dk`;
+    if (s < 86400) return `${Math.floor(s/3600)}sa`;
+    return `${Math.floor(s/86400)}g`;
+  };
+
+  return (
+    <a
+      href={item.link}
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{
+        display: 'block', position: 'relative', height: 240,
+        borderRadius: 14, overflow: 'hidden',
+        border: '1px solid rgba(16,185,129,.18)',
+        textDecoration: 'none', flexShrink: 0,
+        opacity: show ? 1 : 0,
+        transform: show ? 'none' : 'translateY(12px)',
+        transition: `opacity .3s ease ${delay}ms, transform .3s ease ${delay}ms`,
+      }}
+    >
+      {!imgErr
+        ? <img src={imgSrc} alt="" onError={() => setImgErr(true)}
+            style={{ position:'absolute', inset:0, width:'100%', height:'100%', objectFit:'cover' }} />
+        : <div style={{ position:'absolute', inset:0, background:'linear-gradient(135deg, rgba(16,185,129,.1),#05090f)' }} />
+      }
+      <div style={{ position:'absolute', inset:0,
+        background:'linear-gradient(to top, rgba(3,8,20,.97) 0%, rgba(3,8,20,.8) 28%, rgba(3,8,20,.04) 58%, transparent 72%)' }} />
+      <div style={{ position:'absolute', top:0, left:0, right:0, height:2,
+        background:'linear-gradient(to right,#10b981,#34d399)' }} />
+      <div style={{ position:'absolute', bottom:0, left:0, right:0, padding:'10px 12px' }}>
+        <p style={{ margin:'0 0 5px', fontWeight:700, fontSize:14, lineHeight:1.3, color:'#fff' }}>
+          {item.title}
+        </p>
+        <div style={{ display:'flex', justifyContent:'space-between' }}>
+          <span style={{ fontSize:10, color:'rgba(255,255,255,.35)', maxWidth:180, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>
+            {item.source}
+          </span>
+          <span style={{ fontSize:10, color:'rgba(255,255,255,.25)', fontFamily:'monospace' }}>
+            {ago(item.pubDate)}
+          </span>
+        </div>
+      </div>
+    </a>
+  );
+}
+
+function HealthNewsCards() {
+  const [news, setNews] = useState<NewsItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [busy, setBusy] = useState(false);
+
+  const load = useCallback(async () => {
+    setBusy(true);
+    try {
+      const res = await fetch('/api/news/healthgood');
+      if (res.ok) { const d = await res.json(); if (Array.isArray(d)) setNews(d); }
+    } catch {}
+    setLoading(false);
+    setBusy(false);
+  }, []);
+
+  useEffect(() => { load(); }, [load]);
+
+  return (
+    <div style={{ marginTop: 8 }}>
+      <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:12 }}>
+        <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+          <div style={{ width:3, height:16, borderRadius:2, background:'#10b981' }} />
+          <span style={{ fontWeight:600, fontSize:14 }}>Sağlık Haberleri</span>
+          <span style={{ fontSize:10, fontFamily:'monospace', padding:'2px 6px', borderRadius:999,
+            background:'rgba(16,185,129,.1)', color:'#10b981', border:'1px solid rgba(16,185,129,.2)' }}>CANLI</span>
+        </div>
+        <button onClick={load} disabled={busy} style={{ background:'none', border:'none', cursor:'pointer', color:'#4a6080', padding:4 }}>
+          <RefreshCw size={13} style={busy ? { animation:'spin 1s linear infinite' } : {}} />
+        </button>
+      </div>
+      {loading
+        ? [...Array(4)].map((_,k) => (
+            <div key={k} style={{ height:240, borderRadius:14, background:'hsl(222 47% 8%)', opacity:1-k*.15, marginBottom:10, animation:'pulse 1.5s infinite' }} />
+          ))
+        : <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
+            {news.map((item, k) => <HealthCard key={item.id} item={item} i={k} />)}
+          </div>
+      }
+    </div>
   );
 }

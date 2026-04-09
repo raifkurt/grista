@@ -184,7 +184,7 @@ export default function CitiesPage() {
       </div>
 
       {/* Mobil sekme */}
-      <div style={{ display: 'flex', gap: 8, padding: 12, borderBottom: '1px solid #1a2535' }} className="md:hidden">
+      <div className="flex md:hidden gap-2 p-3 border-b border-[#1a2535]">
         {(['istanbul', 'athens'] as const).map((id) => {
           const [flag, lbl, clr] = id === 'istanbul' ? ['🇹🇷', 'İstanbul', '#0BC5EA'] : ['🇬🇷', 'Atina', '#a78bfa'];
           return (
@@ -201,12 +201,12 @@ export default function CitiesPage() {
         })}
       </div>
 
-      {/* Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 24, padding: 16 }} className="cities-grid">
-        <div className={tab === 'istanbul' ? '' : 'hidden md:block'}>
+      {/* Grid — mobilde tek sütun tam genişlik, masaüstünde yan yana */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-3 md:p-4">
+        <div className={tab === 'istanbul' ? 'block' : 'hidden md:block'}>
           <Col city="istanbul" flag="🇹🇷" label="İstanbul" accent="#0BC5EA" items={istanbul} loading={loading} />
         </div>
-        <div className={tab === 'athens' ? '' : 'hidden md:block'}>
+        <div className={tab === 'athens' ? 'block' : 'hidden md:block'}>
           <Col city="athens" flag="🇬🇷" label="Atina" accent="#a78bfa" items={athens} loading={loading} />
         </div>
       </div>
