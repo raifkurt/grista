@@ -112,88 +112,138 @@ async function translate(text: string, from = 'el', to = 'tr'): Promise<string> 
   } catch { return text; }
 }
 
-// ─── Maksimum RSS Kaynakları ──────────────────────────────────────────────────
-// Her şehir için 6-8 farklı arama → 100+ haber
+// ─── RSS Kaynakları ───────────────────────────────────────────────────────────
 
 const FEEDS: Record<string, string[]> = {
 
-  // ── İSTANBUL: Şehrin nabzı ──
+  // ── İSTANBUL (17 kaynak) ──
   istanbul: [
+    // Direkt haber siteleri
+    'https://www.dailysabah.com/rss',
+    'https://www.trtworld.com/rss',
+    'https://www.hurriyetdailynews.com/rss',
+    'https://bianet.org/english/rss.xml',
+    'https://www.middleeasteye.net/tags/turkey/rss.xml',
+    // Google News — Türkçe
     'https://news.google.com/rss/search?q=İstanbul+haber+şehir&hl=tr&gl=TR&ceid=TR:tr',
     'https://news.google.com/rss/search?q=İstanbul+konut+kira+emlak+fiyat&hl=tr&gl=TR&ceid=TR:tr',
     'https://news.google.com/rss/search?q=Beşiktaş+Kadıköy+Şişli+Sarıyer+haber&hl=tr&gl=TR&ceid=TR:tr',
     'https://news.google.com/rss/search?q=İstanbul+inşaat+kentsel+dönüşüm+proje&hl=tr&gl=TR&ceid=TR:tr',
-    'https://news.google.com/rss/search?q=İstanbul+gayrimenkul+yatırım+değer&hl=tr&gl=TR&ceid=TR:tr',
     'https://news.google.com/rss/search?q=İstanbul+metro+ulaşım+altyapı+İBB&hl=tr&gl=TR&ceid=TR:tr',
     'https://news.google.com/rss/search?q=İstanbul+ekonomi+turizm+kültür&hl=tr&gl=TR&ceid=TR:tr',
     'https://news.google.com/rss/search?q=Fatih+Üsküdar+Ataşehir+Bakırköy+haber&hl=tr&gl=TR&ceid=TR:tr',
     'https://news.google.com/rss/search?q=İstanbul+deprem+altyapı+güvenlik&hl=tr&gl=TR&ceid=TR:tr',
     'https://news.google.com/rss/search?q=İstanbul+nüfus+göç+yaşam+maliyet&hl=tr&gl=TR&ceid=TR:tr',
+    // Google News — İngilizce
     'https://news.google.com/rss/search?q=Istanbul+Turkey+news+city&hl=en&gl=TR&ceid=TR:en',
     'https://news.google.com/rss/search?q=Istanbul+real+estate+property+2026&hl=en&gl=TR&ceid=TR:en',
+    'https://news.google.com/rss/search?q=Istanbul+development+investment+urban&hl=en&gl=TR&ceid=TR:en',
   ],
 
-  // ── ATİNA: Şehrin nabzı ──
+  // ── ATİNA (16 kaynak) ──
   athens: [
+    // Direkt haber siteleri
+    'https://www.ekathimerini.com/rss/',
+    'https://greekreporter.com/feed/',
+    'https://www.keeptalkinggreece.com/feed/',
+    'https://greekcitytimes.com/feed/',
+    // Google News — İngilizce
     'https://news.google.com/rss/search?q=Athens+Greece+city+news+2026&hl=en&gl=GR&ceid=GR:en',
     'https://news.google.com/rss/search?q=Athens+real+estate+property+rent+buy&hl=en&gl=GR&ceid=GR:en',
     'https://news.google.com/rss/search?q=Greece+Golden+Visa+property+investment&hl=en&gl=GR&ceid=GR:en',
-    'https://news.google.com/rss/search?q=Αθήνα+ακίνητα+αγορά+κτηματαγορά&hl=el&gl=GR&ceid=GR:el',
     'https://news.google.com/rss/search?q=Kolonaki+Glyfada+Vouliagmeni+property&hl=en&gl=GR&ceid=GR:en',
     'https://news.google.com/rss/search?q=Athens+municipality+city+development&hl=en&gl=GR&ceid=GR:en',
     'https://news.google.com/rss/search?q=Greece+economy+tourism+investment+2026&hl=en&gl=GR&ceid=GR:en',
     'https://news.google.com/rss/search?q=Athens+Piraeus+infrastructure+transport&hl=en&gl=GR&ceid=GR:en',
     'https://news.google.com/rss/search?q=Greece+construction+new+project+development&hl=en&gl=GR&ceid=GR:en',
-    'https://news.google.com/rss/search?q=Ελλάδα+νέα+αθήνα+ακίνητα+οικονομία&hl=el&gl=GR&ceid=GR:el',
     'https://news.google.com/rss/search?q=Athens+cost+of+living+rental+market&hl=en&gl=GR&ceid=GR:en',
     'https://news.google.com/rss/search?q=Greece+expat+living+digital+nomad+2026&hl=en&gl=GR&ceid=GR:en',
+    // Google News — Yunanca
+    'https://news.google.com/rss/search?q=Αθήνα+ακίνητα+αγορά+κτηματαγορά&hl=el&gl=GR&ceid=GR:el',
+    'https://news.google.com/rss/search?q=Ελλάδα+νέα+αθήνα+ακίνητα+οικονομία&hl=el&gl=GR&ceid=GR:el',
   ],
 
-  // ── FİNANS: TR + GR ekonomi ──
+  // ── FİNANS (14 kaynak) ──
   finans: [
+    // Direkt siteler
+    'https://feeds.bbci.co.uk/news/business/rss.xml',
+    'https://feeds.reuters.com/reuters/businessNews',
+    'https://www.cnbc.com/id/10000664/device/rss/rss.html',
+    'https://www.investing.com/rss/news_285.rss',
+    // Google News — Türkçe
     'https://news.google.com/rss/search?q=borsa+BIST+dolar+faiz+enflasyon&hl=tr&gl=TR&ceid=TR:tr',
     'https://news.google.com/rss/search?q=ekonomi+merkez+bankası+döviz+TRY&hl=tr&gl=TR&ceid=TR:tr',
     'https://news.google.com/rss/search?q=BTC+ETH+kripto+borsa+yatırım&hl=tr&gl=TR&ceid=TR:tr',
-    'https://news.google.com/rss/search?q=Greece+economy+ECB+interest+rate&hl=en&gl=GR&ceid=GR:en',
+    'https://news.google.com/rss/search?q=Türkiye+ekonomi+enflasyon+faiz+büyüme+2026&hl=tr&gl=TR&ceid=TR:tr',
+    'https://news.google.com/rss/search?q=altın+dolar+euro+parite+yatırım&hl=tr&gl=TR&ceid=TR:tr',
+    // Google News — İngilizce
+    'https://news.google.com/rss/search?q=Turkey+economy+lira+inflation+central+bank&hl=en&gl=TR&ceid=TR:en',
+    'https://news.google.com/rss/search?q=Greece+economy+ECB+interest+rate+2026&hl=en&gl=GR&ceid=GR:en',
+    'https://news.google.com/rss/search?q=cryptocurrency+bitcoin+ethereum+market+2026&hl=en&gl=US&ceid=US:en',
+    'https://news.google.com/rss/search?q=global+markets+stocks+bonds+Fed+ECB+2026&hl=en&gl=US&ceid=US:en',
+    'https://news.google.com/rss/search?q=real+estate+investment+property+market+2026&hl=en&gl=US&ceid=US:en',
   ],
 
-  // ── EMLAK: Genel TR ──
+  // ── EMLAK ──
   emlak: [
     'https://news.google.com/rss/search?q=emlak+konut+kira+inşaat+İstanbul&hl=tr&gl=TR&ceid=TR:tr',
     'https://news.google.com/rss/search?q=gayrimenkul+fiyat+konut+Türkiye&hl=tr&gl=TR&ceid=TR:tr',
     'https://news.google.com/rss/search?q=Athens+Greece+real+estate+Spitogatos&hl=en&gl=GR&ceid=GR:en',
   ],
 
-  // ── SAĞLIK ──
+  // ── SAĞLIK (küçük) ──
   saglik: [
     'https://news.google.com/rss/search?q=sağlık+hastane+ilaç+tedavi&hl=tr&gl=TR&ceid=TR:tr',
     'https://news.google.com/rss/search?q=health+wellness+nutrition+longevity&hl=en&gl=US&ceid=US:en',
   ],
 
-  // ── SAĞLIK İYİ HABERLER — 22 kaynak → 500+ benzersiz haber ──
+  // ── SAĞLIK DETAYLI (40 kaynak → 400-600 benzersiz haber) ──
   healthgood: [
-    'https://news.google.com/rss/search?q=health+breakthrough+discovery+good+news&hl=en&gl=US&ceid=US:en',
-    'https://news.google.com/rss/search?q=medical+research+new+treatment+cure+2026&hl=en&gl=US&ceid=US:en',
-    'https://news.google.com/rss/search?q=science+medicine+discovery+breakthrough+2026&hl=en&gl=US&ceid=US:en',
-    'https://news.google.com/rss/search?q=new+drug+FDA+approved+treatment+success&hl=en&gl=US&ceid=US:en',
+    // ── Direkt haber siteleri (kendi görselleriyle geliyor!) ──
+    'https://feeds.bbci.co.uk/news/health/rss.xml',
+    'https://www.sciencedaily.com/rss/health_medicine.xml',
+    'https://medicalxpress.com/rss-feed/',
+    'https://www.statnews.com/feed/',
+    'https://feeds.reuters.com/reuters/healthNews',
+    'https://www.theguardian.com/society/health/rss',
+    'https://www.livescience.com/feeds/health.rss',
+    'https://www.newscientist.com/section/health/feed/',
+    'https://www.medicalnewstoday.com/rss/medical-news-today-rss-feed.xml',
+    'https://rss.nytimes.com/services/xml/rss/nyt/Health.xml',
+    'https://feeds.webmd.com/rss/rss.aspx?RSSSource=RSS_PUBLIC',
+    'https://www.healthline.com/rss/health-news',
+    'https://www.everydayhealth.com/rss/news.xml',
+    // ── Google News — İngilizce (farklı konular) ──
+    'https://news.google.com/rss/search?q=health+medicine+news+2026&hl=en&gl=US&ceid=US:en',
+    'https://news.google.com/rss/search?q=medical+research+clinical+trial+patients&hl=en&gl=US&ceid=US:en',
+    'https://news.google.com/rss/search?q=FDA+drug+approval+new+treatment+2026&hl=en&gl=US&ceid=US:en',
+    'https://news.google.com/rss/search?q=cancer+treatment+immunotherapy+survival+2026&hl=en&gl=US&ceid=US:en',
+    'https://news.google.com/rss/search?q=diabetes+heart+disease+prevention+research+2026&hl=en&gl=US&ceid=US:en',
+    'https://news.google.com/rss/search?q=mental+health+depression+anxiety+treatment+2026&hl=en&gl=US&ceid=US:en',
     'https://news.google.com/rss/search?q=longevity+aging+lifespan+science+2026&hl=en&gl=US&ceid=US:en',
     'https://news.google.com/rss/search?q=anti+aging+centenarian+longevity+research&hl=en&gl=US&ceid=US:en',
     'https://news.google.com/rss/search?q=nutrition+diet+healthy+eating+research&hl=en&gl=US&ceid=US:en',
-    'https://news.google.com/rss/search?q=superfood+vitamins+supplements+health+benefit&hl=en&gl=US&ceid=US:en',
-    'https://news.google.com/rss/search?q=mediterranean+diet+plant+based+health+study&hl=en&gl=US&ceid=US:en',
     'https://news.google.com/rss/search?q=fitness+exercise+workout+health+benefit&hl=en&gl=US&ceid=US:en',
-    'https://news.google.com/rss/search?q=strength+training+muscle+health+study+2026&hl=en&gl=US&ceid=US:en',
-    'https://news.google.com/rss/search?q=running+cardio+heart+health+research&hl=en&gl=US&ceid=US:en',
-    'https://news.google.com/rss/search?q=mental+health+wellbeing+happiness+positive&hl=en&gl=US&ceid=US:en',
-    'https://news.google.com/rss/search?q=mindfulness+meditation+stress+sleep+health&hl=en&gl=US&ceid=US:en',
     'https://news.google.com/rss/search?q=sleep+health+rest+recovery+science+2026&hl=en&gl=US&ceid=US:en',
-    'https://news.google.com/rss/search?q=cancer+treatment+cure+survival+new+therapy&hl=en&gl=US&ceid=US:en',
-    'https://news.google.com/rss/search?q=diabetes+heart+disease+prevention+research&hl=en&gl=US&ceid=US:en',
+    'https://news.google.com/rss/search?q=gut+microbiome+probiotics+immune+health&hl=en&gl=US&ceid=US:en',
+    'https://news.google.com/rss/search?q=AI+artificial+intelligence+medicine+diagnosis&hl=en&gl=US&ceid=US:en',
+    'https://news.google.com/rss/search?q=gene+therapy+CRISPR+genetics+disease+cure&hl=en&gl=US&ceid=US:en',
+    'https://news.google.com/rss/search?q=vaccine+infectious+disease+prevention+2026&hl=en&gl=US&ceid=US:en',
+    'https://news.google.com/rss/search?q=obesity+weight+loss+GLP1+medication+2026&hl=en&gl=US&ceid=US:en',
+    'https://news.google.com/rss/search?q=brain+neuroscience+alzheimer+dementia+research&hl=en&gl=US&ceid=US:en',
+    'https://news.google.com/rss/search?q=hospital+surgery+innovation+medical+device&hl=en&gl=US&ceid=US:en',
+    'https://news.google.com/rss/search?q=public+health+WHO+pandemic+disease+2026&hl=en&gl=US&ceid=US:en',
     'https://news.google.com/rss/search?q=wellness+holistic+health+natural+remedy&hl=en&gl=US&ceid=US:en',
-    'https://news.google.com/rss/search?q=gut+health+microbiome+probiotics+research&hl=en&gl=US&ceid=US:en',
-    'https://news.google.com/rss/search?q=sa%C4%9Fl%C4%B1k+ke%C5%9Fif+tedavi+iyi+haber&hl=tr&gl=TR&ceid=TR:tr',
-    'https://news.google.com/rss/search?q=sa%C4%9Fl%C4%B1kl%C4%B1+ya%C5%9Fam+beslenme+spor+wellness&hl=tr&gl=TR&ceid=TR:tr',
-    'https://news.google.com/rss/search?q=uzun+ya%C5%9F+ya%C5%9Flanma+ara%C5%9Ft%C4%B1rma+bilim&hl=tr&gl=TR&ceid=TR:tr',
+    'https://news.google.com/rss/search?q=vitamins+supplements+minerals+health+benefit&hl=en&gl=US&ceid=US:en',
+    'https://news.google.com/rss/search?q=mediterranean+diet+plant+based+health+study&hl=en&gl=US&ceid=US:en',
+    // ── Google News — Türkçe ──
+    'https://news.google.com/rss/search?q=sağlık+keşif+tedavi+iyi+haber+2026&hl=tr&gl=TR&ceid=TR:tr',
+    'https://news.google.com/rss/search?q=sağlıklı+yaşam+beslenme+spor+wellness&hl=tr&gl=TR&ceid=TR:tr',
+    'https://news.google.com/rss/search?q=uzun+yaş+yaşlanma+araştırma+bilim&hl=tr&gl=TR&ceid=TR:tr',
+    'https://news.google.com/rss/search?q=kanser+tedavisi+ilaç+araştırma+hastane&hl=tr&gl=TR&ceid=TR:tr',
+    'https://news.google.com/rss/search?q=ruh+sağlığı+psikoloji+stres+mutluluk&hl=tr&gl=TR&ceid=TR:tr',
+    'https://news.google.com/rss/search?q=beslenme+diyet+kilo+sağlık+spor&hl=tr&gl=TR&ceid=TR:tr',
+    'https://news.google.com/rss/search?q=yapay+zeka+tıp+tanı+dijital+sağlık&hl=tr&gl=TR&ceid=TR:tr',
   ],
 };
 
