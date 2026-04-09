@@ -489,7 +489,7 @@ function AtinaKiraPiyasasi() {
 /* ── Altın Vize ──────────────────────────────────────────────────── */
 const VISA_TIERS = [
   {min:250000, label:'Standart', color:'#6B7280', icon:'🏠',
-   desc:'Yunanistan'da herhangi bir gayrimenkul. En yaygın seçenek.', days:60, years:5},
+   desc:"Yunanistan'da herhangi bir gayrimenkul. En yaygın seçenek.", days:60, years:5},
   {min:400000, label:'Premium Bölge', color:'#3B82F6', icon:'🏙️',
    desc:'Atina merkezi, Selanik, Mykonos, Santorini. Daha hızlı süreç.', days:45, years:5},
   {min:800000, label:'Elite', color:'#8B5CF6', icon:'🏝️',
