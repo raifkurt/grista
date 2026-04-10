@@ -8,14 +8,14 @@ import {
 const PRIMARY = [
   { href: '/',       icon: LayoutDashboard, label: 'Panel' },
   { href: '/live',   icon: Radio,           label: 'Canlı' },
-  { href: '/cities', icon: MapPin,          label: 'Şehirler' },
+  { href: '/property', icon: Building2,      label: 'Emlak' },
   { href: '/health', icon: Heart,           label: 'Sağlık' },
 ];
 
 const MORE = [
   { href: '/financial', icon: DollarSign,  label: 'Finans' },
   { href: '/market',    icon: TrendingUp,  label: 'Piyasa İstihbaratı' },
-  { href: '/property',  icon: Building2,   label: 'Emlak Değerleme' },
+  { href: '/cities',    icon: MapPin,      label: 'Şehirler' },
   { href: '/wellness',  icon: Heart,       label: 'Sağlık & Wellness' },
   { href: '/marketing', icon: Megaphone,   label: 'Pazarlama' },
   { href: '/agents',    icon: Bot,         label: 'Ajan Sistemi' },
