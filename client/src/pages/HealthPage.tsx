@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { RefreshCw, Heart } from 'lucide-react';
 import { NewsItem } from '@/lib/data/liveData';
+import { API_BASE } from '../lib/apiBase';
 
 /* ══════════════════════════════════════════════════════════════════
    SAGLIK BILGI MODULLERI
@@ -533,7 +534,7 @@ export default function HealthPage() {
   const load = useCallback(async (force = false) => {
     setBusy(true);
     try {
-      const res = await fetch(`/api/news/healthgood?${force ? 'force=1&' : ''}_=${Date.now()}`, { cache: 'no-store' });
+      const res = await fetch(`${API_BASE}/api/news/healthgood?${force ? 'force=1&' : ''}_=${Date.now()}`, { cache: 'no-store' });
       if (res.ok) {
         const d = await res.json();
         if (Array.isArray(d) && d.length) {

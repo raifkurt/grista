@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { fetchNewsByCategory, NewsItem } from '@/lib/data/liveData';
 import { SUPPLEMENT_DATABASE, pkModel, computeInteractionMatrix, generateFitnessData } from '@/lib/data/wellnessData';
 import { Heart, Clock, AlertTriangle, CheckCircle2, TrendingUp , RefreshCw } from 'lucide-react';
+import { API_BASE } from '../lib/apiBase';
 
 export default function WellnessPage() {
   const [selected, setSelected] = useState<number[]>([0, 1, 2, 3, 4]);
@@ -334,7 +335,7 @@ function HealthNewsCards() {
   const load = useCallback(async () => {
     setBusy(true);
     try {
-      const res = await fetch('/api/news/healthgood');
+      const res = await fetch(`${API_BASE}/api/news/healthgood`);
       if (res.ok) { const d = await res.json(); if (Array.isArray(d)) setNews(d); }
     } catch {}
     setLoading(false);
