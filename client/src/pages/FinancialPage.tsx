@@ -4,7 +4,6 @@ import { MonteCarloEngine } from '@/lib/algorithms/monteCarlo';
 import { KalmanFilter } from '@/lib/algorithms/kalman';
 import { generateCurrencyData } from '@/lib/data/marketData';
 import { DollarSign, Activity, RefreshCw, TrendingUp, Bitcoin, BarChart2, Globe, Landmark, Building2 } from 'lucide-react';
-import { API_BASE } from '../lib/apiBase';
 
 /* ─── helpers ─────────────────────────────────────────────────────────────── */
 function ago(iso: string) {
@@ -257,13 +256,13 @@ export default function FinancialPage() {
   const loadCrypto = useCallback(async(force=false)=>{
     setCryptoLd(true);
     try {
-      const r = await fetch(`${API_BASE}/api/cryptodetail?${force?'force=1&':''}_=${Date.now()}`, {cache:'no-store'});
+      const r = await fetch(`/api/cryptodetail?${force?'force=1&':''}_=${Date.now()}`, {cache:'no-store'});
       if (r.ok) {
         const d = await r.json();
         if (d.btc || d.eth) { setCrypto(d); setCryptoLd(false); cdRef.current=300; return; }
       }
       // Fallback: basit crypto API
-      const r2 = await fetch(`${API_BASE}/api/crypto?_=${Date.now()}`, {cache:'no-store'});
+      const r2 = await fetch(`/api/crypto?_=${Date.now()}`, {cache:'no-store'});
       if (r2.ok) {
         const d2 = await r2.json();
         setCrypto({
@@ -283,14 +282,14 @@ export default function FinancialPage() {
 
   /* ABD hisseler */
   useEffect(()=>{
-    fetch(`${API_BASE}/api/us/gainers?_=${Date.now()}`,{cache:'no-store'})
+    fetch(`/api/us/gainers?_=${Date.now()}`,{cache:'no-store'})
       .then(r=>r.ok?r.json():[]).catch(()=>[])
       .then(d=>{setUsG(Array.isArray(d)?d:[]);setUsLd(false);});
   },[]);
 
   /* BIST hisseler */
   useEffect(()=>{
-    fetch(`${API_BASE}/api/bist/gainers?_=${Date.now()}`,{cache:'no-store'})
+    fetch(`/api/bist/gainers?_=${Date.now()}`,{cache:'no-store'})
       .then(r=>r.ok?r.json():[]).catch(()=>[])
       .then(d=>{setBistG(Array.isArray(d)?d:[]);setBistLd(false);});
   },[]);

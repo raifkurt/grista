@@ -3,7 +3,6 @@ import { generatePriceTrendIndex, getMacroIndicators, generateSentimentData } fr
 import { ARIMA } from '@/lib/algorithms/arima';
 import { KalmanFilter } from '@/lib/algorithms/kalman';
 import { IsolationForest } from '@/lib/algorithms/isolationForest';
-import { API_BASE } from '../lib/apiBase';
 import {
   Activity, TrendingUp, Building2, DollarSign,
   Megaphone, Bot, AlertTriangle, Brain, Zap, Target,
@@ -35,7 +34,7 @@ function EmtiaModulu() {
   const [loading, setLoading] = useState(true);
   const [isFallback, setIsFallback] = useState(false);
   useEffect(() => {
-    fetch(`${API_BASE}/api/commodities?_=${Date.now()}`, { cache: 'no-store' })
+    fetch(`/api/commodities?_=${Date.now()}`, { cache: 'no-store' })
       .then(r => r.ok ? r.json() : null).catch(() => null)
       .then(d => {
         if (Array.isArray(d) && d.length > 0) {
@@ -88,8 +87,8 @@ function KriptoPiyasaOzeti() {
   const [fg, setFg] = useState<any>(null);
   const [btc, setBtc] = useState<any>(null);
   useEffect(() => {
-    fetch(`${API_BASE}/api/sentiment?_=${Date.now()}`, { cache:'no-store' }).then(r => r.ok?r.json():null).catch(()=>null).then(setFg);
-    fetch(`${API_BASE}/api/crypto?_=${Date.now()}`, { cache:'no-store' }).then(r => r.ok?r.json():null).catch(()=>null).then(setBtc);
+    fetch(`/api/sentiment?_=${Date.now()}`, { cache:'no-store' }).then(r => r.ok?r.json():null).catch(()=>null).then(setFg);
+    fetch(`/api/crypto?_=${Date.now()}`, { cache:'no-store' }).then(r => r.ok?r.json():null).catch(()=>null).then(setBtc);
   }, []);
   const val = fg?.value ?? 50;
   const labelTR: Record<string,string> = { 'Extreme Fear':'Aşırı Korku 😱','Fear':'Korku 😰','Neutral':'Nötr 😐','Greed':'Açgözlülük 😈','Extreme Greed':'Aşırı Açgözlülük 🤑' };
@@ -410,7 +409,7 @@ function AthexBorsa() {
   const [loading, setLoading] = useState(true);
   const [isFallback, setIsFallback] = useState(false);
   useEffect(() => {
-    fetch(`${API_BASE}/api/greece/stocks?_=${Date.now()}`, { cache: 'no-store' })
+    fetch(`/api/greece/stocks?_=${Date.now()}`, { cache: 'no-store' })
       .then(r => r.ok ? r.json() : []).catch(() => [])
       .then(d => {
         const arr = Array.isArray(d) ? d : [];
@@ -1241,8 +1240,8 @@ export default function DashboardPage() {
     const { predictions } = model.forecast(12); setArimaForecast(predictions);
     const { isAnomaly } = IsolationForest.fitSeries(idx.istanbul, 4); setAnomalies(isAnomaly);
     // Canlı makro + sentiment
-    fetch(`${API_BASE}/api/macro?_=${Date.now()}`, { cache:'no-store' }).then(r=>r.ok?r.json():null).catch(()=>null).then(d=>d&&setLiveMacro(d));
-    fetch(`${API_BASE}/api/sentiment?_=${Date.now()}`, { cache:'no-store' }).then(r=>r.ok?r.json():null).catch(()=>null).then(d=>d&&setLiveSentiment(d));
+    fetch(`/api/macro?_=${Date.now()}`, { cache:'no-store' }).then(r=>r.ok?r.json():null).catch(()=>null).then(d=>d&&setLiveMacro(d));
+    fetch(`/api/sentiment?_=${Date.now()}`, { cache:'no-store' }).then(r=>r.ok?r.json():null).catch(()=>null).then(d=>d&&setLiveSentiment(d));
   }, []);
 
   useEffect(() => {

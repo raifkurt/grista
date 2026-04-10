@@ -78,7 +78,7 @@ async function apiFetch<T>(path: string, fallback: T): Promise<T> {
 
 export async function fetchLiveForex(): Promise<LiveForex> {
   if (_fx && Date.now() - _fxAt < 60_000) return _fx;
-  const raw = await apiFetch<any>(`${API_BASE}/api/forex`, null);
+  const raw = await apiFetch<any>(`/api/forex`, null);
   if (!raw) return _fx ?? FX_FALLBACK;
   const result: LiveForex = {
     usdtry: raw.usdtry ?? FX_FALLBACK.usdtry,
@@ -99,7 +99,7 @@ export async function fetchLiveForex(): Promise<LiveForex> {
 
 export async function fetchLiveCrypto(): Promise<LiveCrypto> {
   if (_crypto && Date.now() - _cryptoAt < 30_000) return _crypto;
-  const raw = await apiFetch<any>(`${API_BASE}/api/crypto`, null);
+  const raw = await apiFetch<any>(`/api/crypto`, null);
   if (!raw) return _crypto ?? CRYPTO_FALLBACK;
   _crypto = {
     btcusd: raw.btcusd ?? CRYPTO_FALLBACK.btcusd,
@@ -125,7 +125,7 @@ export async function fetchNewsByCategory(cat: NewsCategory, force = false): Pro
   const entry = _news[cat];
   // 25sn client cache — 30sn polling cycle’nin altında, taşıma engellemez
   if (!force && entry && Date.now() - entry.ts < 25_000) return entry.data;
-  const data = await apiFetch<NewsItem[]>(`${API_BASE}/api/news/${cat}`, []);
+  const data = await apiFetch<NewsItem[]>(`/api/news/${cat}`, []);
   if (data.length > 0) _news[cat] = { data, ts: Date.now() };
   return data.length > 0 ? data : (entry?.data ?? []);
 }
