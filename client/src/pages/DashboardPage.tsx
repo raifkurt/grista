@@ -1223,6 +1223,758 @@ const AGENT_PROFILES = [
 ];
 const STATES = ['perceiving','deliberating','executing','communicating','idle'] as const;
 
+
+/* ═══════════════════════════════════════════════════════════════
+   30 YENİ İSTANBUL & ATİNA MODÜLÜ
+   ═══════════════════════════════════════════════════════════════ */
+
+function NufusDemografi() {
+  const data = [
+    {sehir:'İstanbul',nufus:'16.0M',yas:'32.4',buyume:'+0.6%',yogunluk:'2,948/km²'},
+    {sehir:'Atina Metro',nufus:'3.7M',yas:'44.1',buyume:'-0.2%',yogunluk:'812/km²'},
+  ];
+  return (
+    <div className="metric-card space-y-3">
+      <div className="flex items-center gap-2"><span className="text-lg">👥</span><span className="text-xs font-bold">Nüfus & Demografi Karşılaştırması</span></div>
+      <div className="grid grid-cols-2 gap-3">
+        {data.map(d=>(
+          <div key={d.sehir} className="rounded-xl p-3" style={{background:'hsl(222 47% 6%)'}}>
+            <div className="text-xs font-bold text-white mb-2">{d.sehir}</div>
+            <div className="space-y-1 text-xs">
+              <div className="flex justify-between"><span className="text-gray-400">Nüfus</span><span className="font-mono font-bold text-white">{d.nufus}</span></div>
+              <div className="flex justify-between"><span className="text-gray-400">Medyan Yaş</span><span className="font-mono">{d.yas}</span></div>
+              <div className="flex justify-between"><span className="text-gray-400">Büyüme</span><span className="font-mono" style={{color:d.buyume.startsWith('+')?'#22c55e':'#ef4444'}}>{d.buyume}</span></div>
+              <div className="flex justify-between"><span className="text-gray-400">Yoğunluk</span><span className="font-mono">{d.yogunluk}</span></div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function UlasimMetro() {
+  const metro = [
+    {sehir:'İstanbul',hat:9,istasyon:113,gunluk:'5.2M',uzunluk:'167 km',genisleme:'Havaist M11 hattı inşaat'},
+    {sehir:'Atina',hat:4,istasyon:67,gunluk:'1.1M',uzunluk:'85 km',genisleme:'Hat 4 Alimos-Marousi inşaat'},
+  ];
+  return (
+    <div className="metric-card space-y-3">
+      <div className="flex items-center gap-2"><span className="text-lg">🚇</span><span className="text-xs font-bold">Metro & Ulaşım Ağı</span></div>
+      <div className="grid grid-cols-2 gap-3">
+        {metro.map(m=>(
+          <div key={m.sehir} className="rounded-xl p-3" style={{background:'hsl(222 47% 6%)'}}>
+            <div className="text-xs font-bold text-white mb-2">{m.sehir}</div>
+            <div className="space-y-1 text-xs">
+              <div className="flex justify-between"><span className="text-gray-400">Hat / İstasyon</span><span className="font-mono font-bold text-white">{m.hat} / {m.istasyon}</span></div>
+              <div className="flex justify-between"><span className="text-gray-400">Günlük Yolcu</span><span className="font-mono">{m.gunluk}</span></div>
+              <div className="flex justify-between"><span className="text-gray-400">Toplam Uzunluk</span><span className="font-mono">{m.uzunluk}</span></div>
+              <div className="text-xs mt-1" style={{color:'#f59e0b',fontSize:10}}>📍 {m.genisleme}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function HavaKalitesi() {
+  const d = [
+    {sehir:'İstanbul',aqi:72,pm25:'28 µg/m³',durum:'Orta',renk:'#f59e0b'},
+    {sehir:'Atina',aqi:54,pm25:'18 µg/m³',durum:'İyi',renk:'#22c55e'},
+  ];
+  return (
+    <div className="metric-card space-y-3">
+      <div className="flex items-center gap-2"><span className="text-lg">🌬️</span><span className="text-xs font-bold">Hava Kalitesi Endeksi (AQI)</span></div>
+      <div className="grid grid-cols-2 gap-3">
+        {d.map(x=>(
+          <div key={x.sehir} className="rounded-xl p-3 text-center" style={{background:'hsl(222 47% 6%)'}}>
+            <div className="text-xs font-bold text-white mb-2">{x.sehir}</div>
+            <div className="text-3xl font-black font-mono" style={{color:x.renk}}>{x.aqi}</div>
+            <div className="text-xs font-bold mt-1" style={{color:x.renk}}>{x.durum}</div>
+            <div className="text-xs text-gray-400 mt-1">PM2.5: {x.pm25}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function UniversiteSiralamasi() {
+  const unis = [
+    {uni:'İTÜ',sehir:'İstanbul',alan:'Mühendislik',qs:428},
+    {uni:'Boğaziçi',sehir:'İstanbul',alan:'İşletme & Fen',qs:531},
+    {uni:'Koç',sehir:'İstanbul',alan:'MBA & Hukuk',qs:455},
+    {uni:'Sabancı',sehir:'İstanbul',alan:'Veri Bilimi',qs:541},
+    {uni:'NTUA',sehir:'Atina',alan:'Mühendislik',qs:377},
+    {uni:'EKPA',sehir:'Atina',alan:'Tıp & Hukuk',qs:662},
+    {uni:'Athens Economics',sehir:'Atina',alan:'İktisat',qs:591},
+    {uni:'Panteion',sehir:'Atina',alan:'Sosyal Bilimler',qs:801},
+  ];
+  return (
+    <div className="metric-card space-y-3">
+      <div className="flex items-center gap-2"><span className="text-lg">🎓</span><span className="text-xs font-bold">Üniversite Sıralaması (QS 2026)</span></div>
+      <div className="grid grid-cols-2 gap-2">
+        {unis.map(u=>(
+          <div key={u.uni} className="flex items-center justify-between rounded-lg px-2 py-1.5" style={{background:'hsl(222 47% 6%)'}}>
+            <div>
+              <div className="text-xs font-bold text-white">{u.uni}</div>
+              <div style={{fontSize:10}} className="text-gray-400">{u.alan}</div>
+            </div>
+            <div className="text-xs font-mono font-bold" style={{color:u.sehir==='İstanbul'?'#3b82f6':'#f59e0b'}}>#{u.qs}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function GayrimenkulM2() {
+  const semtler = [
+    {semt:'Beşiktaş',sehir:'İst',m2:'₺268K',kira:'₺28K',getiri:'3.2%'},
+    {semt:'Kadıköy',sehir:'İst',m2:'₺195K',kira:'₺22K',getiri:'3.8%'},
+    {semt:'Ataşehir',sehir:'İst',m2:'₺142K',kira:'₺18K',getiri:'4.5%'},
+    {semt:'Başakşehir',sehir:'İst',m2:'₺98K',kira:'₺14K',getiri:'4.8%'},
+    {semt:'Kolonaki',sehir:'Ati',m2:'€4,200',kira:'€1,450',getiri:'3.5%'},
+    {semt:'Glyfada',sehir:'Ati',m2:'€3,800',kira:'€1,250',getiri:'4.2%'},
+    {semt:'Piraeus',sehir:'Ati',m2:'€2,100',kira:'€750',getiri:'5.1%'},
+    {semt:'Kifisia',sehir:'Ati',m2:'€3,500',kira:'€1,100',getiri:'3.8%'},
+  ];
+  return (
+    <div className="metric-card space-y-3">
+      <div className="flex items-center gap-2"><span className="text-lg">🏘️</span><span className="text-xs font-bold">Semt Bazlı m² Fiyat & Kira Getirisi</span></div>
+      <div className="space-y-1">
+        <div className="grid grid-cols-5 gap-1 text-xs text-gray-500 px-1" style={{fontSize:10}}>
+          <span>Semt</span><span></span><span className="text-right">m²</span><span className="text-right">Kira</span><span className="text-right">Getiri</span>
+        </div>
+        {semtler.map(s=>(
+          <div key={s.semt} className="grid grid-cols-5 gap-1 rounded-lg px-1 py-1" style={{background:'hsl(222 47% 6%)'}}>
+            <span className="text-xs font-bold text-white truncate">{s.semt}</span>
+            <span style={{fontSize:9,color:s.sehir==='İst'?'#3b82f6':'#f59e0b'}}>{s.sehir}</span>
+            <span className="text-xs font-mono text-right">{s.m2}</span>
+            <span className="text-xs font-mono text-right text-gray-400">{s.kira}</span>
+            <span className="text-xs font-mono text-right font-bold" style={{color:'#22c55e'}}>{s.getiri}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function IklimKarsilastirma() {
+  const aylar = ['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];
+  const ist = [6,7,10,15,20,25,28,28,24,18,13,8];
+  const ati = [10,11,13,17,22,27,30,30,26,21,16,12];
+  return (
+    <div className="metric-card space-y-3">
+      <div className="flex items-center gap-2"><span className="text-lg">🌡️</span><span className="text-xs font-bold">İklim Karşılaştırması — Aylık Sıcaklık (°C)</span></div>
+      <div className="flex gap-1 items-end" style={{height:80}}>
+        {aylar.map((ay,i)=>(
+          <div key={ay} className="flex-1 flex flex-col items-center gap-1">
+            <div className="w-full flex gap-0.5" style={{height:80,alignItems:'flex-end'}}>
+              <div style={{flex:1,height:`${ist[i]*2.5}px`,background:'#3b82f6',borderRadius:'3px 3px 0 0'}} title={`İst ${ist[i]}°C`}/>
+              <div style={{flex:1,height:`${ati[i]*2.5}px`,background:'#f59e0b',borderRadius:'3px 3px 0 0'}} title={`Ati ${ati[i]}°C`}/>
+            </div>
+            <span style={{fontSize:8}} className="text-gray-500">{ay}</span>
+          </div>
+        ))}
+      </div>
+      <div className="flex gap-4 justify-center">
+        <span className="text-xs"><span style={{color:'#3b82f6'}}>■</span> İstanbul</span>
+        <span className="text-xs"><span style={{color:'#f59e0b'}}>■</span> Atina</span>
+      </div>
+    </div>
+  );
+}
+
+function TurizmGeliri() {
+  const d = [
+    {sehir:'İstanbul',turist:'20.2M',gelir:'$16.4B',ort:'$812/kişi',pazar:'Rusya, Almanya, İran'},
+    {sehir:'Atina',turist:'6.8M',gelir:'€5.1B',ort:'€750/kişi',pazar:'İngiltere, Almanya, Fransa'},
+  ];
+  return (
+    <div className="metric-card space-y-3">
+      <div className="flex items-center gap-2"><span className="text-lg">✈️</span><span className="text-xs font-bold">Turizm Geliri & Ziyaretçi Analizi</span></div>
+      <div className="grid grid-cols-2 gap-3">
+        {d.map(x=>(
+          <div key={x.sehir} className="rounded-xl p-3" style={{background:'hsl(222 47% 6%)'}}>
+            <div className="text-xs font-bold text-white mb-2">{x.sehir}</div>
+            <div className="space-y-1 text-xs">
+              <div className="flex justify-between"><span className="text-gray-400">Yıllık Turist</span><span className="font-mono font-bold text-white">{x.turist}</span></div>
+              <div className="flex justify-between"><span className="text-gray-400">Gelir</span><span className="font-mono">{x.gelir}</span></div>
+              <div className="flex justify-between"><span className="text-gray-400">Ort. Harcama</span><span className="font-mono">{x.ort}</span></div>
+              <div style={{fontSize:10}} className="text-gray-500 mt-1">🌍 {x.pazar}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function HavalimanTraffik() {
+  const d = [
+    {havaalani:'İstanbul (IST)',yolcu:'76M',kargo:'2.1M ton',pist:5,sirket:'Turkish Airlines hub'},
+    {havaalani:'Sabiha Gökçen (SAW)',yolcu:'41M',kargo:'0.3M ton',pist:2,sirket:'Pegasus hub'},
+    {havaalani:'Atina (ATH)',yolcu:'28M',kargo:'0.12M ton',pist:2,sirket:'Aegean Airlines hub'},
+  ];
+  return (
+    <div className="metric-card space-y-3">
+      <div className="flex items-center gap-2"><span className="text-lg">✈️</span><span className="text-xs font-bold">Havalimanı Trafik Karşılaştırması</span></div>
+      <div className="space-y-2">
+        {d.map(h=>(
+          <div key={h.havaalani} className="rounded-xl p-3" style={{background:'hsl(222 47% 6%)'}}>
+            <div className="flex items-center justify-between mb-1">
+              <span className="text-xs font-bold text-white">{h.havaalani}</span>
+              <span className="text-xs font-mono font-bold" style={{color:'#22c55e'}}>{h.yolcu}</span>
+            </div>
+            <div className="flex gap-4 text-xs text-gray-400">
+              <span>Kargo: {h.kargo}</span><span>Pist: {h.pist}</span>
+            </div>
+            <div style={{fontSize:10}} className="text-gray-500 mt-1">🛫 {h.sirket}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function BogazKopru() {
+  const d = [
+    {ad:'15 Temmuz Köprüsü',yil:1973,uzunluk:'1,560 m',trafik:'180K/gün'},
+    {ad:'FSM Köprüsü',yil:1988,uzunluk:'1,510 m',trafik:'150K/gün'},
+    {ad:'Yavuz Sultan Selim',yil:2016,uzunluk:'1,408 m',trafik:'60K/gün'},
+    {ad:'Marmaray Tünel',yil:2013,uzunluk:'13,600 m',trafik:'600K/gün'},
+    {ad:'Avrasya Tüneli',yil:2016,uzunluk:'5,400 m',trafik:'55K/gün'},
+  ];
+  return (
+    <div className="metric-card space-y-3">
+      <div className="flex items-center gap-2"><span className="text-lg">🌉</span><span className="text-xs font-bold">İstanbul Boğaz Geçişleri</span></div>
+      {d.map(k=>(
+        <div key={k.ad} className="flex items-center justify-between rounded-lg px-2 py-1.5" style={{background:'hsl(222 47% 6%)'}}>
+          <div>
+            <div className="text-xs font-bold text-white">{k.ad}</div>
+            <div style={{fontSize:10}} className="text-gray-500">{k.yil} · {k.uzunluk}</div>
+          </div>
+          <div className="text-xs font-mono font-bold" style={{color:'#3b82f6'}}>{k.trafik}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function TarihiYerler() {
+  const yerler = [
+    {ad:'Ayasofya',sehir:'İst',yil:'537 AD',ziyaret:'3.8M/yıl',tip:'Cami/Müze'},
+    {ad:'Topkapı Sarayı',sehir:'İst',yil:'1478',ziyaret:'2.1M/yıl',tip:'Müze'},
+    {ad:'Sultanahmet Camii',sehir:'İst',yil:'1616',ziyaret:'5M/yıl',tip:'Cami'},
+    {ad:'Yerebatan Sarnıcı',sehir:'İst',yil:'532 AD',ziyaret:'1.2M/yıl',tip:'Tarihi Yapı'},
+    {ad:'Akropolis',sehir:'Ati',yil:'447 BC',ziyaret:'3.0M/yıl',tip:'Antik Tapınak'},
+    {ad:'Ulusal Arkeoloji Müzesi',sehir:'Ati',yil:'1829',ziyaret:'0.5M/yıl',tip:'Müze'},
+    {ad:'Agora',sehir:'Ati',yil:'600 BC',ziyaret:'0.8M/yıl',tip:'Antik Alan'},
+    {ad:'Poseidon Tapınağı',sehir:'Ati',yil:'444 BC',ziyaret:'0.6M/yıl',tip:'Antik Tapınak'},
+  ];
+  return (
+    <div className="metric-card space-y-3">
+      <div className="flex items-center gap-2"><span className="text-lg">🏛️</span><span className="text-xs font-bold">Tarihi & Kültürel Varlıklar</span></div>
+      <div className="grid grid-cols-2 gap-1">
+        {yerler.map(y=>(
+          <div key={y.ad} className="rounded-lg px-2 py-1.5" style={{background:'hsl(222 47% 6%)'}}>
+            <div className="flex items-center gap-1">
+              <span className="text-xs font-bold text-white truncate">{y.ad}</span>
+              <span style={{fontSize:8,color:y.sehir==='İst'?'#3b82f6':'#f59e0b'}}>{y.sehir}</span>
+            </div>
+            <div style={{fontSize:10}} className="text-gray-400">{y.yil} · {y.ziyaret}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function YemekKulturu() {
+  const yemekler = [
+    {yemek:'Kebap Çeşitleri',sehir:'İst',fiyat:'₺250-600',puan:'⭐ 4.6'},
+    {yemek:'Balık Ekmek',sehir:'İst',fiyat:'₺120-200',puan:'⭐ 4.3'},
+    {yemek:'Kokoreç',sehir:'İst',fiyat:'₺150-250',puan:'⭐ 4.5'},
+    {yemek:'Lahmacun',sehir:'İst',fiyat:'₺80-150',puan:'⭐ 4.4'},
+    {yemek:'Souvlaki',sehir:'Ati',fiyat:'€3-8',puan:'⭐ 4.5'},
+    {yemek:'Moussaka',sehir:'Ati',fiyat:'€8-15',puan:'⭐ 4.4'},
+    {yemek:'Gyros',sehir:'Ati',fiyat:'€3-6',puan:'⭐ 4.6'},
+    {yemek:'Spanakopita',sehir:'Ati',fiyat:'€2-5',puan:'⭐ 4.3'},
+  ];
+  return (
+    <div className="metric-card space-y-3">
+      <div className="flex items-center gap-2"><span className="text-lg">🍽️</span><span className="text-xs font-bold">Mutfak & Sokak Yemekleri Rehberi</span></div>
+      <div className="grid grid-cols-2 gap-1">
+        {yemekler.map(y=>(
+          <div key={y.yemek} className="flex items-center justify-between rounded-lg px-2 py-1.5" style={{background:'hsl(222 47% 6%)'}}>
+            <div>
+              <div className="text-xs font-bold text-white">{y.yemek}</div>
+              <div style={{fontSize:10}} className="text-gray-400">{y.fiyat} · <span style={{color:y.sehir==='İst'?'#3b82f6':'#f59e0b'}}>{y.sehir}</span></div>
+            </div>
+            <span style={{fontSize:10}}>{y.puan}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function GocVeExpat() {
+  const d = [
+    {metrik:'Yabancı Nüfus',ist:'1.2M',ati:'320K'},
+    {metrik:'Top Milliyet',ist:'Suriye, İran, Irak',ati:'Arnavutluk, Romanya, Pakistan'},
+    {metrik:'Dijital Nomad',ist:'~45K',ati:'~28K'},
+    {metrik:'Oturum Başvurusu/Yıl',ist:'280K',ati:'65K'},
+    {metrik:'Expat Maliyet Endeksi',ist:'48/100',ati:'62/100'},
+  ];
+  return (
+    <div className="metric-card space-y-3">
+      <div className="flex items-center gap-2"><span className="text-lg">🌐</span><span className="text-xs font-bold">Göç & Expat Profili</span></div>
+      {d.map(x=>(
+        <div key={x.metrik} className="grid grid-cols-3 gap-2 rounded-lg px-2 py-1.5" style={{background:'hsl(222 47% 6%)'}}>
+          <span className="text-xs text-gray-400">{x.metrik}</span>
+          <span className="text-xs font-mono text-center" style={{color:'#3b82f6'}}>{x.ist}</span>
+          <span className="text-xs font-mono text-center" style={{color:'#f59e0b'}}>{x.ati}</span>
+        </div>
+      ))}
+      <div className="flex gap-8 justify-center text-xs">
+        <span><span style={{color:'#3b82f6'}}>■</span> İstanbul</span>
+        <span><span style={{color:'#f59e0b'}}>■</span> Atina</span>
+      </div>
+    </div>
+  );
+}
+
+function InsaatSektoru() {
+  const d = [
+    {metrik:'Aktif Konut Projesi',ist:'2,400+',ati:'380+'},
+    {metrik:'Yıllık Yeni Konut',ist:'520K',ati:'28K'},
+    {metrik:'Kentsel Dönüşüm',ist:'300K bina riskli',ati:'42K bina riskli'},
+    {metrik:'İnşaat Maliyeti/m²',ist:'₺38K ($1,050)',ati:'€1,400'},
+    {metrik:'İmar İzni Süresi',ist:'4-8 ay',ati:'6-12 ay'},
+  ];
+  return (
+    <div className="metric-card space-y-3">
+      <div className="flex items-center gap-2"><span className="text-lg">🏗️</span><span className="text-xs font-bold">İnşaat Sektörü Karşılaştırması</span></div>
+      {d.map(x=>(
+        <div key={x.metrik} className="grid grid-cols-3 gap-2 rounded-lg px-2 py-1.5" style={{background:'hsl(222 47% 6%)'}}>
+          <span className="text-xs text-gray-400">{x.metrik}</span>
+          <span className="text-xs font-mono text-center" style={{color:'#3b82f6'}}>{x.ist}</span>
+          <span className="text-xs font-mono text-center" style={{color:'#f59e0b'}}>{x.ati}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function DepremRiski() {
+  return (
+    <div className="metric-card space-y-3">
+      <div className="flex items-center gap-2"><span className="text-lg">⚠️</span><span className="text-xs font-bold">Deprem Risk Profili</span></div>
+      <div className="grid grid-cols-2 gap-3">
+        <div className="rounded-xl p-3" style={{background:'hsl(222 47% 6%)'}}>
+          <div className="text-xs font-bold text-white mb-2">İstanbul</div>
+          <div className="text-2xl font-black font-mono" style={{color:'#ef4444'}}>7.0+</div>
+          <div style={{fontSize:10}} className="text-gray-400">Beklenen Mw · Kuzey Anadolu Fayı</div>
+          <div className="text-xs mt-2 space-y-1">
+            <div className="text-gray-400">Riskli bina: <span className="text-white font-mono">~300K</span></div>
+            <div className="text-gray-400">DASK zorunlu: <span className="text-green-400 font-mono">Evet</span></div>
+            <div className="text-gray-400">Son büyük: <span className="font-mono">1999 (Mw 7.6)</span></div>
+          </div>
+        </div>
+        <div className="rounded-xl p-3" style={{background:'hsl(222 47% 6%)'}}>
+          <div className="text-xs font-bold text-white mb-2">Atina</div>
+          <div className="text-2xl font-black font-mono" style={{color:'#f59e0b'}}>6.5+</div>
+          <div style={{fontSize:10}} className="text-gray-400">Beklenen Mw · Ege-Parnitha Fayı</div>
+          <div className="text-xs mt-2 space-y-1">
+            <div className="text-gray-400">Riskli bina: <span className="text-white font-mono">~42K</span></div>
+            <div className="text-gray-400">Zorunlu sigorta: <span className="text-yellow-400 font-mono">Kısmi</span></div>
+            <div className="text-gray-400">Son büyük: <span className="font-mono">1999 (Mw 6.0)</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function TeknoParkStartup() {
+  const d = [
+    {ad:'İTÜ Çekirdek',sehir:'İst',startup:800,odak:'DeepTech & AI',renk:'#3b82f6'},
+    {ad:'Teknopark İstanbul',sehir:'İst',startup:350,odak:'Fintech & SaaS',renk:'#3b82f6'},
+    {ad:'Kolektif House',sehir:'İst',startup:120,odak:'E-commerce',renk:'#3b82f6'},
+    {ad:'Found.ation',sehir:'Ati',startup:85,odak:'Fintech & AI',renk:'#f59e0b'},
+    {ad:'EIT Digital Athens',sehir:'Ati',startup:60,odak:'Digital Health',renk:'#f59e0b'},
+    {ad:'Startup Greece',sehir:'Ati',startup:200,odak:'Tourism Tech',renk:'#f59e0b'},
+  ];
+  return (
+    <div className="metric-card space-y-3">
+      <div className="flex items-center gap-2"><span className="text-lg">🚀</span><span className="text-xs font-bold">Teknopark & Startup Ekosistemi</span></div>
+      {d.map(x=>(
+        <div key={x.ad} className="flex items-center justify-between rounded-lg px-2 py-1.5" style={{background:'hsl(222 47% 6%)'}}>
+          <div>
+            <div className="text-xs font-bold text-white">{x.ad} <span style={{fontSize:8,color:x.renk}}>{x.sehir}</span></div>
+            <div style={{fontSize:10}} className="text-gray-400">{x.odak}</div>
+          </div>
+          <div className="text-xs font-mono font-bold" style={{color:x.renk}}>{x.startup} startup</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function SaglikAltyapi() {
+  const d = [
+    {metrik:'Hastane Sayısı',ist:'582',ati:'94'},
+    {metrik:'Doktor / 1000 Kişi',ist:'2.1',ati:'6.2'},
+    {metrik:'Yatak / 1000 Kişi',ist:'2.7',ati:'4.2'},
+    {metrik:'Sağlık Turizmi',ist:'1.2M hasta/yıl',ati:'120K hasta/yıl'},
+    {metrik:'Ortalama Muayene',ist:'₺1,200',ati:'€50'},
+  ];
+  return (
+    <div className="metric-card space-y-3">
+      <div className="flex items-center gap-2"><span className="text-lg">🏥</span><span className="text-xs font-bold">Sağlık Altyapısı Karşılaştırması</span></div>
+      {d.map(x=>(
+        <div key={x.metrik} className="grid grid-cols-3 gap-2 rounded-lg px-2 py-1.5" style={{background:'hsl(222 47% 6%)'}}>
+          <span className="text-xs text-gray-400">{x.metrik}</span>
+          <span className="text-xs font-mono text-center" style={{color:'#3b82f6'}}>{x.ist}</span>
+          <span className="text-xs font-mono text-center" style={{color:'#f59e0b'}}>{x.ati}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function AlisverisMerkezi() {
+  const avmler = [
+    {ad:'İstanbul Cevahir',sehir:'İst',magaza:343,alan:'180K m²'},
+    {ad:'Zorlu Center',sehir:'İst',magaza:175,alan:'105K m²'},
+    {ad:'İstinye Park',sehir:'İst',magaza:290,alan:'87K m²'},
+    {ad:'Mall of İstanbul',sehir:'İst',magaza:350,alan:'156K m²'},
+    {ad:'Golden Hall',sehir:'Ati',magaza:140,alan:'55K m²'},
+    {ad:'The Mall Athens',sehir:'Ati',magaza:200,alan:'60K m²'},
+    {ad:'McArthurGlen',sehir:'Ati',magaza:110,alan:'25K m²'},
+  ];
+  return (
+    <div className="metric-card space-y-3">
+      <div className="flex items-center gap-2"><span className="text-lg">🛍️</span><span className="text-xs font-bold">Alışveriş Merkezleri</span></div>
+      {avmler.map(a=>(
+        <div key={a.ad} className="flex items-center justify-between rounded-lg px-2 py-1.5" style={{background:'hsl(222 47% 6%)'}}>
+          <div>
+            <div className="text-xs font-bold text-white">{a.ad} <span style={{fontSize:8,color:a.sehir==='İst'?'#3b82f6':'#f59e0b'}}>{a.sehir}</span></div>
+            <div style={{fontSize:10}} className="text-gray-400">{a.magaza} mağaza · {a.alan}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function SporKulupler() {
+  const takimlar = [
+    {takim:'Galatasaray',lig:'Süper Lig',sampiyon:24,stadyum:'Rams Park (52K)'},
+    {takim:'Fenerbahçe',lig:'Süper Lig',sampiyon:19,stadyum:'Ülker (50K)'},
+    {takim:'Beşiktaş',lig:'Süper Lig',sampiyon:16,stadyum:'Tüpraş (42K)'},
+    {takim:'Olympiakos',lig:'Super League GR',sampiyon:47,stadyum:'G. Karaiskakis (33K)'},
+    {takim:'Panathinaikos',lig:'Super League GR',sampiyon:20,stadyum:'OAKA (69K)'},
+    {takim:'AEK Athens',lig:'Super League GR',sampiyon:12,stadyum:'OPAP Arena (30K)'},
+  ];
+  return (
+    <div className="metric-card space-y-3">
+      <div className="flex items-center gap-2"><span className="text-lg">⚽</span><span className="text-xs font-bold">Spor Kulüpleri & Stadyumlar</span></div>
+      {takimlar.map(t=>(
+        <div key={t.takim} className="flex items-center justify-between rounded-lg px-2 py-1.5" style={{background:'hsl(222 47% 6%)'}}>
+          <div>
+            <div className="text-xs font-bold text-white">{t.takim}</div>
+            <div style={{fontSize:10}} className="text-gray-400">{t.lig} · {t.stadyum}</div>
+          </div>
+          <div className="text-xs font-mono font-bold" style={{color:'#f59e0b'}}>🏆 {t.sampiyon}x</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function DenizYollari() {
+  const hatlar = [
+    {hat:'Kadıköy-Eminönü',sure:'20 dk',fiyat:'₺18',sehir:'İst'},
+    {hat:'Beşiktaş-Üsküdar',sure:'12 dk',fiyat:'₺18',sehir:'İst'},
+    {hat:'Adalar Vapur',sure:'90 dk',fiyat:'₺36',sehir:'İst'},
+    {hat:'Piraeus-Mykonos',sure:'5 sa',fiyat:'€45-80',sehir:'Ati'},
+    {hat:'Piraeus-Santorini',sure:'7.5 sa',fiyat:'€55-95',sehir:'Ati'},
+    {hat:'Rafina-Andros',sure:'2 sa',fiyat:'€18-30',sehir:'Ati'},
+  ];
+  return (
+    <div className="metric-card space-y-3">
+      <div className="flex items-center gap-2"><span className="text-lg">⛴️</span><span className="text-xs font-bold">Deniz Ulaşımı & Feribot Hatları</span></div>
+      {hatlar.map(h=>(
+        <div key={h.hat} className="flex items-center justify-between rounded-lg px-2 py-1.5" style={{background:'hsl(222 47% 6%)'}}>
+          <div>
+            <div className="text-xs font-bold text-white">{h.hat} <span style={{fontSize:8,color:h.sehir==='İst'?'#3b82f6':'#f59e0b'}}>{h.sehir}</span></div>
+            <div style={{fontSize:10}} className="text-gray-400">{h.sure}</div>
+          </div>
+          <span className="text-xs font-mono font-bold text-white">{h.fiyat}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function EnerjiAltyapi() {
+  const d = [
+    {metrik:'Elektrik Tüketimi',ist:'52 TWh/yıl',ati:'12 TWh/yıl'},
+    {metrik:'Doğalgaz Kullanımı',ist:'12.5 BCM/yıl',ati:'2.1 BCM/yıl'},
+    {metrik:'Yenilenebilir Enerji',ist:'%8 güneş+rüzgar',ati:'%22 güneş+rüzgar'},
+    {metrik:'Konut Elektrik Fiyatı',ist:'₺4.2/kWh ($0.12)',ati:'€0.22/kWh'},
+    {metrik:'Doğalgaz Fiyatı',ist:'₺8.5/m³',ati:'€0.09/kWh'},
+  ];
+  return (
+    <div className="metric-card space-y-3">
+      <div className="flex items-center gap-2"><span className="text-lg">⚡</span><span className="text-xs font-bold">Enerji & Altyapı Karşılaştırması</span></div>
+      {d.map(x=>(
+        <div key={x.metrik} className="grid grid-cols-3 gap-2 rounded-lg px-2 py-1.5" style={{background:'hsl(222 47% 6%)'}}>
+          <span className="text-xs text-gray-400">{x.metrik}</span>
+          <span className="text-xs font-mono text-center" style={{color:'#3b82f6'}}>{x.ist}</span>
+          <span className="text-xs font-mono text-center" style={{color:'#f59e0b'}}>{x.ati}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function SuKullanimVeAtik() {
+  const d = [
+    {metrik:'Günlük Su Tüketimi',ist:'2.8M m³',ati:'0.9M m³'},
+    {metrik:'Atık Su Arıtma',ist:'%92',ati:'%88'},
+    {metrik:'Geri Dönüşüm Oranı',ist:'%12',ati:'%18'},
+    {metrik:'Çöp Üretimi (Günlük)',ist:'18K ton',ati:'4.5K ton'},
+  ];
+  return (
+    <div className="metric-card space-y-3">
+      <div className="flex items-center gap-2"><span className="text-lg">💧</span><span className="text-xs font-bold">Su & Atık Yönetimi</span></div>
+      {d.map(x=>(
+        <div key={x.metrik} className="grid grid-cols-3 gap-2 rounded-lg px-2 py-1.5" style={{background:'hsl(222 47% 6%)'}}>
+          <span className="text-xs text-gray-400">{x.metrik}</span>
+          <span className="text-xs font-mono text-center" style={{color:'#3b82f6'}}>{x.ist}</span>
+          <span className="text-xs font-mono text-center" style={{color:'#f59e0b'}}>{x.ati}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function VergiKarsilastirma() {
+  const d = [
+    {vergi:'Gelir Vergisi (Maks)',tr:'%40',gr:'%44'},
+    {vergi:'KDV Standart',tr:'%20',gr:'%24'},
+    {vergi:'Kurumlar Vergisi',tr:'%25',gr:'%22'},
+    {vergi:'Emlak Vergisi (Yıllık)',tr:'%0.1-0.6',gr:'ENFIA €200-3K'},
+    {vergi:'Tapu Harcı',tr:'%4',gr:'%3.09'},
+    {vergi:'Temettü Vergisi',tr:'%10',gr:'%5'},
+    {vergi:'Sermaye Kazancı',tr:'%0 (2 yıl+)',gr:'%15'},
+  ];
+  return (
+    <div className="metric-card space-y-3">
+      <div className="flex items-center gap-2"><span className="text-lg">📋</span><span className="text-xs font-bold">Vergi Rejimi Karşılaştırması</span></div>
+      <div className="grid grid-cols-3 gap-1 text-xs text-gray-500 px-1" style={{fontSize:10}}>
+        <span>Vergi Türü</span><span className="text-center">🇹🇷 Türkiye</span><span className="text-center">🇬🇷 Yunanistan</span>
+      </div>
+      {d.map(x=>(
+        <div key={x.vergi} className="grid grid-cols-3 gap-1 rounded-lg px-2 py-1.5" style={{background:'hsl(222 47% 6%)'}}>
+          <span className="text-xs text-gray-400">{x.vergi}</span>
+          <span className="text-xs font-mono text-center" style={{color:'#3b82f6'}}>{x.tr}</span>
+          <span className="text-xs font-mono text-center" style={{color:'#f59e0b'}}>{x.gr}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function GayrimenkulHukuk() {
+  const d = [
+    {konu:'Yabancı Mülk Hakkı',tr:'183 ülke ile karşılıklılık',gr:'AB + 3. ülke serbest'},
+    {konu:'Tapu Süresi',tr:'7-15 gün',gr:'10-30 gün'},
+    {konu:'Golden Visa Eşiği',tr:'$400K (vatandaşlık)',gr:'€250K-500K (oturum)'},
+    {konu:'Kiracı Koruma',tr:'5 yıl + enflasyon sınırı',gr:'3 yıl minimum'},
+    {konu:'Vergi Muafiyeti',tr:'2 yıl satış kazancı',gr:'Yok (satışta %15)'},
+  ];
+  return (
+    <div className="metric-card space-y-3">
+      <div className="flex items-center gap-2"><span className="text-lg">⚖️</span><span className="text-xs font-bold">Gayrimenkul Hukuku & Düzenlemeler</span></div>
+      {d.map(x=>(
+        <div key={x.konu} className="rounded-lg px-2 py-2" style={{background:'hsl(222 47% 6%)'}}>
+          <div className="text-xs font-bold text-white mb-1">{x.konu}</div>
+          <div className="grid grid-cols-2 gap-2">
+            <div className="text-xs"><span style={{color:'#3b82f6'}}>🇹🇷</span> <span className="text-gray-400">{x.tr}</span></div>
+            <div className="text-xs"><span style={{color:'#f59e0b'}}>🇬🇷</span> <span className="text-gray-400">{x.gr}</span></div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function KurDovizRezerv() {
+  const d = [
+    {metrik:'Merkez Bankası Faizi',tr:'%42.5 (TCMB)',gr:'%4.5 (ECB)'},
+    {metrik:'Döviz Rezervi',tr:'$98.2B',gr:'€8.4B (BoG)'},
+    {metrik:'Cari Açık/GSYH',tr:'%-3.6',gr:'%-6.2'},
+    {metrik:'Dış Borç/GSYH',tr:'%42',gr:'%172'},
+    {metrik:'CDS 5Y',tr:'268 bps',gr:'118 bps'},
+    {metrik:'Kredi Notu',tr:'B+ (Fitch)',gr:'BBB- (Fitch)'},
+  ];
+  return (
+    <div className="metric-card space-y-3">
+      <div className="flex items-center gap-2"><span className="text-lg">🏦</span><span className="text-xs font-bold">Merkez Bankası & Makro Göstergeler</span></div>
+      {d.map(x=>(
+        <div key={x.metrik} className="grid grid-cols-3 gap-2 rounded-lg px-2 py-1.5" style={{background:'hsl(222 47% 6%)'}}>
+          <span className="text-xs text-gray-400">{x.metrik}</span>
+          <span className="text-xs font-mono text-center" style={{color:'#3b82f6'}}>{x.tr}</span>
+          <span className="text-xs font-mono text-center" style={{color:'#f59e0b'}}>{x.gr}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function IstihdamSektoru() {
+  const d = [
+    {sektor:'Hizmet',ist:'68%',ati:'78%'},
+    {sektor:'Sanayi',ist:'24%',ati:'12%'},
+    {sektor:'Tarım',ist:'1%',ati:'2%'},
+    {sektor:'İnşaat',ist:'7%',ati:'5%'},
+    {sektor:'Teknoloji',ist:'4.2%',ati:'3.8%'},
+    {sektor:'İşsizlik',ist:'12.4%',ati:'10.2%'},
+  ];
+  return (
+    <div className="metric-card space-y-3">
+      <div className="flex items-center gap-2"><span className="text-lg">💼</span><span className="text-xs font-bold">İstihdam & Sektörel Dağılım</span></div>
+      {d.map(x=>(
+        <div key={x.sektor} className="grid grid-cols-3 gap-2 rounded-lg px-2 py-1.5" style={{background:'hsl(222 47% 6%)'}}>
+          <span className="text-xs text-gray-400">{x.sektor}</span>
+          <span className="text-xs font-mono text-center" style={{color:'#3b82f6'}}>{x.ist}</span>
+          <span className="text-xs font-mono text-center" style={{color:'#f59e0b'}}>{x.ati}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function OtelKonaklama() {
+  const d = [
+    {tip:'5 Yıldız Ort.',ist:'₺8,500/gece ($235)',ati:'€220/gece'},
+    {tip:'4 Yıldız Ort.',ist:'₺3,800/gece ($105)',ati:'€120/gece'},
+    {tip:'Airbnb Merkez',ist:'₺2,200/gece ($60)',ati:'€85/gece'},
+    {tip:'Doluluk Oranı',ist:'%72',ati:'%68'},
+    {tip:'Toplam Yatak',ist:'185K',ati:'72K'},
+  ];
+  return (
+    <div className="metric-card space-y-3">
+      <div className="flex items-center gap-2"><span className="text-lg">🏨</span><span className="text-xs font-bold">Otel & Konaklama Fiyatları</span></div>
+      {d.map(x=>(
+        <div key={x.tip} className="grid grid-cols-3 gap-2 rounded-lg px-2 py-1.5" style={{background:'hsl(222 47% 6%)'}}>
+          <span className="text-xs text-gray-400">{x.tip}</span>
+          <span className="text-xs font-mono text-center" style={{color:'#3b82f6'}}>{x.ist}</span>
+          <span className="text-xs font-mono text-center" style={{color:'#f59e0b'}}>{x.ati}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function EgitimSistem() {
+  const d = [
+    {metrik:'Öğrenci Sayısı',ist:'4.2M',ati:'720K'},
+    {metrik:'Üniversite Sayısı',ist:'57',ati:'24'},
+    {metrik:'Uluslararası Okul',ist:'42',ati:'28'},
+    {metrik:'Ort. Üniversite Ücreti',ist:'₺15K-250K/yıl',ati:'€0-5K/yıl (devlet ücretsiz)'},
+    {metrik:'PISA Puanı (2024)',ist:'476',ati:'459'},
+  ];
+  return (
+    <div className="metric-card space-y-3">
+      <div className="flex items-center gap-2"><span className="text-lg">📚</span><span className="text-xs font-bold">Eğitim Sistemi Karşılaştırması</span></div>
+      {d.map(x=>(
+        <div key={x.metrik} className="grid grid-cols-3 gap-2 rounded-lg px-2 py-1.5" style={{background:'hsl(222 47% 6%)'}}>
+          <span className="text-xs text-gray-400">{x.metrik}</span>
+          <span className="text-xs font-mono text-center" style={{color:'#3b82f6'}}>{x.ist}</span>
+          <span className="text-xs font-mono text-center" style={{color:'#f59e0b'}}>{x.ati}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function KulturSanat() {
+  const d = [
+    {metrik:'Müze Sayısı',ist:'80+',ati:'60+'},
+    {metrik:'Tiyatro & Opera',ist:'120+',ati:'50+'},
+    {metrik:'Yıllık Festival',ist:'45+',ati:'30+'},
+    {metrik:'UNESCO Miras',ist:'Tarihi Yarımada',ati:'Akropolis & çevresi'},
+    {metrik:'Sinema Sektörü',ist:'~150 film/yıl',ati:'~40 film/yıl'},
+  ];
+  return (
+    <div className="metric-card space-y-3">
+      <div className="flex items-center gap-2"><span className="text-lg">🎭</span><span className="text-xs font-bold">Kültür & Sanat Hayatı</span></div>
+      {d.map(x=>(
+        <div key={x.metrik} className="grid grid-cols-3 gap-2 rounded-lg px-2 py-1.5" style={{background:'hsl(222 47% 6%)'}}>
+          <span className="text-xs text-gray-400">{x.metrik}</span>
+          <span className="text-xs font-mono text-center" style={{color:'#3b82f6'}}>{x.ist}</span>
+          <span className="text-xs font-mono text-center" style={{color:'#f59e0b'}}>{x.ati}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function InternetHiz() {
+  const d = [
+    {metrik:'Ort. İndirme (Sabit)',ist:'52 Mbps',ati:'78 Mbps'},
+    {metrik:'Ort. İndirme (Mobil)',ist:'38 Mbps',ati:'45 Mbps'},
+    {metrik:'5G Kapsama',ist:'%35 (İstanbul merkez)',ati:'%28 (Atina merkez)'},
+    {metrik:'Fiber Penetrasyon',ist:'%42',ati:'%65'},
+    {metrik:'Aylık İnternet (100Mbps)',ist:'₺350 ($10)',ati:'€30'},
+  ];
+  return (
+    <div className="metric-card space-y-3">
+      <div className="flex items-center gap-2"><span className="text-lg">📶</span><span className="text-xs font-bold">İnternet & Dijital Altyapı</span></div>
+      {d.map(x=>(
+        <div key={x.metrik} className="grid grid-cols-3 gap-2 rounded-lg px-2 py-1.5" style={{background:'hsl(222 47% 6%)'}}>
+          <span className="text-xs text-gray-400">{x.metrik}</span>
+          <span className="text-xs font-mono text-center" style={{color:'#3b82f6'}}>{x.ist}</span>
+          <span className="text-xs font-mono text-center" style={{color:'#f59e0b'}}>{x.ati}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function YesilAlanPark() {
+  const d = [
+    {ad:'Belgrad Ormanı',sehir:'İst',alan:'5,500 ha',tip:'Orman'},
+    {ad:'Emirgan Korusu',sehir:'İst',alan:'47 ha',tip:'Park'},
+    {ad:'Atatürk Arboretumu',sehir:'İst',alan:'296 ha',tip:'Botanik'},
+    {ad:'Maçka Parkı',sehir:'İst',alan:'10 ha',tip:'Şehir Parkı'},
+    {ad:'Ulusal Bahçe',sehir:'Ati',alan:'15.5 ha',tip:'Park'},
+    {ad:'Stavros Niarchos',sehir:'Ati',alan:'21 ha',tip:'Kültür Parkı'},
+    {ad:'Filopappou',sehir:'Ati',alan:'18 ha',tip:'Arkeolojik'},
+    {ad:'Pedion tou Areos',sehir:'Ati',alan:'28 ha',tip:'Şehir Parkı'},
+  ];
+  return (
+    <div className="metric-card space-y-3">
+      <div className="flex items-center gap-2"><span className="text-lg">🌳</span><span className="text-xs font-bold">Yeşil Alan & Parklar</span></div>
+      <div className="grid grid-cols-2 gap-1">
+        {d.map(p=>(
+          <div key={p.ad} className="rounded-lg px-2 py-1.5" style={{background:'hsl(222 47% 6%)'}}>
+            <div className="text-xs font-bold text-white">{p.ad} <span style={{fontSize:8,color:p.sehir==='İst'?'#3b82f6':'#f59e0b'}}>{p.sehir}</span></div>
+            <div style={{fontSize:10}} className="text-gray-400">{p.alan} · {p.tip}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function DashboardPage() {
   const [priceIndex, setPriceIndex] = useState<ReturnType<typeof generatePriceTrendIndex>|null>(null);
   const [liveSentiment, setLiveSentiment] = useState<{value:number;label:string}|null>(null);
@@ -1447,6 +2199,38 @@ export default function DashboardPage() {
       <BorsaPerformans />
       <BankacilikSektoru />
       <RiskYatirim />
+
+      {/* ── 30 YENİ İSTANBUL & ATİNA MODÜLLERİ ─── */}
+      <NufusDemografi />
+      <UlasimMetro />
+      <HavaKalitesi />
+      <UniversiteSiralamasi />
+      <GayrimenkulM2 />
+      <IklimKarsilastirma />
+      <TurizmGeliri />
+      <HavalimanTraffik />
+      <BogazKopru />
+      <TarihiYerler />
+      <YemekKulturu />
+      <GocVeExpat />
+      <InsaatSektoru />
+      <DepremRiski />
+      <TeknoParkStartup />
+      <SaglikAltyapi />
+      <AlisverisMerkezi />
+      <SporKulupler />
+      <DenizYollari />
+      <EnerjiAltyapi />
+      <SuKullanimVeAtik />
+      <VergiKarsilastirma />
+      <GayrimenkulHukuk />
+      <KurDovizRezerv />
+      <IstihdamSektoru />
+      <OtelKonaklama />
+      <EgitimSistem />
+      <KulturSanat />
+      <InternetHiz />
+      <YesilAlanPark />
 
     </div>
   );
