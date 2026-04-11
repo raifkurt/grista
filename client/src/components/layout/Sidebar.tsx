@@ -46,7 +46,7 @@ export default function Sidebar() {
           <div className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-400 pulse-dot" />
         </div>
         <div>
-          <div className="text-sm font-semibold tracking-wider text-foreground">GRISTA</div>
+          <div className="text-sm font-semibold tracking-wider text-foreground">Kurt GMG</div>
           <div className="text-xs text-muted-foreground font-mono" style={{ fontSize: '9px' }}>
             INTELLIGENCE v1.0
           </div>

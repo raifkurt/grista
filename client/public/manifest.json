@@ -1,14 +1,13 @@
 {
-  "name": "GRIST — İstanbul & Atina",
-  "short_name": "GRIST",
-  "description": "İstanbul ve Atina şehir nabzı, sağlık haberleri, finans verileri",
+  "name": "Kurt GMG",
+  "short_name": "Kurt GMG",
+  "description": "İstanbul & Atina Gayrimenkul & Finans Platformu",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#050d1a",
-  "theme_color": "#0BC5EA",
-  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
   "icons": [
-    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
   ]
 }

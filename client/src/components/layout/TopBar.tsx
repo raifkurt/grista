@@ -36,7 +36,7 @@ export default function TopBar() {
 
       {/* Sol: Başlık */}
       <div className="flex items-center gap-2 min-w-0 flex-1">
-        {/* Mobilde GRISTA logosu */}
+        {/* Mobilde Kurt GMG logosu */}
         <div className="md:hidden flex-shrink-0">
           <svg viewBox="0 0 20 20" className="w-5 h-5" fill="none">
             <polygon points="10,1 19,5.5 19,14.5 10,19 1,14.5 1,5.5"
